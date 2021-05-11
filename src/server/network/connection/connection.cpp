@@ -151,7 +151,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	}
 
 	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - timeConnected) + 1);
-	if ((++packetsSent / timePassed) > static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND))) {
+	if ((++packetsSent / timePassed) > static_cast<uint32_t>(g_config.getNumber(MAX_PACKETS_PER_SECOND))) {
 			SPDLOG_INFO("{} disconnected for exceeding packet per second limit", convertIPToString(getIP()));
 			close();
 			return;
@@ -163,7 +163,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		if (!receivedName && msgBuffer[1] == 0x00) {
 			receivedLastChar = true;
 		} else {
-			std::string serverName = g_config.getString(ConfigManager::SERVER_NAME) + "\n";
+			std::string serverName = g_config.getString(SERVER_NAME) + "\n";
 
 			if (!receivedName) {
 				if (static_cast<char>(msgBuffer[0]) == serverName[0]

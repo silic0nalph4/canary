@@ -54,7 +54,7 @@ Npc::Npc(NpcType* npcType) :
 {
 	defaultOutfit = npcType->info.outfit;
 	currentOutfit = npcType->info.outfit;
-	float multiplier = g_config.getFloat(ConfigManager::RATE_NPC_HEALTH);
+	float multiplier = g_config.getFloat(RATE_NPC_HEALTH);
 	health = npcType->info.health*multiplier;
 	healthMax = npcType->info.healthMax*multiplier;
 	baseSpeed = npcType->info.baseSpeed;

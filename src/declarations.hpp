@@ -20,6 +20,7 @@
 #ifndef SRC_DECLARATIONS_HPP_
 #define SRC_DECLARATIONS_HPP_
 
+#include "config/config_definitions.hpp"
 #include "creatures/creatures_definitions.hpp"
 #include "game/game_definitions.hpp"
 #include "io/io_definitions.hpp"
