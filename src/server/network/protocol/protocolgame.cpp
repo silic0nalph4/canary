@@ -21,27 +21,24 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
-#include "server/network/protocol/protocolgame.h"
-
-#include "server/network/message/outputmessage.h"
-
-#include "creatures/players/player.h"
-
+#include "lua/creature/actions.h"
+#include "creatures/players/management/ban.h"
 #include "config/configmanager.h"
 #include "declarations.hpp"
-#include "lua/creature/actions.h"
 #include "game/game.h"
-#include "io/iologindata.h"
-#include "io/iomarket.h"
-#include "creatures/players/management/waitlist.h"
-#include "creatures/players/management/ban.h"
-#include "game/scheduling/scheduler.h"
-#include "lua/modules/modules.h"
-#include "creatures/combat/spells.h"
-#include "items/weapons/weapons.h"
 #include "creatures/players/imbuements/imbuements.h"
 #include "io/iobestiary.h"
+#include "io/iologindata.h"
+#include "io/iomarket.h"
+#include "lua/modules/modules.h"
 #include "creatures/monsters/monsters.h"
+#include "server/network/message/outputmessage.h"
+#include "creatures/players/player.h"
+#include "server/network/protocol/protocolgame.h"
+#include "game/scheduling/scheduler.h"
+#include "creatures/combat/spells.h"
+#include "creatures/players/management/waitlist.h"
+#include "items/weapons/weapons.h"
 
 extern Game g_game;
 extern ConfigManager g_config;

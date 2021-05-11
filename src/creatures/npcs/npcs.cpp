@@ -19,15 +19,15 @@
 
 #include "otpch.h"
 
-#include "creatures/creature.h"
-#include "creatures/combat/spells.h"
 #include "creatures/combat/combat.h"
+#include "config/configmanager.h"
+#include "creatures/creature.h"
+#include "declarations.hpp"
+#include "game/game.h"
 #include "creatures/npcs/npc.h"
 #include "creatures/npcs/npcs.h"
-#include "declarations.hpp"
+#include "creatures/combat/spells.h"
 #include "items/weapons/weapons.h"
-#include "config/configmanager.h"
-#include "game/game.h"
 
 #include "utils/pugicast.h"
 

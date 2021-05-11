@@ -20,8 +20,8 @@
 #ifndef SRC_LUA_SCRIPTS_SCRIPTS_H_
 #define SRC_LUA_SCRIPTS_SCRIPTS_H_
 
-#include "lua/scripts/luascript.h"
 #include "declarations.hpp"
+#include "lua/scripts/luascript.h"
 
 class Scripts {
 	public:

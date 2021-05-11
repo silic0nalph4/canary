@@ -20,8 +20,9 @@
 #ifndef SRC_UTILS_THREAD_HOLDER_H_
 #define SRC_UTILS_THREAD_HOLDER_H_
 
-#include <thread>
 #include <atomic>
+#include <thread>
+
 #include "declarations.hpp"
 
 template <typename Derived>

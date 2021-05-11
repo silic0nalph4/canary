@@ -23,8 +23,8 @@
 #include "creatures/creatures_definitions.hpp"
 #include "game/game_definitions.hpp"
 #include "io/io_definitions.hpp"
-#include "lua/lua_definitions.hpp"
 #include "items/items_definitions.hpp"
+#include "lua/lua_definitions.hpp"
 #include "server/server_definitions.hpp"
 #include "utils/utils_definitions.hpp"
 

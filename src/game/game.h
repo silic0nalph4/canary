@@ -24,18 +24,18 @@
 
 #include "creatures/players/account/account.hpp"
 #include "creatures/combat/combat.h"
-#include "creatures/players/grouping/groups.h"
-#include "creatures/players/grouping/team_finder.hpp"
-#include "map/map.h"
-#include "movement/position.h"
-#include "items/item.h"
 #include "items/containers/container.h"
+#include "game/gamestore.h"
+#include "creatures/players/grouping/groups.h"
+#include "io/iobestiary.h"
+#include "items/item.h"
+#include "map/map.h"
+#include "creatures/npcs/npc.h"
+#include "movement/position.h"
 #include "creatures/players/player.h"
 #include "lua/creature/raids.h"
-#include "creatures/npcs/npc.h"
+#include "creatures/players/grouping/team_finder.hpp"
 #include "utils/wildcardtree.h"
-#include "game/gamestore.h"
-#include "io/iobestiary.h"
 
 class ServiceManager;
 class Creature;

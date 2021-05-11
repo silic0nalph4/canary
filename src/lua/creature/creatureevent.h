@@ -20,9 +20,9 @@
 #ifndef SRC_LUA_CREATURE_CREATUREEVENT_H_
 #define SRC_LUA_CREATURE_CREATUREEVENT_H_
 
-#include "lua/scripts/luascript.h"
 #include "lua/global/baseevents.h"
 #include "declarations.hpp"
+#include "lua/scripts/luascript.h"
 
 class CreatureEvent;
 using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;

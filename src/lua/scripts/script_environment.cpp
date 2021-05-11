@@ -23,10 +23,10 @@
 #include <limits>
 #include <map>
 
-#include "lua/scripts/script_environment.hpp"
-#include "lua/scripts/luascript.h"
-#include "game/game.h"
 #include "declarations.hpp"
+#include "game/game.h"
+#include "lua/scripts/luascript.h"
+#include "lua/scripts/script_environment.hpp"
 
 extern Game g_game;
 

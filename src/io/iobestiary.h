@@ -24,11 +24,11 @@
 #include <string>
 
 #include "declarations.hpp"
+#include "game/game.h"
+#include "lua/scripts/luascript.h"
 #include "creatures/monsters/monster.h"
 #include "creatures/monsters/monsters.h"
-#include "game/game.h"
 #include "creatures/players/player.h"
-#include "lua/scripts/luascript.h"
 
 class Game;
 

@@ -19,11 +19,11 @@
 
 #include "otpch.h"
 
-#include "io/iobestiary.h"
 #include "declarations.hpp"
+#include "game/game.h"
+#include "io/iobestiary.h"
 #include "creatures/monsters/monster.h"
 #include "creatures/monsters/monsters.h"
-#include "game/game.h"
 #include "creatures/players/player.h"
 
 extern Game g_game;
