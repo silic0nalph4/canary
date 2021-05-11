@@ -17,38 +17,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "otpch.h"
+#ifndef SRC_DECLARATIONS_HPP_
+#define SRC_DECLARATIONS_HPP_
 
-#include "items/containers/rewards/rewardchest.h"
+#include "creatures/creatures_definitions.hpp"
+#include "game/game_definitions.hpp"
+#include "io/io_definitions.hpp"
+#include "lua/lua_definitions.hpp"
+#include "items/items_definitions.hpp"
+#include "server/server_definitions.hpp"
+#include "utils/utils_definitions.hpp"
 
-RewardChest::RewardChest(uint16_t type) :
-	Container(type)
-{
-	maxSize = 32;
-	unlocked = false;
-	pagination = true;
-}
-
-ReturnValue RewardChest::queryAdd(int32_t, const Thing&, uint32_t,
-	uint32_t, Creature* actor/* = nullptr*/) const
-{
-	if (actor) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-		
-	return RETURNVALUE_NOERROR;
-}
-
-void RewardChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
-	}
-}
-
-void RewardChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
-	}
-}
+#endif  // SRC_DECLARATIONS_HPP_

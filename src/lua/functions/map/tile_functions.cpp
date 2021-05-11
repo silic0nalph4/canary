@@ -526,7 +526,7 @@ int TileFunctions::luaTileHasProperty(lua_State* L) {
 		item = nullptr;
 	}
 
-	ITEMPROPERTY property = getNumber<ITEMPROPERTY>(L, 2);
+	ItemProperty property = getNumber<ItemProperty>(L, 2);
 	if (item) {
 		pushBoolean(L, tile->hasProperty(item, property));
 	} else {

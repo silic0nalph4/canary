@@ -20,12 +20,12 @@
 #ifndef SRC_CREATURES_CREATURE_H_
 #define SRC_CREATURES_CREATURE_H_
 
+#include "declarations.hpp"
 #include "map/map.h"
 #include "game/movement/position.h"
 #include "creatures/combat/condition.h"
 #include "utils/const.h"
 #include "items/tile.h"
-#include "utils/enums.h"
 #include "lua/creature/creatureevent.h"
 
 using ConditionList = std::list<Condition*>;

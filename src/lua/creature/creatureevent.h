@@ -22,7 +22,7 @@
 
 #include "lua/scripts/luascript.h"
 #include "lua/global/baseevents.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 class CreatureEvent;
 using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;

@@ -26,7 +26,7 @@
 #include <boost/algorithm/string.hpp>
 #include "game/movement/position.h"
 #include "utils/const.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
 

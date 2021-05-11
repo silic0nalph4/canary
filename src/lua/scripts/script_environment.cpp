@@ -26,7 +26,7 @@
 #include "lua/scripts/script_environment.hpp"
 #include "lua/scripts/luascript.h"
 #include "game/game.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 extern Game g_game;
 

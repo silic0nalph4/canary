@@ -17,38 +17,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "otpch.h"
+#ifndef SRC_IO_IO_DEFINITIONS_HPP_
+#define SRC_IO_IO_DEFINITIONS_HPP_
 
-#include "items/containers/rewards/rewardchest.h"
-
-RewardChest::RewardChest(uint16_t type) :
-	Container(type)
-{
-	maxSize = 32;
-	unlocked = false;
-	pagination = true;
-}
-
-ReturnValue RewardChest::queryAdd(int32_t, const Thing&, uint32_t,
-	uint32_t, Creature* actor/* = nullptr*/) const
-{
-	if (actor) {
-		return RETURNVALUE_NOTPOSSIBLE;
+struct MarketStatistics {
+	MarketStatistics() {
+		numTransactions = 0;
+		highestPrice = 0;
+		totalPrice = 0;
+		lowestPrice = 0;
 	}
-		
-	return RETURNVALUE_NOERROR;
-}
 
-void RewardChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
-	}
-}
+	uint32_t numTransactions;
+	uint32_t highestPrice;
+	uint64_t totalPrice;
+	uint32_t lowestPrice;
+};
 
-void RewardChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
-	}
-}
+#endif  // SRC_IO_IO_DEFINITIONS_HPP_

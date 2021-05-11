@@ -702,7 +702,7 @@ int ItemFunctions::luaItemHasProperty(lua_State* L) {
 	// item:hasProperty(property)
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		ITEMPROPERTY property = getNumber<ITEMPROPERTY>(L, 2);
+		ItemProperty property = getNumber<ItemProperty>(L, 2);
 		pushBoolean(L, item->hasProperty(property));
 	} else {
 		lua_pushnil(L);

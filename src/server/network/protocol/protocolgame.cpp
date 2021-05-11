@@ -28,6 +28,7 @@
 #include "creatures/players/player.h"
 
 #include "config/configmanager.h"
+#include "declarations.hpp"
 #include "lua/creature/actions.h"
 #include "game/game.h"
 #include "io/iologindata.h"

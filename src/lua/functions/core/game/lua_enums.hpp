@@ -27,7 +27,7 @@
 #include "game/game.h"
 #include "lua/creature/creatureevent.h"
 #include "lua/scripts/luascript.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 class LuaEnums final : LuaScriptInterface {
 	public:

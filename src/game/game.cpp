@@ -48,7 +48,6 @@
 #include "creatures/npcs/npcs.h"
 #include "server/network/webhook/webhook.h"
 
-
 extern ConfigManager g_config;
 extern Actions* g_actions;
 extern Chat* g_chat;

@@ -728,7 +728,7 @@ Thing* Container::getThing(size_t index) const
 	return getItemByIndex(index);
 }
 
-void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
+void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t)
 {
 	Cylinder* topParent = getTopParent();
 	if (topParent->getCreature()) {
@@ -743,7 +743,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 	}
 }
 
-void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
+void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t)
 {
 	Cylinder* topParent = getTopParent();
 	if (topParent->getCreature()) {

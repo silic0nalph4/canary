@@ -45,82 +45,6 @@ class Door;
 class MagicField;
 class BedItem;
 
-enum ITEMPROPERTY {
-	CONST_PROP_BLOCKSOLID = 0,
-	CONST_PROP_HASHEIGHT,
-	CONST_PROP_BLOCKPROJECTILE,
-	CONST_PROP_BLOCKPATH,
-	CONST_PROP_ISVERTICAL,
-	CONST_PROP_ISHORIZONTAL,
-	CONST_PROP_MOVEABLE,
-	CONST_PROP_IMMOVABLEBLOCKSOLID,
-	CONST_PROP_IMMOVABLEBLOCKPATH,
-	CONST_PROP_IMMOVABLENOFIELDBLOCKPATH,
-	CONST_PROP_NOFIELDBLOCKPATH,
-	CONST_PROP_SUPPORTHANGABLE,
-};
-
-enum TradeEvents_t {
-	ON_TRADE_TRANSFER,
-	ON_TRADE_CANCEL,
-};
-
-enum ItemDecayState_t : uint8_t {
-	DECAYING_FALSE = 0,
-	DECAYING_TRUE,
-	DECAYING_PENDING,
-};
-
-enum AttrTypes_t {
-	//ATTR_DESCRIPTION = 1,
-	//ATTR_EXT_FILE = 2,
-	ATTR_TILE_FLAGS = 3,
-	ATTR_ACTION_ID = 4,
-	ATTR_UNIQUE_ID = 5,
-	ATTR_TEXT = 6,
-	ATTR_DESC = 7,
-	ATTR_TELE_DEST = 8,
-	ATTR_ITEM = 9,
-	ATTR_DEPOT_ID = 10,
-	//ATTR_EXT_SPAWN_FILE = 11,
-	ATTR_RUNE_CHARGES = 12,
-	//ATTR_EXT_HOUSE_FILE = 13,
-	ATTR_HOUSEDOORID = 14,
-	ATTR_COUNT = 15,
-	ATTR_DURATION = 16,
-	ATTR_DECAYING_STATE = 17,
-	ATTR_WRITTENDATE = 18,
-	ATTR_WRITTENBY = 19,
-	ATTR_SLEEPERGUID = 20,
-	ATTR_SLEEPSTART = 21,
-	ATTR_CHARGES = 22,
-	ATTR_CONTAINER_ITEMS = 23,
-	ATTR_NAME = 24,
-	ATTR_ARTICLE = 25,
-	ATTR_PLURALNAME = 26,
-	ATTR_WEIGHT = 27,
-	ATTR_ATTACK = 28,
-	ATTR_DEFENSE = 29,
-	ATTR_EXTRADEFENSE = 30,
-	ATTR_ARMOR = 31,
-	ATTR_HITCHANCE = 32,
-	ATTR_SHOOTRANGE = 33,
-	ATTR_SPECIAL = 34,
-	ATTR_IMBUINGSLOTS = 35,
-	ATTR_OPENCONTAINER = 36,
-	ATTR_CUSTOM_ATTRIBUTES = 37,
-
-	ATTR_QUICKLOOTCONTAINER = 38
-};
-
-enum Attr_ReadValue {
-	ATTR_READ_CONTINUE,
-	ATTR_READ_ERROR,
-	ATTR_READ_END,
-};
-
-#define IMBUEMENT_SLOT 500
-
 class ItemAttributes
 {
 	public:
@@ -359,8 +283,7 @@ class ItemAttributes
 
 		typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
-		struct Attribute
-		{
+		struct Attribute {
 			union {
 				int64_t integer;
 				std::string* string;
@@ -814,8 +737,8 @@ class Item : virtual public Thing
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-    static std::vector<std::pair<std::string, std::string>> getDescriptions(const ItemType& it,
-																						const Item* item = nullptr);
+		static std::vector<std::pair<std::string, std::string>> getDescriptions(const ItemType& it,
+                                    const Item* item = nullptr);
 		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
@@ -918,7 +841,7 @@ class Item : virtual public Thing
 		uint32_t getWorth() const;
 		LightInfo getLightInfo() const;
 
-		bool hasProperty(ITEMPROPERTY prop) const;
+		bool hasProperty(ItemProperty prop) const;
 		bool isBlocking() const {
 			return items[id].blockSolid;
 		}

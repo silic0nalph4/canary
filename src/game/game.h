@@ -25,6 +25,7 @@
 #include "creatures/players/account/account.hpp"
 #include "creatures/combat/combat.h"
 #include "creatures/players/grouping/groups.h"
+#include "creatures/players/grouping/team_finder.hpp"
 #include "map/map.h"
 #include "movement/position.h"
 #include "items/item.h"

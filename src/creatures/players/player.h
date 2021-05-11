@@ -26,7 +26,7 @@
 #include "items/cylinder.h"
 #include "items/containers/depot/depotchest.h"
 #include "items/containers/depot/depotlocker.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 #include "grouping/familiars.h"
 #include "game/gamestore.h"
 #include "grouping/groups.h"
@@ -1613,10 +1613,10 @@ class Player final : public Creature, public Cylinder
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent,
                                  int32_t index,
-                                 cylinderlink_t link = LINK_OWNER) override;
+                                 cylinderLink_t link = LINK_OWNER) override;
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent,
                                     int32_t index,
-                                    cylinderlink_t link = LINK_OWNER) override;
+                                    cylinderLink_t link = LINK_OWNER) override;
 
 		void setNextAction(int64_t time) {
 			if (time > nextAction) {

@@ -22,7 +22,7 @@
 
 #include <thread>
 #include <atomic>
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 template <typename Derived>
 class ThreadHolder

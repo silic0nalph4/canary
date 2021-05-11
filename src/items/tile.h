@@ -208,8 +208,8 @@ class Tile : public Cylinder
 		uint32_t getTopItemCount() const;
 		uint32_t getDownItemCount() const;
 
-		bool hasProperty(ITEMPROPERTY prop) const;
-		bool hasProperty(const Item* exclude, ITEMPROPERTY prop) const;
+		bool hasProperty(ItemProperty prop) const;
+		bool hasProperty(const Item* exclude, ItemProperty prop) const;
 
 		bool hasFlag(uint32_t flag) const {
 			return hasBitSet(flag, this->flags);
@@ -265,8 +265,8 @@ class Tile : public Cylinder
 		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
 		Thing* getThing(size_t index) const override final;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override final;
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override final;
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t link = LINK_OWNER) override final;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t link = LINK_OWNER) override final;
 
 		void internalAddThing(Thing* thing) override;
 		void virtual internalAddThing(uint32_t index, Thing* thing) override;

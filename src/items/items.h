@@ -21,7 +21,7 @@
 #define SRC_ITEMS_ITEMS_H_
 
 #include "utils/const.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 #include "items/itemloader.h"
 #include "game/movement/position.h"
 

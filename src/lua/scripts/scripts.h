@@ -21,7 +21,7 @@
 #define SRC_LUA_SCRIPTS_SCRIPTS_H_
 
 #include "lua/scripts/luascript.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 class Scripts {
 	public:

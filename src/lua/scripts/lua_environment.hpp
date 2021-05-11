@@ -25,7 +25,7 @@
 
 #include "creatures/combat/combat.h"
 #include "lua/scripts/luascript.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 class AreaCombat;
 class Combat;

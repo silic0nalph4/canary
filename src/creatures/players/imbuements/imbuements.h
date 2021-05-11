@@ -21,7 +21,7 @@
 #define SRC_CREATURES_PLAYERS_IMBUEMENTS_IMBUEMENTS_H_
 
 #include "creatures/players/player.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 #include "utils/tools.h"
 
 class Player;

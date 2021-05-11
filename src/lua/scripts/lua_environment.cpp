@@ -26,7 +26,7 @@
 #include "lua/scripts/lua_environment.hpp"
 #include "lua/scripts/script_environment.hpp"
 #include "lua/scripts/scripts.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 LuaEnvironment::LuaEnvironment(): LuaScriptInterface("Main Interface") {}
 

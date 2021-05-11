@@ -20,7 +20,7 @@
 #include "otpch.h"
 
 #include "io/iobestiary.h"
-#include "utils/enums.h"
+#include "declarations.hpp"
 #include "creatures/monsters/monster.h"
 #include "creatures/monsters/monsters.h"
 #include "game/game.h"

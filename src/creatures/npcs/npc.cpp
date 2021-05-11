@@ -19,14 +19,14 @@
 
 #include "otpch.h"
 
+#include "declarations.hpp"
 #include "creatures/npcs/npc.h"
-#include "npcs.h"
+#include "creatures/npcs/npcs.h"
 #include "config/configmanager.h"
 #include "lua/callbacks/creaturecallback.h"
 #include "game/game.h"
 #include "creatures/combat/spells.h"
 #include "lua/creature/events.h"
-#include "utils/enums.h"
 
 extern Game g_game;
 extern Npcs g_npcs;

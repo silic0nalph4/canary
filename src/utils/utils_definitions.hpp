@@ -17,38 +17,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "otpch.h"
+#ifndef SRC_UTILS_UTILS_DEFINITIONS_HPP_
+#define SRC_UTILS_UTILS_DEFINITIONS_HPP_
 
-#include "items/containers/rewards/rewardchest.h"
+// Enums
+enum ThreadState {
+	THREAD_STATE_RUNNING,
+	THREAD_STATE_CLOSING,
+	THREAD_STATE_TERMINATED,
+};
 
-RewardChest::RewardChest(uint16_t type) :
-	Container(type)
+enum SpawnType_t
 {
-	maxSize = 32;
-	unlocked = false;
-	pagination = true;
-}
+	RESPAWN_IN_ALL = 0,
+	RESPAWN_IN_DAY = 1,
+	RESPAWN_IN_NIGHT = 2,
+	RESPAWN_IN_DAY_CAVE = 3,
+	RESPAWN_IN_NIGHT_CAVE = 4,
+};
 
-ReturnValue RewardChest::queryAdd(int32_t, const Thing&, uint32_t,
-	uint32_t, Creature* actor/* = nullptr*/) const
-{
-	if (actor) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-		
-	return RETURNVALUE_NOERROR;
-}
+enum Cipbia_Elementals_t : uint8_t {
+	CIPBIA_ELEMENTAL_PHYSICAL = 0,
+	CIPBIA_ELEMENTAL_FIRE = 1,
+	CIPBIA_ELEMENTAL_EARTH = 2,
+	CIPBIA_ELEMENTAL_ENERGY = 3,
+	CIPBIA_ELEMENTAL_ICE = 4,
+	CIPBIA_ELEMENTAL_HOLY = 5,
+	CIPBIA_ELEMENTAL_DEATH = 6,
+	CIPBIA_ELEMENTAL_HEALING = 7,
+	CIPBIA_ELEMENTAL_DROWN = 8,
+	CIPBIA_ELEMENTAL_LIFEDRAIN = 9,
+	CIPBIA_ELEMENTAL_UNDEFINED = 10
+};
 
-void RewardChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
-	}
-}
-
-void RewardChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
-	}
-}
+#endif  // SRC_UTILS_UTILS_DEFINITIONS_HPP_

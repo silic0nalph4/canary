@@ -3460,7 +3460,7 @@ Thing* Player::getThing(size_t index) const
 	return nullptr;
 }
 
-void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
@@ -3515,7 +3515,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 	}
 }
 
-void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts

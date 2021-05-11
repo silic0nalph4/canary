@@ -23,7 +23,7 @@
 #include "game/movement/position.h"
 #include "lua/scripts/luajit_sync.hpp"
 #include "lua/scripts/script_environment.hpp"
-#include "utils/enums.h"
+#include "declarations.hpp"
 
 class Combat;
 class Creature;
