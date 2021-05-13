@@ -23,16 +23,6 @@
 
 #include "utils/const.h"
 
-enum GlobalEvent_t {
-	GLOBALEVENT_NONE,
-	GLOBALEVENT_TIMER,
-
-	GLOBALEVENT_STARTUP,
-	GLOBALEVENT_SHUTDOWN,
-	GLOBALEVENT_RECORD,
-	GLOBALEVENT_PERIODCHANGE
-};
-
 class GlobalEvent;
 using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
 using GlobalEventMap = std::map<std::string, GlobalEvent>;

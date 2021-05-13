@@ -118,7 +118,7 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 				connection->accept();
 			}
 		} else {
-			connection->close(Connection::FORCE_CLOSE);
+			connection->close(FORCE_CLOSE);
 		}
 
 		accept();

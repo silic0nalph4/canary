@@ -32,17 +32,6 @@ extern Game g_game;
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
 
-enum RequestedInfo_t : uint16_t {
-	REQUEST_BASIC_SERVER_INFO = 1 << 0,
-	REQUEST_OWNER_SERVER_INFO = 1 << 1,
-	REQUEST_MISC_SERVER_INFO = 1 << 2,
-	REQUEST_PLAYERS_INFO = 1 << 3,
-	REQUEST_MAP_INFO = 1 << 4,
-	REQUEST_EXT_PLAYERS_INFO = 1 << 5,
-	REQUEST_PLAYER_STATUS_INFO = 1 << 6,
-	REQUEST_SERVER_SOFTWARE_INFO = 1 << 7,
-};
-
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
 	uint32_t ip = getIP();

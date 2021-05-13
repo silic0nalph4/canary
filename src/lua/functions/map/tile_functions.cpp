@@ -556,7 +556,7 @@ int TileFunctions::luaTileHasFlag(lua_State* L) {
 	// tile:hasFlag(flag)
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile) {
-		tileflags_t flag = getNumber<tileflags_t>(L, 2);
+		TileFlags_t flag = getNumber<TileFlags_t>(L, 2);
 		pushBoolean(L, tile->hasFlag(flag));
 	} else {
 		lua_pushnil(L);

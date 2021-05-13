@@ -44,31 +44,6 @@ class Npc;
 class CombatInfo;
 class Charm;
 
-enum stackPosType_t {
-	STACKPOS_MOVE,
-	STACKPOS_LOOK,
-	STACKPOS_TOPDOWN_ITEM,
-	STACKPOS_USEITEM,
-	STACKPOS_USETARGET,
-  	STACKPOS_FIND_THING,
-};
-
-enum WorldType_t {
-	WORLD_TYPE_NO_PVP = 1,
-	WORLD_TYPE_PVP = 2,
-	WORLD_TYPE_PVP_ENFORCED = 3,
-};
-
-enum GameState_t {
-	GAME_STATE_STARTUP,
-	GAME_STATE_INIT,
-	GAME_STATE_NORMAL,
-	GAME_STATE_CLOSED,
-	GAME_STATE_SHUTDOWN,
-	GAME_STATE_CLOSING,
-	GAME_STATE_MAINTAIN,
-};
-
 static constexpr int32_t EVENT_LIGHTINTERVAL_MS = 10000;
 static constexpr int32_t EVENT_DECAYINTERVAL = 250;
 static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
@@ -118,7 +93,7 @@ class Game
 
 		Cylinder* internalGetCylinder(Player* player, const Position& pos) const;
 		Thing* internalGetThing(Player* player, const Position& pos, int32_t index,
-								uint32_t spriteId, stackPosType_t type) const;
+								uint32_t spriteId, StackPosType_t type) const;
 		static void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
 
 		static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
@@ -194,7 +169,7 @@ class Game
 
 		ReturnValue internalPlayerAddItem(Player* player, Item* item,
                                           bool dropOnMap = true,
-                                          slots_t slot = CONST_SLOT_WHEREEVER);
+                                          Slots_t slot = CONST_SLOT_WHEREEVER);
 
 		Item* findItemOfType(Cylinder* cylinder, uint16_t itemId,
                              bool depthSearch = true, int32_t subType = -1) const;
@@ -310,7 +285,7 @@ class Game
 		void playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId);
 		void playerFollowCreature(uint32_t playerId, uint32_t creatureId);
 		void playerCancelAttackAndFollow(uint32_t playerId);
-		void playerSetFightModes(uint32_t playerId, fightMode_t fightMode, bool chaseMode, bool secureMode);
+		void playerSetFightModes(uint32_t playerId, FightMode_t fightMode, bool chaseMode, bool secureMode);
 		void playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos);
 		void playerLookInBattleList(uint32_t playerId, uint32_t creatureId);
 		void playerQuickLoot(uint32_t playerId, const Position& pos,

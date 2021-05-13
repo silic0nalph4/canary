@@ -21,8 +21,37 @@
 #define SRC_SERVER_SERVER_DEFINITIONS_HPP_
 
 // Enums
+// Connection and networkmessage.
+enum {FORCE_CLOSE = true};
+enum {HEADER_LENGTH = 2};
+enum {CHECKSUM_LENGTH = 4};
+enum {XTEA_MULTIPLE = 8};
+enum {MAX_BODY_LENGTH = NETWORKMESSAGE_MAXSIZE - HEADER_LENGTH - CHECKSUM_LENGTH - XTEA_MULTIPLE};
+enum {MAX_PROTOCOL_BODY_LENGTH = MAX_BODY_LENGTH - 10};
+
+enum ConnectionState_t : int8_t {
+	CONNECTION_STATE_DISCONNECTED,
+	CONNECTION_STATE_CONNECTING_STAGE1,
+	CONNECTION_STATE_CONNECTING_STAGE2,
+	CONNECTION_STATE_GAME,
+	CONNECTION_STATE_PENDING
+};
+// Connection and networkmessage.
+
+// Protocol.
+enum RequestedInfo_t : uint16_t {
+	REQUEST_BASIC_SERVER_INFO = 1 << 0,
+	REQUEST_OWNER_SERVER_INFO = 1 << 1,
+	REQUEST_MISC_SERVER_INFO = 1 << 2,
+	REQUEST_PLAYERS_INFO = 1 << 3,
+	REQUEST_MAP_INFO = 1 << 4,
+	REQUEST_EXT_PLAYERS_INFO = 1 << 5,
+	REQUEST_PLAYER_STATUS_INFO = 1 << 6,
+	REQUEST_SERVER_SOFTWARE_INFO = 1 << 7,
+};
+
 enum SessionEndInformations : uint8_t {
-	// Guessing unknown types are ban/protocol error or something
+	// Guessing unknown types are ban/protocol error or something.
 	// But since there aren't any difference from logout should we care?
 	SESSION_END_LOGOUT,
 	SESSION_END_UNK2,

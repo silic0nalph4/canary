@@ -1353,7 +1353,7 @@ void ProtocolGame::parseFightModes(NetworkMessage &msg)
 	uint8_t rawSecureMode = msg.getByte(); // 0 - can't attack unmarked, 1 - can attack unmarked
 	// uint8_t rawPvpMode = msg.getByte(); // pvp mode introduced in 10.0
 
-	fightMode_t fightMode;
+	FightMode_t fightMode;
 	if (rawFightMode == 1)
 	{
 		fightMode = FIGHTMODE_ATTACK;
@@ -2998,12 +2998,12 @@ void ProtocolGame::sendCyclopediaCharacterCombatStats()
 	alignas(16) int16_t absorbs[COMBAT_COUNT] = {};
 	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot)
 	{
-		if (!player->isItemAbilityEnabled(static_cast<slots_t>(slot)))
+		if (!player->isItemAbilityEnabled(static_cast<Slots_t>(slot)))
 		{
 			continue;
 		}
 
-		Item *item = player->getInventoryItem(static_cast<slots_t>(slot));
+		Item *item = player->getInventoryItem(static_cast<Slots_t>(slot));
 		if (!item)
 		{
 			continue;
@@ -3255,9 +3255,9 @@ void ProtocolGame::sendCyclopediaCharacterInspection()
 	uint8_t inventoryItems = 0;
 	auto startInventory = msg.getBufferPosition();
 	msg.skipBytes(1);
-	for (std::underlying_type<slots_t>::type slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; slot++)
+	for (std::underlying_type<Slots_t>::type slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; slot++)
 	{
-		Item *inventoryItem = player->getInventoryItem(static_cast<slots_t>(slot));
+		Item *inventoryItem = player->getInventoryItem(static_cast<Slots_t>(slot));
 		if (inventoryItem)
 		{
 			++inventoryItems;
@@ -5168,7 +5168,7 @@ void ProtocolGame::sendAddCreature(const Creature *creature, const Position &pos
 
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i)
 	{
-		sendInventoryItem(static_cast<slots_t>(i), player->getInventoryItem(static_cast<slots_t>(i)));
+		sendInventoryItem(static_cast<Slots_t>(i), player->getInventoryItem(static_cast<Slots_t>(i)));
 	}
 
 	sendStats();
@@ -5339,7 +5339,7 @@ void ProtocolGame::sendMoveCreature(const Creature *creature, const Position &ne
 	}
 }
 
-void ProtocolGame::sendInventoryItem(slots_t slot, const Item *item)
+void ProtocolGame::sendInventoryItem(Slots_t slot, const Item *item)
 {
 	NetworkMessage msg;
 	if (item)

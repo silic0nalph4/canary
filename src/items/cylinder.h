@@ -121,7 +121,7 @@ class Cylinder : virtual public Thing
 		 * \param index is the objects new index value
 		 * \param link holds the relation the object has to the cylinder
 		 */
-		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t link = LINK_OWNER) = 0;
+		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, CylinderLink_t link = LINK_OWNER) = 0;
 
 		/**
 		 * Is sent after an operation (move/remove) to update internal values
@@ -129,7 +129,7 @@ class Cylinder : virtual public Thing
 		 * \param index is the previous index of the removed object
 		 * \param link holds the relation the object has to the cylinder
 		 */
-		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t link = LINK_OWNER) = 0;
+		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, CylinderLink_t link = LINK_OWNER) = 0;
 
 		/**
 		 * Gets the index of an object
@@ -211,8 +211,8 @@ class VirtualCylinder final : public Cylinder
 		virtual void replaceThing(uint32_t, Thing*) override {}
 		virtual void removeThing(Thing*, uint32_t) override {}
 
-		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderLink_t = LINK_OWNER) override {}
-		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, cylinderLink_t = LINK_OWNER) override {}
+		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, CylinderLink_t = LINK_OWNER) override {}
+		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, CylinderLink_t = LINK_OWNER) override {}
 
 		bool isPushable() const override {
 			return false;

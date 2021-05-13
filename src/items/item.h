@@ -271,10 +271,10 @@ class ItemAttributes
 		};
 
 	private:
-		bool hasAttribute(itemAttrTypes type) const {
+		bool hasAttribute(ItemAttrTypes type) const {
 			return (type & attributeBits) != 0;
 		}
-		void removeAttribute(itemAttrTypes type);
+		void removeAttribute(ItemAttrTypes type);
 
 		static std::string emptyString;
 		static int64_t emptyInt;
@@ -289,9 +289,9 @@ class ItemAttributes
 				std::string* string;
 				CustomAttributeMap* custom;
 			} value;
-			itemAttrTypes type;
+			ItemAttrTypes type;
 
-			explicit Attribute(itemAttrTypes initType) : type(initType) {
+			explicit Attribute(ItemAttrTypes initType) : type(initType) {
 				memset(&value, 0, sizeof(value));
 			}
 			Attribute(const Attribute& i) {
@@ -347,15 +347,15 @@ class ItemAttributes
 		std::forward_list<Attribute> attributes;
 		uint32_t attributeBits = 0;
 
-		const std::string& getStrAttr(itemAttrTypes type) const;
-		void setStrAttr(itemAttrTypes type, const std::string& value);
+		const std::string& getStrAttr(ItemAttrTypes type) const;
+		void setStrAttr(ItemAttrTypes type, const std::string& value);
 
-		int64_t getIntAttr(itemAttrTypes type) const;
-		void setIntAttr(itemAttrTypes type, int64_t value);
-		void increaseIntAttr(itemAttrTypes type, int64_t value);
+		int64_t getIntAttr(ItemAttrTypes type) const;
+		void setIntAttr(ItemAttrTypes type, int64_t value);
+		void increaseIntAttr(ItemAttrTypes type, int64_t value);
 
-		const Attribute* getExistingAttr(itemAttrTypes type) const;
-		Attribute& getAttr(itemAttrTypes type);
+		const Attribute* getExistingAttr(ItemAttrTypes type) const;
+		Attribute& getAttr(ItemAttrTypes type);
 
 		CustomAttributeMap* getCustomAttributeMap() {
 			if (!hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
@@ -439,13 +439,13 @@ class ItemAttributes
 			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME | ITEM_ATTRIBUTE_SPECIAL;
 
 	public:
-		static bool isIntAttrType(itemAttrTypes type) {
+		static bool isIntAttrType(ItemAttrTypes type) {
 			return (type & intAttributeTypes) == type;
 		}
-		static bool isStrAttrType(itemAttrTypes type) {
+		static bool isStrAttrType(ItemAttrTypes type) {
 			return (type & stringAttributeTypes) == type;
 		}
-		inline static bool isCustomAttrType(itemAttrTypes type) {
+		inline static bool isCustomAttrType(ItemAttrTypes type) {
 			return (type & 0x80000000) != 0;
 		}
 
@@ -520,26 +520,26 @@ class Item : virtual public Thing
 			return nullptr;
 		}
 
-		const std::string& getStrAttr(itemAttrTypes type) const {
+		const std::string& getStrAttr(ItemAttrTypes type) const {
 			if (!attributes) {
 				return ItemAttributes::emptyString;
 			}
 			return attributes->getStrAttr(type);
 		}
-		void setStrAttr(itemAttrTypes type, const std::string& value) {
+		void setStrAttr(ItemAttrTypes type, const std::string& value) {
 			getAttributes()->setStrAttr(type, value);
 		}
 
-		int32_t getIntAttr(itemAttrTypes type) const {
+		int32_t getIntAttr(ItemAttrTypes type) const {
 			if (!attributes) {
 				return 0;
 			}
 			return attributes->getIntAttr(type);
 		}
-		void setIntAttr(itemAttrTypes type, int32_t value) {
+		void setIntAttr(ItemAttrTypes type, int32_t value) {
 			getAttributes()->setIntAttr(type, value);
 		}
-		void increaseIntAttr(itemAttrTypes type, int32_t value) {
+		void increaseIntAttr(ItemAttrTypes type, int32_t value) {
 			getAttributes()->increaseIntAttr(type, value);
 		}
 
@@ -551,12 +551,12 @@ class Item : virtual public Thing
 			return isLootTrackeable;
 		}
 
-		void removeAttribute(itemAttrTypes type) {
+		void removeAttribute(ItemAttrTypes type) {
 			if (attributes) {
 				attributes->removeAttribute(type);
 			}
 		}
-		bool hasAttribute(itemAttrTypes type) const {
+		bool hasAttribute(ItemAttrTypes type) const {
 			if (!attributes) {
 				return false;
 			}

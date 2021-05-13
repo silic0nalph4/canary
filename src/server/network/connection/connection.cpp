@@ -129,7 +129,7 @@ void Connection::accept()
 		} else {
 			// Read size of the first packet
 			boost::asio::async_read(socket,
-				boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
+				boost::asio::buffer(msg.getBuffer(), HEADER_LENGTH),
 				std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 		}
 	} catch (boost::system::system_error& e) {
@@ -219,7 +219,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
                                            std::placeholders::_1));
 
 		// Read packet content
-		msg.setLength(size + NetworkMessage::HEADER_LENGTH);
+		msg.setLength(size + HEADER_LENGTH);
 		boost::asio::async_read(socket, boost::asio::buffer(msg.getBodyBuffer(), size),
                                std::bind(&Connection::parsePacket, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
@@ -253,7 +253,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		if (!protocol) {
 			// As of 11.11+ update, we need to check if it's a outdated client or a status client server with this ugly check
 			if (msg.getLength() < 280) {
-				msg.skipBytes(-NetworkMessage::CHECKSUM_LENGTH); //those 32bits read up there
+				msg.skipBytes(-CHECKSUM_LENGTH); //those 32bits read up there
 			}
 
 			// Game protocol has already been created at this point
@@ -278,7 +278,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 		// Wait to the next packet
 		boost::asio::async_read(socket,
-                               boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
+                               boost::asio::buffer(msg.getBuffer(), HEADER_LENGTH),
                                std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		SPDLOG_ERROR("[Connection::parsePacket] - {}", e.what());

@@ -17,38 +17,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "otpch.h"
+#ifndef SRC_MAP_MAP_DEFINITIONS_HPP_
+#define SRC_MAP_MAP_DEFINITIONS_HPP_
 
-#include "items/containers/rewards/rewardchest.h"
+// Enums
+enum AccessList_t {
+	GUEST_LIST = 0x100,
+	SUBOWNER_LIST = 0x101,
+};
 
-RewardChest::RewardChest(uint16_t type) :
-	Container(type)
-{
-	maxSize = 32;
-	unlocked = false;
-	pagination = true;
-}
+enum AccessHouseLevel_t {
+	HOUSE_NOT_INVITED = 0,
+	HOUSE_GUEST = 1,
+	HOUSE_SUBOWNER = 2,
+	HOUSE_OWNER = 3,
+};
 
-ReturnValue RewardChest::queryAdd(int32_t, const Thing&, uint32_t,
-	uint32_t, Creature* actor/* = nullptr*/) const
-{
-	if (actor) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-		
-	return RETURNVALUE_NOERROR;
-}
+enum RentPeriod_t {
+	RENTPERIOD_DAILY,
+	RENTPERIOD_WEEKLY,
+	RENTPERIOD_MONTHLY,
+	RENTPERIOD_YEARLY,
+	RENTPERIOD_NEVER,
+};
 
-void RewardChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, CylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
-	}
-}
-
-void RewardChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, CylinderLink_t)
-{
-	if (parent != nullptr) {
-		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
-	}
-}
+#endif  // SRC_MAP_MAP_DEFINITIONS_HPP_

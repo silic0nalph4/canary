@@ -21,6 +21,57 @@
 #define SRC_CREATURES_CREATURES_DEFINITIONS_HPP_
 
 // Enum
+
+enum SkillsId_t {
+	SKILLVALUE_LEVEL = 0,
+	SKILLVALUE_TRIES = 1,
+	SKILLVALUE_PERCENT = 2,
+};
+
+enum MatrixOperation_t {
+	MATRIXOPERATION_COPY,
+	MATRIXOPERATION_MIRROR,
+	MATRIXOPERATION_FLIP,
+	MATRIXOPERATION_ROTATE90,
+	MATRIXOPERATION_ROTATE180,
+	MATRIXOPERATION_ROTATE270,
+};
+
+enum ConditionAttr_t {
+	CONDITIONATTR_TYPE = 1,
+	CONDITIONATTR_ID,
+	CONDITIONATTR_TICKS,
+	CONDITIONATTR_HEALTHTICKS,
+	CONDITIONATTR_HEALTHGAIN,
+	CONDITIONATTR_MANATICKS,
+	CONDITIONATTR_MANAGAIN,
+	CONDITIONATTR_DELAYED,
+	CONDITIONATTR_OWNER,
+	CONDITIONATTR_INTERVALDATA,
+	CONDITIONATTR_SPEEDDELTA,
+	CONDITIONATTR_FORMULA_MINA,
+	CONDITIONATTR_FORMULA_MINB,
+	CONDITIONATTR_FORMULA_MAXA,
+	CONDITIONATTR_FORMULA_MAXB,
+	CONDITIONATTR_LIGHTCOLOR,
+	CONDITIONATTR_LIGHTLEVEL,
+	CONDITIONATTR_LIGHTTICKS,
+	CONDITIONATTR_LIGHTINTERVAL,
+	CONDITIONATTR_SOULTICKS,
+	CONDITIONATTR_SOULGAIN,
+	CONDITIONATTR_SKILLS,
+	CONDITIONATTR_STATS,
+	CONDITIONATTR_BUFFS,
+	CONDITIONATTR_OUTFIT,
+	CONDITIONATTR_PERIODDAMAGE,
+	CONDITIONATTR_ISBUFF,
+	CONDITIONATTR_SUBID,
+	CONDITIONATTR_MANASHIELD,
+
+	//reserved for serialization
+	CONDITIONATTR_END = 254,
+};
+
 enum ConditionType_t {
 	CONDITION_NONE,
 
@@ -241,6 +292,24 @@ enum RespawnPeriod_t {
 	RESPAWNPERIOD_ALL,
 	RESPAWNPERIOD_DAY,
 	RESPAWNPERIOD_NIGHT
+};
+
+enum Slots_t : uint8_t {
+	CONST_SLOT_WHEREEVER = 0,
+	CONST_SLOT_HEAD = 1,
+	CONST_SLOT_NECKLACE = 2,
+	CONST_SLOT_BACKPACK = 3,
+	CONST_SLOT_ARMOR = 4,
+	CONST_SLOT_RIGHT = 5,
+	CONST_SLOT_LEFT = 6,
+	CONST_SLOT_LEGS = 7,
+	CONST_SLOT_FEET = 8,
+	CONST_SLOT_RING = 9,
+	CONST_SLOT_AMMO = 10,
+	CONST_SLOT_STORE_INBOX = 11,
+
+	CONST_SLOT_FIRST = CONST_SLOT_HEAD,
+	CONST_SLOT_LAST = CONST_SLOT_STORE_INBOX,
 };
 
 enum charmRune_t : int8_t {
@@ -466,6 +535,27 @@ enum Vocation_t : uint16_t {
 	VOCATION_LAST = VOCATION_ELITE_KNIGHT
 };
 
+enum FightMode_t : uint8_t {
+	FIGHTMODE_ATTACK = 1,
+	FIGHTMODE_BALANCED = 2,
+	FIGHTMODE_DEFENSE = 3,
+};
+
+enum PvpMode_t : uint8_t {
+	PVP_MODE_DOVE = 0,
+	PVP_MODE_WHITE_HAND = 1,
+	PVP_MODE_YELLOW_HAND = 2,
+	PVP_MODE_RED_FIST = 3,
+};
+
+enum TradeState_t : uint8_t {
+	TRADE_NONE,
+	TRADE_INITIATED,
+	TRADE_ACCEPT,
+	TRADE_ACKNOWLEDGE,
+	TRADE_TRANSFER,
+};
+
 enum CombatType_t : uint16_t {
 	COMBAT_NONE = 0,
 
@@ -485,7 +575,77 @@ enum CombatType_t : uint16_t {
 	COMBAT_COUNT = 12
 };
 
-// Struct
+enum PlayerAsyncOngoingTaskFlags : uint64_t {
+	PlayerAsyncTask_Highscore = 1 << 0,
+	PlayerAsyncTask_RecentDeaths = 1 << 1,
+	PlayerAsyncTask_RecentPvPKills = 1 << 2
+};
+
+// Structs
+struct Position;
+
+struct VIPEntry {
+	VIPEntry(uint32_t initGuid, std::string initName, std::string initDescription,
+             uint32_t initIcon, bool initNotify) :
+                guid(initGuid),
+                name(std::move(initName)),
+                description(std::move(initDescription)),
+                icon(initIcon),
+                notify(initNotify) {}
+
+	uint32_t guid;
+	std::string name;
+	std::string description;
+	uint32_t icon;
+	bool notify;
+};
+
+struct OutfitEntry {
+	constexpr OutfitEntry(uint16_t initLookType, uint8_t initAddons) :
+                         lookType(initLookType), addons(initAddons) {}
+
+	uint16_t lookType;
+	uint8_t addons;
+};
+
+struct FamiliarEntry {
+	constexpr explicit FamiliarEntry(uint16_t initLookType) : lookType(initLookType) {}
+	uint16_t lookType;
+};
+
+struct Skill {
+	uint64_t tries = 0;
+	uint16_t level = 10;
+	double_t percent = 0;
+};
+
+struct Kill {
+	uint32_t target;
+	time_t time;
+	bool unavenged;
+
+	Kill(uint32_t _target, time_t _time, bool _unavenged) :
+        target(_target), time(_time), unavenged(_unavenged) {}
+};
+
+struct IntervalInfo {
+	int32_t timeLeft;
+	int32_t value;
+	int32_t interval;
+};
+
+struct FindPathParams {
+	bool fullPathSearch = true;
+	bool clearSight = true;
+	bool allowDiagonal = true;
+	bool keepDistance = false;
+	bool absoluteDist = false;
+	bool preferDiagonal = false;
+	int32_t maxSearchDist = 0;
+	int32_t minTargetDist = -1;
+	int32_t maxTargetDist = -1;
+};
+
 struct RecentDeathEntry {
 	RecentDeathEntry(std::string cause, uint32_t timestamp) :
         cause(std::move(cause)),

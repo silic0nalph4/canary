@@ -206,7 +206,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 	return s.str();
 }
 
-Item* Player::getInventoryItem(slots_t slot) const
+Item* Player::getInventoryItem(Slots_t slot) const
 {
 	if (slot < CONST_SLOT_FIRST || slot > CONST_SLOT_LAST) {
 		return nullptr;
@@ -224,7 +224,7 @@ void Player::removeConditionSuppressions(uint32_t removeConditions)
 	conditionSuppressions &= ~removeConditions;
 }
 
-Item* Player::getWeapon(slots_t slot, bool ignoreAmmo) const
+Item* Player::getWeapon(Slots_t slot, bool ignoreAmmo) const
 {
 	Item* item = inventory[slot];
 	if (!item) {
@@ -325,8 +325,8 @@ int32_t Player::getArmor() const
 {
 	int32_t armor = 0;
 
-	static const slots_t armorSlots[] = {CONST_SLOT_HEAD, CONST_SLOT_NECKLACE, CONST_SLOT_ARMOR, CONST_SLOT_LEGS, CONST_SLOT_FEET, CONST_SLOT_RING};
-	for (slots_t slot : armorSlots) {
+	static const Slots_t armorSlots[] = {CONST_SLOT_HEAD, CONST_SLOT_NECKLACE, CONST_SLOT_ARMOR, CONST_SLOT_LEGS, CONST_SLOT_FEET, CONST_SLOT_RING};
+	for (Slots_t slot : armorSlots) {
 		Item* inventoryItem = inventory[slot];
 		if (inventoryItem) {
 			armor += inventoryItem->getArmor();
@@ -1313,7 +1313,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			Item* item = inventory[slot];
 			if (item) {
 				item->startDecaying();
-				g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
+				g_moveEvents->onPlayerEquip(this, item, static_cast<Slots_t>(slot), false);
 			}
 		}
 
@@ -2188,7 +2188,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 
 	if (damage > 0) {
 		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-			if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
+			if (!isItemAbilityEnabled(static_cast<Slots_t>(slot))) {
 				continue;
 			}
 
@@ -2853,7 +2853,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 
 	if (ret == RETURNVALUE_NOERROR || ret == RETURNVALUE_NOTENOUGHROOM) {
 		//need an exchange with source?
-		const Item* inventoryItem = getInventoryItem(static_cast<slots_t>(index));
+		const Item* inventoryItem = getInventoryItem(static_cast<Slots_t>(index));
 		if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
 			return RETURNVALUE_NEEDEXCHANGE;
 		}
@@ -2863,7 +2863,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 			return RETURNVALUE_NOTENOUGHCAPACITY;
 		}
 
-		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true)) {
+		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), static_cast<Slots_t>(index), true)) {
 			return RETURNVALUE_CANNOTBEDRESSED;
 		}
 	}
@@ -3110,7 +3110,7 @@ void Player::addThing(int32_t index, Thing* thing)
 	inventory[index] = item;
 
 	//send to client
-	sendInventoryItem(static_cast<slots_t>(index), item);
+	sendInventoryItem(static_cast<Slots_t>(index), item);
 }
 
 void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
@@ -3129,7 +3129,7 @@ void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	item->setSubType(count);
 
 	//send to client
-	sendInventoryItem(static_cast<slots_t>(index), item);
+	sendInventoryItem(static_cast<Slots_t>(index), item);
 
 	//event methods
 	onUpdateInventoryItem(item, item);
@@ -3141,7 +3141,7 @@ void Player::replaceThing(uint32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* oldItem = getInventoryItem(static_cast<slots_t>(index));
+	Item* oldItem = getInventoryItem(static_cast<Slots_t>(index));
 	if (!oldItem) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -3152,7 +3152,7 @@ void Player::replaceThing(uint32_t index, Thing* thing)
 	}
 
 	//send to client
-	sendInventoryItem(static_cast<slots_t>(index), item);
+	sendInventoryItem(static_cast<Slots_t>(index), item);
 
 	//event methods
 	onUpdateInventoryItem(oldItem, item);
@@ -3177,7 +3177,7 @@ void Player::removeThing(Thing* thing, uint32_t count)
 	if (item->isStackable()) {
 		if (count == item->getItemCount()) {
 			//send change to client
-			sendInventoryItem(static_cast<slots_t>(index), nullptr);
+			sendInventoryItem(static_cast<Slots_t>(index), nullptr);
 
 			//event methods
 			onRemoveInventoryItem(item);
@@ -3189,14 +3189,14 @@ void Player::removeThing(Thing* thing, uint32_t count)
 			item->setItemCount(newCount);
 
 			//send change to client
-			sendInventoryItem(static_cast<slots_t>(index), item);
+			sendInventoryItem(static_cast<Slots_t>(index), item);
 
 			//event methods
 			onUpdateInventoryItem(item, item);
 		}
 	} else {
 		//send change to client
-		sendInventoryItem(static_cast<slots_t>(index), nullptr);
+		sendInventoryItem(static_cast<Slots_t>(index), nullptr);
 
 		//event methods
 		onRemoveInventoryItem(item);
@@ -3460,11 +3460,11 @@ Thing* Player::getThing(size_t index) const
 	return nullptr;
 }
 
-void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderLink_t link /*= LINK_OWNER*/)
+void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, CylinderLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerEquip(this, thing->getItem(), static_cast<slots_t>(index), false);
+		g_moveEvents->onPlayerEquip(this, thing->getItem(), static_cast<Slots_t>(index), false);
 	}
 
 	bool requireListUpdate = true;
@@ -3515,11 +3515,11 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 	}
 }
 
-void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderLink_t link /*= LINK_OWNER*/)
+void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, CylinderLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<slots_t>(index));
+		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<Slots_t>(index));
 	}
 
 	bool requireListUpdate = true;
@@ -3902,7 +3902,7 @@ void Player::onCombatRemoveCondition(Condition* condition)
 	if (condition->getId() > 0) {
 		//Means the condition is from an item, id == slot
 		if (g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
-			Item* item = getInventoryItem(static_cast<slots_t>(condition->getId()));
+			Item* item = getInventoryItem(static_cast<Slots_t>(condition->getId()));
 			if (item) {
 				//25% chance to destroy the item
 				if (25 >= uniform_random(1, 100)) {
@@ -5420,17 +5420,17 @@ void Player::stowItem(Item* item, uint32_t count, bool allItems) {
  * Interfaces
  ******************************************************************************/
 
-error_t Player::SetAccountInterface(account::Account *account) {
-  if (account == nullptr) {
-    return account::ERROR_NULLPTR;
-  }
+error_t Player::SetAccountInterface(account::Account* account) {
+	if (account == nullptr) {
+		return account::ERROR_NULLPTR;
+	}
 
-  account_ = account;
-  return account::ERROR_NO;
+	account_ = account;
+	return account::ERROR_NO;
 }
 
-error_t Player::GetAccountInterface(account::Account *account) {
-  account = account_;
-  return account::ERROR_NO;
+error_t Player::GetAccountInterface(account::Account* account) {
+	account = account_;
+	return account::ERROR_NO;
 }
 
