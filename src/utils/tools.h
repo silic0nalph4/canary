@@ -25,7 +25,7 @@
 #include <regex>
 #include <boost/algorithm/string.hpp>
 
-#include "utils/const.h"
+#include "utils/utils_definitions.hpp"
 #include "declarations.hpp"
 #include "game/movement/position.h"
 

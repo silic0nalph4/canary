@@ -20,8 +20,8 @@
 #ifndef SRC_DECLARATIONS_HPP_
 #define SRC_DECLARATIONS_HPP_
 
+#include "utils/const.hpp"
 #include "config/config_definitions.hpp"
-#include "utils/const.h"
 #include "creatures/creatures_definitions.hpp"
 #include "database/database_definitions.hpp"
 #include "game/game_definitions.hpp"

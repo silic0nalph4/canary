@@ -21,7 +21,7 @@
 #define SRC_LUA_CREATURE_TALKACTION_H_
 
 #include "lua/global/baseevents.h"
-#include "utils/const.h"
+#include "utils/utils_definitions.hpp"
 #include "declarations.hpp"
 #include "lua/scripts/luascript.h"
 

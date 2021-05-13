@@ -22,7 +22,7 @@
 
 #include "declarations.hpp"
 #include "creatures/combat/condition.h"
-#include "utils/const.h"
+#include "utils/utils_definitions.hpp"
 #include "lua/creature/creatureevent.h"
 #include "map/map.h"
 #include "game/movement/position.h"

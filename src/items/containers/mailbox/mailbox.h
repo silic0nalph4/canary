@@ -22,7 +22,7 @@
 
 #include "items/item.h"
 #include "items/cylinder.h"
-#include "utils/const.h"
+#include "utils/utils_definitions.hpp"
 
 class Mailbox final : public Item, public Cylinder
 {

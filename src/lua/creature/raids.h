@@ -20,7 +20,7 @@
 #ifndef SRC_LUA_CREATURE_RAIDS_H_
 #define SRC_LUA_CREATURE_RAIDS_H_
 
-#include "utils/const.h"
+#include "utils/utils_definitions.hpp"
 #include "declarations.hpp"
 #include "game/movement/position.h"
 #include "lua/global/baseevents.h"

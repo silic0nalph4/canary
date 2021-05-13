@@ -20,7 +20,7 @@
 #ifndef SRC_SERVER_NETWORK_MESSAGE_NETWORKMESSAGE_H_
 #define SRC_SERVER_NETWORK_MESSAGE_NETWORKMESSAGE_H_
 
-#include "utils/const.h"
+#include "utils/const.hpp"
 #include "declarations.hpp"
 
 class Item;
