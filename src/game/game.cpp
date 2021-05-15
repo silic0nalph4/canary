@@ -7690,7 +7690,7 @@ void Game::playerBrowseMarketOwnHistory(uint32_t playerId) {
 }
 
 void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spriteId, uint16_t amount, uint32_t price,
-                                   bool anonymous) // Limit of 64k of items to create offer {
+                                   bool anonymous) {
 	// 64000 is size of the client limitation
 	if (amount == 0 || amount > 64000) {
 		return;
@@ -7823,11 +7823,11 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
 
-	//
 	player->updateMarketExhausted(); // Exhausted for create offert in the market
 }
 
-void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter) // Market cancel offer {
+// Market cancel offer
+void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter) {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
@@ -7904,8 +7904,8 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	player->updateMarketExhausted(); // Exhausted for cancel offer in the market
 }
 
-void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount)
-// Limit of 64k of items to create offer {
+void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount) {
+	// Limit of 64k of items to create offer
 	if (amount == 0 || amount > 64000) {
 		return;
 	}
@@ -8191,7 +8191,8 @@ void Game::playerBuyStoreOffer(uint32_t playerId, uint32_t offerId,
 		account.LoadAccountDB(player->getAccount());
 		uint32_t coins;
 		account.GetCoins(&coins);
-		if (coins < offer->price) // player doesnt have enough coins {
+		// player doesnt have enough coins
+		if (coins < offer->price) {
 			player->sendStoreError(STORE_ERROR_PURCHASE, "You don't have enough coins");
 			return;
 		}
