@@ -21,7 +21,8 @@
 #define SRC_CONFIG_CONFIG_DEFINITIONS_HPP_
 
 // Enum
-enum booleanConfig_t {
+enum booleanConfig_t
+{
 	ALLOW_CHANGEOUTFIT,
 	ONE_PLAYER_ON_ACCOUNT,
 	AIMBOT_HOTKEY_ENABLED,
@@ -61,9 +62,10 @@ enum booleanConfig_t {
 	ALL_CONSOLE_LOG,
 
 	LAST_BOOLEAN_CONFIG
-	};
+};
 
-enum stringConfig_t {
+enum stringConfig_t
+{
 	MAP_NAME,
 	HOUSE_RENT_PERIOD,
 	SERVER_NAME,
@@ -90,9 +92,10 @@ enum stringConfig_t {
 	DISCORD_WEBHOOK_URL,
 
 	LAST_STRING_CONFIG
-	};
+};
 
-enum integerConfig_t {
+enum integerConfig_t
+{
 	SQL_PORT,
 	MAX_PLAYERS,
 	PZ_LOCKED,
@@ -144,7 +147,8 @@ enum integerConfig_t {
 	LAST_INTEGER_CONFIG
 };
 
-enum floatingConfig_t {
+enum floatingConfig_t
+{
 	RATE_MONSTER_HEALTH,
 	RATE_MONSTER_ATTACK,
 	RATE_MONSTER_DEFENSE,

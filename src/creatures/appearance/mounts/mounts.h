@@ -26,9 +26,11 @@
 struct Mount
 {
 	Mount(uint8_t initId, uint16_t initClientId, std::string initName, int32_t initSpeed, bool initPremium,
-																							std::string initType) :
-		name(initName), speed(initSpeed), clientId(initClientId), id(initId), premium(initPremium),
-		type(initType) {}
+	      std::string initType) :
+		name(std::move(std::move(initName))), speed(initSpeed), clientId(initClientId), id(initId), premium(initPremium),
+		type(std::move(std::move(initType)))
+	{
+	}
 
 	std::string name;
 	int32_t speed;
@@ -40,19 +42,20 @@ struct Mount
 
 class Mounts
 {
-	public:
-		bool reload();
-		bool loadFromXml();
-		Mount* getMountByID(uint8_t id);
-		Mount* getMountByName(const std::string& name);
-		Mount* getMountByClientID(uint16_t clientId);
+public:
+	bool reload();
+	bool loadFromXml();
+	Mount* getMountByID(uint8_t id);
+	Mount* getMountByName(const std::string& name);
+	Mount* getMountByClientID(uint16_t clientId);
 
-		const std::vector<Mount>& getMounts() const {
-			return mounts;
-		}
+	const std::vector<Mount>& getMounts() const
+	{
+		return mounts;
+	}
 
-	private:
-		std::vector<Mount> mounts;
+private:
+	std::vector<Mount> mounts;
 };
 
 #endif  // SRC_CREATURES_APPEARANCE_MOUNTS_MOUNTS_H_

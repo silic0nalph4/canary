@@ -24,51 +24,61 @@
 
 class Teleport final : public Item, public Cylinder
 {
-	public:
-		explicit Teleport(uint16_t type) : Item(type) {};
+public:
+	explicit Teleport(uint16_t type) : Item(type)
+	{
+	};
 
-		Teleport* getTeleport() override {
-			return this;
-		}
-		const Teleport* getTeleport() const override {
-			return this;
-		}
+	Teleport* getTeleport() override
+	{
+		return this;
+	}
 
-		//serialization
-		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
-		void serializeAttr(PropWriteStream& propWriteStream) const override;
+	const Teleport* getTeleport() const override
+	{
+		return this;
+	}
 
-		const Position& getDestPos() const {
-			return destPos;
-		}
-		void setDestPos(Position pos) {
-			destPos = std::move(pos);
-		}
+	//serialization
+	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
-		bool checkInfinityLoop(Tile* destTile);
+	const Position& getDestPos() const
+	{
+		return destPos;
+	}
 
-		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const override;
-		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t& maxQueryCount, uint32_t flags) const override;
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
-		Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
-				uint32_t& flags) override;
+	void setDestPos(Position pos)
+	{
+		destPos = pos;
+	}
 
-		void addThing(Thing* thing) override;
-		void addThing(int32_t index, Thing* thing) override;
+	bool checkInfinityLoop(Tile* destTile);
 
-		void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override;
-		void replaceThing(uint32_t index, Thing* thing) override;
+	//cylinder implementations
+	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
+	                     uint32_t flags, Creature* actor = nullptr) const override;
+	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
+	                          uint32_t& maxQueryCount, uint32_t flags) const override;
+	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
+	Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
+	                           uint32_t& flags) override;
 
-		void removeThing(Thing* thing, uint32_t count) override;
+	void addThing(Thing* thing) override;
+	void addThing(int32_t index, Thing* thing) override;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, CylinderLink_t link = LINK_OWNER) override;
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, CylinderLink_t link = LINK_OWNER) override;
+	void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override;
+	void replaceThing(uint32_t index, Thing* thing) override;
 
-	private:
-		Position destPos;
+	void removeThing(Thing* thing, uint32_t count) override;
+
+	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
+	                         CylinderLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
+	                            CylinderLink_t link = LINK_OWNER) override;
+
+private:
+	Position destPos;
 };
 
 #endif  // SRC_GAME_MOVEMENT_TELEPORT_H_

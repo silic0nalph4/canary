@@ -26,7 +26,8 @@
 class Monster;
 class MonsterType;
 
-struct spawnBlock_t {
+struct spawnBlock_t
+{
 	Position pos;
 	MonsterType* monsterType;
 	int64_t lastSpawn;
@@ -36,73 +37,84 @@ struct spawnBlock_t {
 
 class SpawnMonster
 {
-	public:
-		SpawnMonster(Position initPos, int32_t initRadius) : centerPos(std::move(initPos)), radius(initRadius) {}
-		~SpawnMonster();
+public:
+	SpawnMonster(Position initPos, int32_t initRadius) : centerPos(initPos), radius(initRadius)
+	{
+	}
 
-		// non-copyable
-		SpawnMonster(const SpawnMonster&) = delete;
-		SpawnMonster& operator=(const SpawnMonster&) = delete;
+	~SpawnMonster();
 
-		bool addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
-		void removeMonster(Monster* monster);
+	// non-copyable
+	SpawnMonster(const SpawnMonster&) = delete;
+	SpawnMonster& operator=(const SpawnMonster&) = delete;
 
-		uint32_t getInterval() const {
-			return interval;
-		}
-		void startup();
+	bool addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
+	void removeMonster(Monster* monster);
 
-		void startSpawnMonsterCheck();
-		void stopEvent();
+	uint32_t getInterval() const
+	{
+		return interval;
+	}
 
-		bool isInSpawnMonsterZone(const Position& pos);
-		void cleanup();
+	void startup();
 
-	private:
-		//map of the spawned creatures
-		using SpawnedMap = std::multimap<uint32_t, Monster*>;
-		using spawned_pair = SpawnedMap::value_type;
-		SpawnedMap spawnedMonsterMap;
+	void startSpawnMonsterCheck();
+	void stopEvent();
 
-		//map of creatures in the spawn
-		std::map<uint32_t, spawnBlock_t> spawnMonsterMap;
+	bool isInSpawnMonsterZone(const Position& pos);
+	void cleanup();
 
-		Position centerPos;
-		int32_t radius;
+private:
+	//map of the spawned creatures
+	using SpawnedMap = std::multimap<uint32_t, Monster*>;
+	using spawned_pair = SpawnedMap::value_type;
+	SpawnedMap spawnedMonsterMap;
 
-		uint32_t interval = 60000;
-		uint32_t checkSpawnMonsterEvent = 0;
+	//map of creatures in the spawn
+	std::map<uint32_t, spawnBlock_t> spawnMonsterMap;
 
-		static bool findPlayer(const Position& pos);
-		bool spawnMonster(uint32_t spawnMonsterId, MonsterType* monsterType, const Position& pos, Direction dir, bool startup = false);
-		void checkSpawnMonster();
-		void scheduleSpawn(uint32_t spawnMonsterId, spawnBlock_t& sb, uint16_t interval);
+	Position centerPos;
+	int32_t radius;
+
+	uint32_t interval = 60000;
+	uint32_t checkSpawnMonsterEvent = 0;
+
+	static bool findPlayer(const Position& pos);
+	bool spawnMonster(uint32_t spawnMonsterId, MonsterType* monsterType, const Position& pos, Direction dir,
+	                  bool startup = false);
+	void checkSpawnMonster();
+	void scheduleSpawn(uint32_t spawnMonsterId, spawnBlock_t sb, uint16_t interval);
 };
 
 class SpawnsMonster
 {
-	public:
-		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
+public:
+	static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
-		bool loadFromXML(const std::string& filemonstername);
-		void startup();
-		void clear();
+	bool loadFromXML(const std::string& filemonstername);
+	void startup();
+	void clear();
 
-		bool isStarted() const {
-			return started;
-		}
-		bool isLoaded() const {
-			return loaded;
-		}
-		std::forward_list<SpawnMonster>& getspawnMonsterList() {
-			return spawnMonsterList;
-		}
+	bool isStarted() const
+	{
+		return started;
+	}
 
-	private:
-		std::forward_list<SpawnMonster> spawnMonsterList;
-		std::string filemonstername;
-		bool loaded = false;
-		bool started = false;
+	bool isLoaded() const
+	{
+		return loaded;
+	}
+
+	std::forward_list<SpawnMonster>& getspawnMonsterList()
+	{
+		return spawnMonsterList;
+	}
+
+private:
+	std::forward_list<SpawnMonster> spawnMonsterList;
+	std::string filemonstername;
+	bool loaded = false;
+	bool started = false;
 };
 
 static constexpr int32_t NONBLOCKABLE_SPAWN_MONSTER_INTERVAL = 1400;

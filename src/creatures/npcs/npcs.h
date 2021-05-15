@@ -24,7 +24,8 @@
 
 class NpcType
 {
-	struct NpcInfo {
+	struct NpcInfo
+	{
 		LuaScriptInterface* scriptInterface;
 
 		Outfit_t outfit = {};
@@ -67,42 +68,48 @@ class NpcType
 		NpcsEvent_t eventType = NPCS_EVENT_NONE;
 	};
 
-	public:
-		NpcType() = default;
-		NpcType(std::string name) : name(name), nameDescription(name) {};
+public:
+	NpcType() = default;
 
-		// non-copyable
-		NpcType(const NpcType&) = delete;
-		NpcType& operator=(const NpcType&) = delete;
+	NpcType(const std::string& name) : name(name), nameDescription(name)
+	{
+	};
 
-		std::string name;
-		std::string nameDescription;
-		NpcInfo info;
+	// non-copyable
+	NpcType(const NpcType&) = delete;
+	NpcType& operator=(const NpcType&) = delete;
 
-		void addShopItem(uint16_t serverId, ShopInfo &item) {
-			info.shopItems[serverId] = item;
-		}
+	std::string name;
+	std::string nameDescription;
+	NpcInfo info;
 
-		bool loadCallback(LuaScriptInterface* scriptInterface);
-		bool canSpawn(const Position& pos);
+	void addShopItem(uint16_t serverId, ShopInfo& item)
+	{
+		info.shopItems[serverId] = item;
+	}
+
+	bool loadCallback(LuaScriptInterface* scriptInterface);
+	bool canSpawn(const Position& pos);
 };
 
 class Npcs
 {
-	public:
-		Npcs() = default;
-		// non-copyable
-		Npcs(const Npcs&) = delete;
-		Npcs& operator=(const Npcs&) = delete;
+public:
+	Npcs() = default;
+	// non-copyable
+	Npcs(const Npcs&) = delete;
+	Npcs& operator=(const Npcs&) = delete;
 
-		NpcType* getNpcType(const std::string& name, bool create = false);
-		void reset() {
-			npcs.clear();
-			scriptInterface.reset();
-		};
+	NpcType* getNpcType(const std::string& name, bool create = false);
 
-		std::unique_ptr<LuaScriptInterface> scriptInterface;
-		std::map<std::string, NpcType*> npcs;
+	void reset()
+	{
+		npcs.clear();
+		scriptInterface.reset();
+	};
+
+	std::unique_ptr<LuaScriptInterface> scriptInterface;
+	std::map<std::string, NpcType*> npcs;
 };
 
 #endif  // SRC_CREATURES_NPCS_NPCS_H_

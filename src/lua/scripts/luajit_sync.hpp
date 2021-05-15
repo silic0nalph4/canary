@@ -21,7 +21,7 @@
 #define SRC_LUA_SCRIPTS_LUAJIT_SYNC_HPP_
 
 #if __has_include("luajit/lua.hpp")
-	#include <luajit/lua.hpp>
+#include <luajit/lua.hpp>
 #else
 	#include <lua.hpp>
 #endif

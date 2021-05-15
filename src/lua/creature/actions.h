@@ -28,137 +28,153 @@ class Action;
 
 using Action_ptr = std::unique_ptr<Action>;
 using ActionFunction =
-                       std::function<bool(Player* player, Item* item,
-                            const Position& fromPosition, Thing* target,
-                            const Position& toPosition, bool isHotkey
-                       )>;
+std::function<bool(Player* player, Item* item,
+                   const Position& fromPosition, Thing* target,
+                   const Position& toPosition, bool isHotkey
+)>;
 
-class Action : public Event {
-	public:
-		explicit Action(LuaScriptInterface* interface);
+class Action : public Event
+{
+public:
+	explicit Action(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) override;
+	bool configureEvent(const pugi::xml_node& node) override;
 
-		// Scripting
-		virtual bool executeUse(Player* player, Item* item,
-                                const Position& fromPosition, Thing* target,
-                                const Position& toPosition, bool isHotkey);
+	// Scripting
+	virtual bool executeUse(Player* player, Item* item,
+	                        const Position& fromPosition, Thing* target,
+	                        const Position& toPosition, bool isHotkey);
 
-		bool getAllowFarUse() const {
-			return allowFarUse;
-		}
+	bool getAllowFarUse() const
+	{
+		return allowFarUse;
+	}
 
-		void setAllowFarUse(bool allow) {
-			allowFarUse = allow;
-		}
+	void setAllowFarUse(bool allow)
+	{
+		allowFarUse = allow;
+	}
 
-		bool getCheckLineOfSight() const {
-			return checkLineOfSight;
-		}
+	bool getCheckLineOfSight() const
+	{
+		return checkLineOfSight;
+	}
 
-		void setCheckLineOfSight(bool state) {
-			checkLineOfSight = state;
-		}
+	void setCheckLineOfSight(bool state)
+	{
+		checkLineOfSight = state;
+	}
 
-		bool getCheckFloor() const {
-			return checkFloor;
-		}
+	bool getCheckFloor() const
+	{
+		return checkFloor;
+	}
 
-		void setCheckFloor(bool state) {
-			checkFloor = state;
-		}
+	void setCheckFloor(bool state)
+	{
+		checkFloor = state;
+	}
 
-		std::vector<uint16_t> getItemIdRange() {
-			return ids;
-		}
+	std::vector<uint16_t> getItemIdRange()
+	{
+		return ids;
+	}
 
-		void addItemId(uint16_t id) {
-			ids.emplace_back(id);
-		}
+	void addItemId(uint16_t id)
+	{
+		ids.emplace_back(id);
+	}
 
-		std::vector<uint16_t> getUniqueIdRange() {
-			return uids;
-		}
+	std::vector<uint16_t> getUniqueIdRange()
+	{
+		return uids;
+	}
 
-		void addUniqueId(uint16_t id) {
-			uids.emplace_back(id);
-		}
+	void addUniqueId(uint16_t id)
+	{
+		uids.emplace_back(id);
+	}
 
-		std::vector<uint16_t> getActionIdRange() {
-			return aids;
-		}
+	std::vector<uint16_t> getActionIdRange()
+	{
+		return aids;
+	}
 
-		void addActionId(uint16_t id) {
-			aids.emplace_back(id);
-		}
+	void addActionId(uint16_t id)
+	{
+		aids.emplace_back(id);
+	}
 
-		virtual ReturnValue canExecuteAction(const Player* player,
-                                             const Position& toPos);
+	virtual ReturnValue canExecuteAction(const Player* player,
+	                                     const Position& toPos);
 
-		virtual bool hasOwnErrorHandler() {
-			return false;
-		}
+	virtual bool hasOwnErrorHandler()
+	{
+		return false;
+	}
 
-		virtual Thing* getTarget(Player* player, Creature* targetCreature,
-						const Position& toPosition, uint8_t toStackPos) const;
+	virtual Thing* getTarget(Player* player, Creature* targetCreature,
+	                         const Position& toPosition, uint8_t toStackPos) const;
 
-		/**ActionFunction = std::function<bool(Player* player, Item* item,
-        * const Position& fromPosition, Thing* target,
-        * const Position& toPosition, bool isHotkey)>;
-		**/
-		ActionFunction function;
+	/**ActionFunction = std::function<bool(Player* player, Item* item,
+      * const Position& fromPosition, Thing* target,
+      * const Position& toPosition, bool isHotkey)>;
+	**/
+	ActionFunction function;
 
-	private:
-		std::string getScriptEventName() const override;
+private:
+	std::string getScriptEventName() const override;
 
-		// Atributes
-		bool allowFarUse = false;
-		bool checkFloor = true;
-		bool checkLineOfSight = true;
+	// Atributes
+	bool allowFarUse = false;
+	bool checkFloor = true;
+	bool checkLineOfSight = true;
 
-		// IDs
-		std::vector<uint16_t> ids;
-		std::vector<uint16_t> uids;
-		std::vector<uint16_t> aids;
+	// IDs
+	std::vector<uint16_t> ids;
+	std::vector<uint16_t> uids;
+	std::vector<uint16_t> aids;
 };
 
-class Actions final : public BaseEvents {
-	public:
-		Actions();
-		~Actions();
+class Actions final : public BaseEvents
+{
+public:
+	Actions();
+	~Actions() override;
 
-		// non-copyable
-		Actions(const Actions&) = delete;
-		Actions& operator=(const Actions&) = delete;
+	// non-copyable
+	Actions(const Actions&) = delete;
+	Actions& operator=(const Actions&) = delete;
 
-		bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey, Creature* creature = nullptr);
+	bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
+	bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item,
+	               bool isHotkey, Creature* creature = nullptr);
 
-		ReturnValue canUse(const Player* player, const Position& pos);
-		ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
-		ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
+	ReturnValue canUse(const Player* player, const Position& pos);
+	ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
+	ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
-		bool registerLuaEvent(Action* event);
-		void clear(bool fromLua) override final;
+	bool registerLuaEvent(Action* event);
+	void clear(bool fromLua);
 
-	private:
-		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
+private:
+	ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
+	static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
-		LuaScriptInterface& getScriptInterface() override;
-		std::string getScriptBaseName() const override;
-		Event_ptr getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
+	LuaScriptInterface& getScriptInterface() override;
+	std::string getScriptBaseName() const override;
+	Event_ptr getEvent(const std::string& nodeName) override;
+	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
-		using ActionUseMap = std::map<uint16_t, Action>;
-		ActionUseMap useItemMap;
-		ActionUseMap uniqueItemMap;
-		ActionUseMap actionItemMap;
+	using ActionUseMap = std::map<uint16_t, Action>;
+	ActionUseMap useItemMap;
+	ActionUseMap uniqueItemMap;
+	ActionUseMap actionItemMap;
 
-		Action* getAction(const Item* item);
-		void clearMap(ActionUseMap& map, bool fromLua);
+	Action* getAction(const Item* item);
+	void clearMap(ActionUseMap& map, bool fromLua);
 
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface scriptInterface;
 };
 
 #endif  // SRC_LUA_CREATURE_ACTIONS_H_

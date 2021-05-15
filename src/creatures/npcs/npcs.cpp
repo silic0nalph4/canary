@@ -39,10 +39,11 @@ extern ConfigManager g_config;
 bool NpcType::canSpawn(const Position& pos)
 {
 	bool canSpawn = true;
-	bool isDay = g_game.gameIsDay();
+	const bool isDay = g_game.gameIsDay();
 
 	if ((isDay && info.respawnType.period == RESPAWNPERIOD_NIGHT) ||
-		(!isDay && info.respawnType.period == RESPAWNPERIOD_DAY)) {
+		(!isDay && info.respawnType.period == RESPAWNPERIOD_DAY))
+	{
 		// It will ignore day and night if underground
 		canSpawn = (pos.z > 7 && info.respawnType.underground);
 	}
@@ -52,40 +53,42 @@ bool NpcType::canSpawn(const Position& pos)
 
 bool NpcType::loadCallback(LuaScriptInterface* scriptInterface)
 {
-	int32_t id = scriptInterface->getEvent();
-	if (id == -1) {
+	const int32_t id = scriptInterface->getEvent();
+	if (id == -1)
+	{
 		SPDLOG_WARN("[NpcType::loadCallback] - Event not found");
 		return false;
 	}
 
 	info.scriptInterface = scriptInterface;
-	switch (info.eventType) {
-		case NPCS_EVENT_THINK:
-			info.thinkEvent = id;
-			break;
-		case NPCS_EVENT_APPEAR:
-			info.creatureAppearEvent = id;
-			break;
-		case NPCS_EVENT_DISAPPEAR:
-			info.creatureDisappearEvent = id;
-			break;
-		case NPCS_EVENT_MOVE:
-			info.creatureMoveEvent = id;
-			break;
-		case NPCS_EVENT_SAY:
-			info.creatureSayEvent = id;
-			break;
-		case NPCS_EVENT_PLAYER_BUY:
-			info.playerBuyEvent = id;
-			break;
-		case NPCS_EVENT_PLAYER_SELL:
-			info.playerSellEvent = id;
-			break;
-		case NPCS_EVENT_PLAYER_CHECK_ITEM:
-			info.playerLookEvent = id;
-			break;
-		default:
-			break;
+	switch (info.eventType)
+	{
+	case NPCS_EVENT_THINK:
+		info.thinkEvent = id;
+		break;
+	case NPCS_EVENT_APPEAR:
+		info.creatureAppearEvent = id;
+		break;
+	case NPCS_EVENT_DISAPPEAR:
+		info.creatureDisappearEvent = id;
+		break;
+	case NPCS_EVENT_MOVE:
+		info.creatureMoveEvent = id;
+		break;
+	case NPCS_EVENT_SAY:
+		info.creatureSayEvent = id;
+		break;
+	case NPCS_EVENT_PLAYER_BUY:
+		info.playerBuyEvent = id;
+		break;
+	case NPCS_EVENT_PLAYER_SELL:
+		info.playerSellEvent = id;
+		break;
+	case NPCS_EVENT_PLAYER_CHECK_ITEM:
+		info.playerLookEvent = id;
+		break;
+	default:
+		break;
 	}
 
 	return true;
@@ -93,14 +96,16 @@ bool NpcType::loadCallback(LuaScriptInterface* scriptInterface)
 
 NpcType* Npcs::getNpcType(const std::string& name, bool create /* = false*/)
 {
-	std::string key = asLowerCaseString(name);
-	auto it = npcs.find(key);
+	const std::string key = asLowerCaseString(name);
+	const auto it = npcs.find(key);
 
-	if (it != npcs.end()) {
+	if (it != npcs.end())
+	{
 		return it->second;
 	}
 
-	if (!create) {
+	if (!create)
+	{
 		return nullptr;
 	}
 

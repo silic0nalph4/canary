@@ -24,26 +24,29 @@
 
 class WildcardTreeNode
 {
-	public:
-		explicit WildcardTreeNode(bool initBreakpoint) : breakpoint(initBreakpoint) {}
-		WildcardTreeNode(WildcardTreeNode&& other) = default;
+public:
+	explicit WildcardTreeNode(bool initBreakpoint) : breakpoint(initBreakpoint)
+	{
+	}
 
-		// non-copyable
-		WildcardTreeNode(const WildcardTreeNode&) = delete;
-		WildcardTreeNode& operator=(const WildcardTreeNode&) = delete;
+	WildcardTreeNode(WildcardTreeNode&& other) = default;
 
-		WildcardTreeNode* getChild(char ch);
-		const WildcardTreeNode* getChild(char ch) const;
-		WildcardTreeNode* addChild(char ch, bool breakpoint);
+	// non-copyable
+	WildcardTreeNode(const WildcardTreeNode&) = delete;
+	WildcardTreeNode& operator=(const WildcardTreeNode&) = delete;
 
-		void insert(const std::string& str);
-		void remove(const std::string& str);
+	WildcardTreeNode* getChild(char ch);
+	const WildcardTreeNode* getChild(char ch) const;
+	WildcardTreeNode* addChild(char ch, bool breakpoint);
 
-		ReturnValue findOne(const std::string& query, std::string& result) const;
+	void insert(const std::string& str);
+	void remove(const std::string& str);
 
-	private:
-		std::map<char, WildcardTreeNode> children;
-		bool breakpoint;
+	ReturnValue findOne(const std::string& query, std::string& result) const;
+
+private:
+	std::map<char, WildcardTreeNode> children;
+	bool breakpoint;
 };
 
 #endif  // SRC_UTILS_WILDCARDTREE_H_

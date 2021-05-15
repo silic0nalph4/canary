@@ -20,12 +20,15 @@
 #ifndef SRC_ITEMS_ITEMS_H_
 #define SRC_ITEMS_ITEMS_H_
 
+#include <memory>
+
 #include "utils/utils_definitions.hpp"
 #include "declarations.hpp"
 #include "items/itemloader.h"
 #include "game/movement/position.h"
 
-struct Abilities {
+struct Abilities
+{
 	uint32_t healthGain = 0;
 	uint32_t healthTicks = 0;
 	uint32_t manaGain = 0;
@@ -35,22 +38,22 @@ struct Abilities {
 	uint32_t conditionSuppressions = 0;
 
 	//stats modifiers
-	int32_t stats[STAT_LAST + 1] = { 0 };
-	int32_t statsPercent[STAT_LAST + 1] = { 0 };
+	int32_t stats[STAT_LAST + 1] = {0};
+	int32_t statsPercent[STAT_LAST + 1] = {0};
 
 	//extra skill modifiers
-	int32_t skills[SKILL_LAST + 1] = { 0 };
+	int32_t skills[SKILL_LAST + 1] = {0};
 
 	int32_t speed = 0;
 
 	// field damage abilities modifiers
-	int16_t fieldAbsorbPercent[COMBAT_COUNT] = { 0 };
+	int16_t fieldAbsorbPercent[COMBAT_COUNT] = {0};
 
 	//damage abilities modifiers
-	int16_t absorbPercent[COMBAT_COUNT] = { 0 };
+	int16_t absorbPercent[COMBAT_COUNT] = {0};
 
 	//relfect abilities modifires
-	int16_t reflectPercent[COMBAT_COUNT] = { 0 };
+	int16_t reflectPercent[COMBAT_COUNT] = {0};
 
 	//elemental damage
 	uint16_t elementDamage = 0;
@@ -65,241 +68,285 @@ class ConditionDamage;
 
 class ItemType
 {
-	public:
-		ItemType() = default;
+public:
+	ItemType() = default;
 
-		//non-copyable
-		ItemType(const ItemType& other) = delete;
-		ItemType& operator=(const ItemType& other) = delete;
+	//non-copyable
+	ItemType(const ItemType& other) = delete;
+	ItemType& operator=(const ItemType& other) = delete;
 
-		ItemType(ItemType&& other) = default;
-		ItemType& operator=(ItemType&& other) = default;
+	ItemType(ItemType&& other) = default;
+	ItemType& operator=(ItemType&& other) = default;
 
-		bool isGroundTile() const {
-			return group == ITEM_GROUP_GROUND;
+	bool isGroundTile() const
+	{
+		return group == ITEM_GROUP_GROUND;
+	}
+
+	bool isContainer() const
+	{
+		return group == ITEM_GROUP_CONTAINER;
+	}
+
+	bool isSplash() const
+	{
+		return group == ITEM_GROUP_SPLASH;
+	}
+
+	bool isFluidContainer() const
+	{
+		return group == ITEM_GROUP_FLUID;
+	}
+
+	bool isDoor() const
+	{
+		return (type == ITEM_TYPE_DOOR);
+	}
+
+	bool isMagicField() const
+	{
+		return (type == ITEM_TYPE_MAGICFIELD);
+	}
+
+	bool isTeleport() const
+	{
+		return (type == ITEM_TYPE_TELEPORT);
+	}
+
+	bool isKey() const
+	{
+		return (type == ITEM_TYPE_KEY);
+	}
+
+	bool isDepot() const
+	{
+		return (type == ITEM_TYPE_DEPOT);
+	}
+
+	bool isRewardChest() const
+	{
+		return (type == ITEM_TYPE_REWARDCHEST);
+	}
+
+	bool isCarpet() const
+	{
+		return (type == ITEM_TYPE_CARPET);
+	}
+
+	bool isMailbox() const
+	{
+		return (type == ITEM_TYPE_MAILBOX);
+	}
+
+	bool isTrashHolder() const
+	{
+		return (type == ITEM_TYPE_TRASHHOLDER);
+	}
+
+	bool isBed() const
+	{
+		return (type == ITEM_TYPE_BED);
+	}
+
+	bool isRune() const
+	{
+		return (type == ITEM_TYPE_RUNE);
+	}
+
+	bool isPickupable() const
+	{
+		return (allowPickupable || pickupable);
+	}
+
+	bool isUseable() const
+	{
+		return (useable);
+	}
+
+	bool hasSubType() const
+	{
+		return (isFluidContainer() || isSplash() || stackable || charges != 0);
+	}
+
+	Abilities& getAbilities()
+	{
+		if (!abilities)
+		{
+			abilities = std::make_unique<Abilities>();
 		}
-		bool isContainer() const {
-			return group == ITEM_GROUP_CONTAINER;
-		}
-		bool isSplash() const {
-			return group == ITEM_GROUP_SPLASH;
-		}
-		bool isFluidContainer() const {
-			return group == ITEM_GROUP_FLUID;
+		return *abilities;
+	}
+
+	std::string getPluralName() const
+	{
+		if (!pluralName.empty())
+		{
+			return pluralName;
 		}
 
-		bool isDoor() const {
-			return (type == ITEM_TYPE_DOOR);
-		}
-		bool isMagicField() const {
-			return (type == ITEM_TYPE_MAGICFIELD);
-		}
-		bool isTeleport() const {
-			return (type == ITEM_TYPE_TELEPORT);
-		}
-		bool isKey() const {
-			return (type == ITEM_TYPE_KEY);
-		}
-		bool isDepot() const {
-			return (type == ITEM_TYPE_DEPOT);
-		}
-		bool isRewardChest() const {
-			return (type == ITEM_TYPE_REWARDCHEST);
-		}
-		bool isCarpet() const {
-			return (type == ITEM_TYPE_CARPET);
-		}
-		bool isMailbox() const {
-			return (type == ITEM_TYPE_MAILBOX);
-		}
-		bool isTrashHolder() const {
-			return (type == ITEM_TYPE_TRASHHOLDER);
-		}
-		bool isBed() const {
-			return (type == ITEM_TYPE_BED);
-		}
-		bool isRune() const {
-			return (type == ITEM_TYPE_RUNE);
-		}
-		bool isPickupable() const {
-			return (allowPickupable || pickupable);
-		}
-		bool isUseable() const {
-			return (useable);
-		}
-		bool hasSubType() const {
-			return (isFluidContainer() || isSplash() || stackable || charges != 0);
+		if (showCount == 0)
+		{
+			return name;
 		}
 
-		Abilities& getAbilities() {
-			if (!abilities) {
-				abilities.reset(new Abilities());
-			}
-			return *abilities;
-		}
+		std::string str;
+		str.reserve(name.length() + 1);
+		str.assign(name);
+		str += 's';
+		return str;
+	}
 
-		std::string getPluralName() const {
-			if (!pluralName.empty()) {
-				return pluralName;
-			}
+	ItemGroup_t group = ITEM_GROUP_NONE;
+	ItemTypes_t type = ITEM_TYPE_NONE;
+	uint16_t id = 0;
+	uint16_t clientId = 0;
+	bool stackable = false;
+	bool isAnimation = false;
+	bool isPodium = false;
 
-			if (showCount == 0) {
-				return name;
-			}
+	std::string name;
+	std::string article;
+	std::string pluralName;
+	std::string description;
+	std::string runeSpellName;
+	std::string vocationString;
 
-			std::string str;
-			str.reserve(name.length() + 1);
-			str.assign(name);
-			str += 's';
-			return str;
-		}
+	std::unique_ptr<Abilities> abilities;
+	std::unique_ptr<ConditionDamage> conditionDamage;
 
-		ItemGroup_t group = ITEM_GROUP_NONE;
-		ItemTypes_t type = ITEM_TYPE_NONE;
-		uint16_t id = 0;
-		uint16_t clientId = 0;
-		bool stackable = false;
-		bool isAnimation = false;
-		bool isPodium = false;
+	uint32_t weight = 0;
+	uint32_t levelDoor = 0;
+	uint32_t decayTime = 0;
+	uint32_t wieldInfo = 0;
+	uint32_t minReqLevel = 0;
+	uint32_t minReqMagicLevel = 0;
+	uint32_t charges = 0;
+	int32_t maxHitChance = -1;
+	int32_t decayTo = -1;
+	int32_t attack = 0;
+	int32_t defense = 0;
+	int32_t extraDefense = 0;
+	int32_t armor = 0;
+	int32_t imbuingSlots = 0;
+	int32_t rotateTo = 0;
+	int32_t runeMagLevel = 0;
+	int32_t runeLevel = 0;
+	int32_t wrapableTo = 0;
 
-		std::string name;
-		std::string article;
-		std::string pluralName;
-		std::string description;
-		std::string runeSpellName;
-		std::string vocationString;
+	CombatType_t combatType = COMBAT_NONE;
 
-		std::unique_ptr<Abilities> abilities;
-		std::unique_ptr<ConditionDamage> conditionDamage;
+	uint16_t transformToOnUse[2] = {0, 0};
+	uint16_t transformToFree = 0;
+	uint16_t destroyTo = 0;
+	uint16_t maxTextLen = 0;
+	uint16_t writeOnceItemId = 0;
+	uint16_t transformEquipTo = 0;
+	uint16_t transformDeEquipTo = 0;
+	uint16_t maxItems = 8;
+	uint16_t slotPosition = SLOTP_HAND;
+	uint16_t speed = 0;
+	uint16_t wareId = 0;
 
-		uint32_t weight = 0;
-		uint32_t levelDoor = 0;
-		uint32_t decayTime = 0;
-		uint32_t wieldInfo = 0;
-		uint32_t minReqLevel = 0;
-		uint32_t minReqMagicLevel = 0;
-		uint32_t charges = 0;
-		int32_t maxHitChance = -1;
-		int32_t decayTo = -1;
-		int32_t attack = 0;
-		int32_t defense = 0;
-		int32_t extraDefense = 0;
-		int32_t armor = 0;
-		int32_t imbuingSlots = 0;
-		int32_t rotateTo = 0;
-		int32_t runeMagLevel = 0;
-		int32_t runeLevel = 0;
-		int32_t wrapableTo = 0;
+	MagicEffectClasses magicEffect = CONST_ME_NONE;
+	Direction bedPartnerDir = DIRECTION_NONE;
+	WeaponType_t weaponType = WEAPON_NONE;
+	Ammo_t ammoType = AMMO_NONE;
+	ShootType_t shootType = CONST_ANI_NONE;
+	RaceType_t corpseType = RACE_NONE;
+	FluidTypes_t fluidSource = FLUID_NONE;
 
-		CombatType_t combatType = COMBAT_NONE;
+	uint8_t floorChange = 0;
+	uint8_t alwaysOnTopOrder = 0;
+	uint8_t lightLevel = 0;
+	uint8_t lightColor = 0;
+	uint8_t shootRange = 1;
+	int8_t hitChance = 0;
 
-		uint16_t transformToOnUse[2] = {0, 0};
-		uint16_t transformToFree = 0;
-		uint16_t destroyTo = 0;
-		uint16_t maxTextLen = 0;
-		uint16_t writeOnceItemId = 0;
-		uint16_t transformEquipTo = 0;
-		uint16_t transformDeEquipTo = 0;
-		uint16_t maxItems = 8;
-		uint16_t slotPosition = SLOTP_HAND;
-		uint16_t speed = 0;
-		uint16_t wareId = 0;
-
-		MagicEffectClasses magicEffect = CONST_ME_NONE;
-		Direction bedPartnerDir = DIRECTION_NONE;
-		WeaponType_t weaponType = WEAPON_NONE;
-		Ammo_t ammoType = AMMO_NONE;
-		ShootType_t shootType = CONST_ANI_NONE;
-		RaceType_t corpseType = RACE_NONE;
-		FluidTypes_t fluidSource = FLUID_NONE;
-
-		uint8_t floorChange = 0;
-		uint8_t alwaysOnTopOrder = 0;
-		uint8_t lightLevel = 0;
-		uint8_t lightColor = 0;
-		uint8_t shootRange = 1;
-		int8_t hitChance = 0;
-
-		bool forceUse = false;
-		bool hasHeight = false;
-		bool walkStack = true;
-		bool blockSolid = false;
-		bool blockPickupable = false;
-		bool blockProjectile = false;
-		bool blockPathFind = false;
-		bool allowPickupable = false;
-		bool showDuration = false;
-		bool showCharges = false;
-		bool showAttributes = false;
-		bool replaceable = true;
-		bool pickupable = false;
-		bool rotatable = false;
-		bool wrapable = false;
-		bool wrapContainer = false;
-		bool useable = false;
-		bool moveable = false;
-		bool alwaysOnTop = false;
-		bool canReadText = false;
-		bool canWriteText = false;
-		bool isVertical = false;
-		bool isHorizontal = false;
-		bool isHangable = false;
-		bool allowDistRead = false;
-		bool lookThrough = false;
-		bool stopTime = false;
-		bool showCount = true;
+	bool forceUse = false;
+	bool hasHeight = false;
+	bool walkStack = true;
+	bool blockSolid = false;
+	bool blockPickupable = false;
+	bool blockProjectile = false;
+	bool blockPathFind = false;
+	bool allowPickupable = false;
+	bool showDuration = false;
+	bool showCharges = false;
+	bool showAttributes = false;
+	bool replaceable = true;
+	bool pickupable = false;
+	bool rotatable = false;
+	bool wrapable = false;
+	bool wrapContainer = false;
+	bool useable = false;
+	bool moveable = false;
+	bool alwaysOnTop = false;
+	bool canReadText = false;
+	bool canWriteText = false;
+	bool isVertical = false;
+	bool isHorizontal = false;
+	bool isHangable = false;
+	bool allowDistRead = false;
+	bool lookThrough = false;
+	bool stopTime = false;
+	bool showCount = true;
 };
 
 class Items
 {
-	public:
-		using NameMap = std::unordered_multimap<std::string, uint16_t>;
-		using InventoryVector = std::vector<uint16_t>;
+public:
+	using NameMap = std::unordered_multimap<std::string, uint16_t>;
+	using InventoryVector = std::vector<uint16_t>;
 
-		Items();
+	Items();
 
-		// non-copyable
-		Items(const Items&) = delete;
-		Items& operator=(const Items&) = delete;
+	// non-copyable
+	Items(const Items&) = delete;
+	Items& operator=(const Items&) = delete;
 
-		bool reload();
-		void clear();
+	bool reload();
+	void clear();
 
-		FILELOADER_ERRORS loadFromOtb(const std::string& file);
+	FILELOADER_ERRORS loadFromOtb(const std::string& file);
 
-		const ItemType& operator[](size_t id) const {
-			return getItemType(id);
-		}
-		const ItemType& getItemType(size_t id) const;
-		ItemType& getItemType(size_t id);
-		const ItemType& getItemIdByClientId(uint16_t spriteId) const;
+	const ItemType& operator[](size_t id) const
+	{
+		return getItemType(id);
+	}
 
-		uint16_t getItemIdByName(const std::string& name);
+	const ItemType& getItemType(size_t id) const;
+	ItemType& getItemType(size_t id);
+	const ItemType& getItemIdByClientId(uint16_t spriteId) const;
 
-		uint32_t majorVersion = 0;
-		uint32_t minorVersion = 0;
-		uint32_t buildNumber = 0;
+	uint16_t getItemIdByName(const std::string& name);
 
-		bool loadFromXml();
-		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
+	uint32_t majorVersion = 0;
+	uint32_t minorVersion = 0;
+	uint32_t buildNumber = 0;
 
-		void buildInventoryList();
-		const InventoryVector& getInventory() const {
-			return inventory;
-		}
+	bool loadFromXml();
+	void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
-		size_t size() const {
-			return items.size();
-		}
+	void buildInventoryList();
 
-		NameMap nameToItems;
+	const InventoryVector& getInventory() const
+	{
+		return inventory;
+	}
 
-	private:
-		ItemTypes_t getLootType(const std::string& strValue);
+	size_t size() const
+	{
+		return items.size();
+	}
 
-		std::map<uint16_t, uint16_t> reverseItemMap;
-		std::vector<ItemType> items;
-		InventoryVector inventory;
+	NameMap nameToItems;
+
+private:
+	ItemTypes_t getLootType(const std::string& strValue);
+
+	std::map<uint16_t, uint16_t> reverseItemMap;
+	std::vector<ItemType> items;
+	InventoryVector inventory;
 };
 
 #endif  // SRC_ITEMS_ITEMS_H_

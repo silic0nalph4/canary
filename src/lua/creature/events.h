@@ -29,8 +29,10 @@ class ItemType;
 class Tile;
 class Imbuements;
 
-class Events {
-	struct EventsInfo {
+class Events
+{
+	struct EventsInfo
+	{
 		// Creature
 		int32_t creatureOnChangeOutfit = -1;
 		int32_t creatureOnAreaCombat = -1;
@@ -78,60 +80,69 @@ class Events {
 		int32_t npcOnSpawn = -1;
 	};
 
-	public:
-		Events();
+public:
+	Events();
 
-		bool loadFromXml();
+	bool loadFromXml();
 
-		// Creature
-		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
-		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
-		ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
-		void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
-		void eventCreatureOnDrainHealth(Creature* creature, Creature* attacker, CombatType_t& typePrimary, int32_t& damagePrimary, CombatType_t& typeSecondary, int32_t& damageSecondary, TextColor_t& colorPrimary, TextColor_t& colorSecondary);
+	// Creature
+	bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
+	ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
+	ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
+	void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
+	void eventCreatureOnDrainHealth(Creature* creature, Creature* attacker, CombatType_t& typePrimary,
+	                                int32_t& damagePrimary, CombatType_t& typeSecondary, int32_t& damageSecondary,
+	                                TextColor_t& colorPrimary, TextColor_t& colorSecondary);
 
-		// Party
-		bool eventPartyOnJoin(Party* party, Player* player);
-		bool eventPartyOnLeave(Party* party, Player* player);
-		bool eventPartyOnDisband(Party* party);
-		void eventPartyOnShareExperience(Party* party, uint64_t& exp);
+	// Party
+	bool eventPartyOnJoin(Party* party, Player* player);
+	bool eventPartyOnLeave(Party* party, Player* player);
+	bool eventPartyOnDisband(Party* party);
+	void eventPartyOnShareExperience(Party* party, uint64_t& exp);
 
-		// Player
-		bool eventPlayerOnBrowseField(Player* player, const Position& position);
-		void eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance);
-		void eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance);
-		void eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
-		bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count);
-		bool eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
-		void eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
-		bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
-		void eventPlayerOnReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment, const std::string& translation);
-		bool eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category);
-		bool eventPlayerOnTurn(Player* player, Direction direction);
-		bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
-		bool eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem);
-		void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
-		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
-		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
-		bool eventPlayerOnRemoveCount(Player* player, Item * item);
-		void eventPlayerOnRequestQuestLog(Player* player);
-		void eventPlayerOnRequestQuestLine(Player* player, uint16_t questId);
-		void eventOnStorageUpdate(Player* player, const uint32_t key, const int32_t value, int32_t oldValue, uint64_t currentTime);
-		bool eventPlayerCanBeAppliedImbuement(Player* player, Imbuement* imbuement, Item* item);
-		void eventPlayerOnApplyImbuement(Player* player, Imbuement* imbuement, Item* item, uint8_t slot, bool protectionCharm);
-		void eventPlayerClearImbuement(Player* player, Item* item, uint8_t slot);
-		void eventPlayerOnCombat(Player* player, Creature* target, Item* item, CombatDamage& damage);
+	// Player
+	bool eventPlayerOnBrowseField(Player* player, const Position& position);
+	void eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos,
+	                       int32_t lookDistance);
+	void eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance);
+	void eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
+	bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count);
+	bool eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition,
+	                           const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
+	void eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition,
+	                            const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
+	bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition,
+	                               const Position& toPosition);
+	void eventPlayerOnReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType,
+	                                      uint8_t reportReason, const std::string& comment,
+	                                      const std::string& translation);
+	bool eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category);
+	bool eventPlayerOnTurn(Player* player, Direction direction);
+	bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
+	bool eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem);
+	void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
+	void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
+	void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
+	bool eventPlayerOnRemoveCount(Player* player, Item* item);
+	void eventPlayerOnRequestQuestLog(Player* player);
+	void eventPlayerOnRequestQuestLine(Player* player, uint16_t questId);
+	void eventOnStorageUpdate(Player* player, uint32_t key, int32_t value, int32_t oldValue, uint64_t currentTime);
+	bool eventPlayerCanBeAppliedImbuement(Player* player, Imbuement* imbuement, Item* item);
+	void eventPlayerOnApplyImbuement(Player* player, Imbuement* imbuement, Item* item, uint8_t slot,
+	                                 bool protectionCharm);
+	void eventPlayerClearImbuement(Player* player, Item* item, uint8_t slot);
+	void eventPlayerOnCombat(Player* player, Creature* target, Item* item, CombatDamage& damage);
 
-		// Monster
-		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
-		void eventMonsterOnSpawn(Monster* monster, const Position& position);
+	// Monster
+	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
+	void eventMonsterOnSpawn(Monster* monster, const Position& position);
 
-		// Monster
-		void eventNpcOnSpawn(Npc* npc, const Position& position);
+	// Monster
+	void eventNpcOnSpawn(Npc* npc, const Position& position);
 
-	private:
-		LuaScriptInterface scriptInterface;
-		EventsInfo info;
+private:
+	LuaScriptInterface scriptInterface;
+	EventsInfo info;
 };
 
 #endif  // SRC_LUA_CREATURE_EVENTS_H_

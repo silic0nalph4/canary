@@ -28,7 +28,8 @@ extern Game g_game;
 ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature*) const
 {
 	const Item* item = thing.getItem();
-	if (item && Mailbox::canSend(item)) {
+	if (item && canSend(item))
+	{
 		return RETURNVALUE_NOERROR;
 	}
 	return RETURNVALUE_NOTPOSSIBLE;
@@ -58,7 +59,8 @@ void Mailbox::addThing(Thing* thing)
 void Mailbox::addThing(int32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
-	if (item && Mailbox::canSend(item)) {
+	if (item && canSend(item))
+	{
 		sendItem(item);
 	}
 }
@@ -91,29 +93,35 @@ void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, in
 bool Mailbox::sendItem(Item* item) const
 {
 	std::string receiver;
-	if (!getReceiver(item, receiver)) {
+	if (!getReceiver(item, receiver))
+	{
 		return false;
 	}
 
 	/**No need to continue if its still empty**/
-	if (receiver.empty()) {
+	if (receiver.empty())
+	{
 		return false;
 	}
 
 	Player* player = g_game.getPlayerByName(receiver);
 	std::string writer;
-	time_t date = time(0);
+	time_t date = time(nullptr);
 	std::string text;
-	if (item && item->getID() == ITEM_LETTER && item->getWriter() != "") {
+	if (item && item->getID() == ITEM_LETTER && item->getWriter() != "")
+	{
 		writer = item->getWriter();
 		date = item->getDate();
 		text = item->getText();
 	}
-	if (player && item) {
+	if (player && item)
+	{
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-                                   item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
+		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR)
+		{
 			Item* newItem = g_game.transformItem(item, item->getID() + 1);
-			if (newItem && newItem->getID() == ITEM_LETTER_STAMPED && writer != "") {
+			if (newItem && newItem->getID() == ITEM_LETTER_STAMPED && writer != "")
+			{
 				newItem->setWriter(writer);
 				newItem->setDate(date);
 				newItem->setText(text);
@@ -121,16 +129,21 @@ bool Mailbox::sendItem(Item* item) const
 			player->onReceiveMail();
 			return true;
 		}
-	} else {
+	}
+	else
+	{
 		Player tmpPlayer(nullptr);
-		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
+		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver))
+		{
 			return false;
 		}
 
 		if (item && g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER,
-                                   item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
+		                                    item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR)
+		{
 			Item* newItem = g_game.transformItem(item, item->getID() + 1);
-			if (newItem && newItem->getID() == ITEM_LETTER_STAMPED && writer != "") {
+			if (newItem && newItem->getID() == ITEM_LETTER_STAMPED && writer != "")
+			{
 				newItem->setWriter(writer);
 				newItem->setDate(date);
 				newItem->setText(text);
@@ -145,9 +158,12 @@ bool Mailbox::sendItem(Item* item) const
 bool Mailbox::getReceiver(Item* item, std::string& name) const
 {
 	const Container* container = item->getContainer();
-	if (container) {
-		for (Item* containerItem : container->getItemList()) {
-			if (containerItem->getID() == ITEM_LABEL && getReceiver(containerItem, name)) {
+	if (container)
+	{
+		for (Item* containerItem : container->getItemList())
+		{
+			if (containerItem->getID() == ITEM_LABEL && getReceiver(containerItem, name))
+			{
 				return true;
 			}
 		}
@@ -155,7 +171,8 @@ bool Mailbox::getReceiver(Item* item, std::string& name) const
 	}
 
 	const std::string& text = item->getText();
-	if (text.empty()) {
+	if (text.empty())
+	{
 		return false;
 	}
 

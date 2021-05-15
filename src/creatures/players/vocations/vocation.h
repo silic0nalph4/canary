@@ -25,122 +25,150 @@
 
 class Vocation
 {
-	public:
-		explicit Vocation(uint16_t initId) : id(initId) {}
+public:
+	explicit Vocation(uint16_t initId) : id(initId)
+	{
+	}
 
-		const std::string& getVocName() const {
-			return name;
-		}
-		const std::string& getVocDescription() const {
-			return description;
-		}
-		uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
-		uint64_t getReqMana(uint32_t magLevel);
+	const std::string& getVocName() const
+	{
+		return name;
+	}
 
-		uint16_t getId() const {
-			return id;
-		}
+	const std::string& getVocDescription() const
+	{
+		return description;
+	}
 
-		uint8_t getClientId() const {
-			return clientId;
-		}
+	uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
+	uint64_t getReqMana(uint32_t magLevel);
 
-		uint32_t getHPGain() const {
-			return gainHP;
-		}
-		uint32_t getManaGain() const {
-			return gainMana;
-		}
-		uint32_t getCapGain() const {
-			return gainCap;
-		}
+	uint16_t getId() const
+	{
+		return id;
+	}
 
-		uint32_t getManaGainTicks() const {
-			return gainManaTicks;
-		}
-		uint32_t getManaGainAmount() const {
-			return gainManaAmount;
-		}
-		uint32_t getHealthGainTicks() const {
-			return gainHealthTicks;
-		}
-		uint32_t getHealthGainAmount() const {
-			return gainHealthAmount;
-		}
+	uint8_t getClientId() const
+	{
+		return clientId;
+	}
 
-		uint8_t getSoulMax() const {
-			return soulMax;
-		}
-		uint16_t getSoulGainTicks() const {
-			return gainSoulTicks;
-		}
+	uint32_t getHPGain() const
+	{
+		return gainHP;
+	}
 
-		uint32_t getAttackSpeed() const {
-			return attackSpeed;
-		}
-		uint32_t getBaseSpeed() const {
-			return baseSpeed;
-		}
+	uint32_t getManaGain() const
+	{
+		return gainMana;
+	}
 
-		uint32_t getFromVocation() const {
-			return fromVocation;
-		}
+	uint32_t getCapGain() const
+	{
+		return gainCap;
+	}
 
-    bool getMagicShield() const {
-      return magicShield;
-    }
+	uint32_t getManaGainTicks() const
+	{
+		return gainManaTicks;
+	}
 
-		float meleeDamageMultiplier = 1.0f;
-		float distDamageMultiplier = 1.0f;
-		float defenseMultiplier = 1.0f;
-		float armorMultiplier = 1.0f;
+	uint32_t getManaGainAmount() const
+	{
+		return gainManaAmount;
+	}
 
-	private:
-		friend class Vocations;
+	uint32_t getHealthGainTicks() const
+	{
+		return gainHealthTicks;
+	}
 
-		std::map<uint32_t, uint64_t> cacheMana;
-		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
+	uint32_t getHealthGainAmount() const
+	{
+		return gainHealthAmount;
+	}
 
-		std::string name = "none";
-		std::string description;
+	uint8_t getSoulMax() const
+	{
+		return soulMax;
+	}
 
-		float skillMultipliers[SKILL_LAST + 1] = {1.5f, 2.0f, 2.0f, 2.0f, 2.0f, 1.5f, 1.1f};
-		float manaMultiplier = 4.0f;
+	uint16_t getSoulGainTicks() const
+	{
+		return gainSoulTicks;
+	}
 
-		uint32_t gainHealthTicks = 6;
-		uint32_t gainHealthAmount = 1;
-		uint32_t gainManaTicks = 6;
-		uint32_t gainManaAmount = 1;
-		uint32_t gainCap = 500;
-		uint32_t gainMana = 5;
-		uint32_t gainHP = 5;
-		uint32_t fromVocation = VOCATION_NONE;
-		uint32_t attackSpeed = 1500;
-		uint32_t baseSpeed = 220;
-		uint16_t id;
+	uint32_t getAttackSpeed() const
+	{
+		return attackSpeed;
+	}
 
-    bool magicShield = false;
+	uint32_t getBaseSpeed() const
+	{
+		return baseSpeed;
+	}
 
-		uint16_t gainSoulTicks = 120;
+	uint32_t getFromVocation() const
+	{
+		return fromVocation;
+	}
 
-		uint8_t soulMax = 100;
-		uint8_t clientId = 0;
+	bool getMagicShield() const
+	{
+		return magicShield;
+	}
 
-		static uint32_t skillBase[SKILL_LAST + 1];
+	float meleeDamageMultiplier = 1.0f;
+	float distDamageMultiplier = 1.0f;
+	float defenseMultiplier = 1.0f;
+	float armorMultiplier = 1.0f;
+
+private:
+	friend class Vocations;
+
+	std::map<uint32_t, uint64_t> cacheMana;
+	std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
+
+	std::string name = "none";
+	std::string description;
+
+	float skillMultipliers[SKILL_LAST + 1] = {1.5f, 2.0f, 2.0f, 2.0f, 2.0f, 1.5f, 1.1f};
+	float manaMultiplier = 4.0f;
+
+	uint32_t gainHealthTicks = 6;
+	uint32_t gainHealthAmount = 1;
+	uint32_t gainManaTicks = 6;
+	uint32_t gainManaAmount = 1;
+	uint32_t gainCap = 500;
+	uint32_t gainMana = 5;
+	uint32_t gainHP = 5;
+	uint32_t fromVocation = VOCATION_NONE;
+	uint32_t attackSpeed = 1500;
+	uint32_t baseSpeed = 220;
+	uint16_t id;
+
+	bool magicShield = false;
+
+	uint16_t gainSoulTicks = 120;
+
+	uint8_t soulMax = 100;
+	uint8_t clientId = 0;
+
+	static uint32_t skillBase[SKILL_LAST + 1];
 };
 
 class Vocations
 {
-	public:
-		bool loadFromXml();
+public:
+	bool loadFromXml();
 
-		Vocation* getVocation(uint16_t id);
-    const std::map<uint16_t, Vocation>& getVocations() const {return vocationsMap;}
-		int32_t getVocationId(const std::string& name) const;
-		uint16_t getPromotedVocation(uint16_t vocationId) const;
+	Vocation* getVocation(uint16_t id);
+	const std::map<uint16_t, Vocation>& getVocations() const { return vocationsMap; }
+	int32_t getVocationId(const std::string& name) const;
+	uint16_t getPromotedVocation(uint16_t vocationId) const;
 
-	private:
-		std::map<uint16_t, Vocation> vocationsMap;
+private:
+	std::map<uint16_t, Vocation> vocationsMap;
 };
 
 #endif  // SRC_CREATURES_PLAYERS_VOCATIONS_VOCATION_H_

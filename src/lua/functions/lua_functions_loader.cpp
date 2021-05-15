@@ -51,8 +51,10 @@ extern Game g_game;
 
 class LuaScriptInterface;
 
-void LuaFunctionsLoader::load(lua_State* L) {
-	if (!L) {
+void LuaFunctionsLoader::load(lua_State* L)
+{
+	if (!L)
+	{
 		g_game.dieSafely("Invalid lua state, cannot load lua functions.");
 	}
 
@@ -65,37 +67,41 @@ void LuaFunctionsLoader::load(lua_State* L) {
 	MapFunctions::init(L);
 }
 
-std::string LuaFunctionsLoader::getErrorDesc(ErrorCode_t code) {
-	switch (code) {
-		case LUA_ERROR_PLAYER_NOT_FOUND: return "Player not found";
-		case LUA_ERROR_CREATURE_NOT_FOUND: return "Creature not found";
-		case LUA_ERROR_NPC_NOT_FOUND: return "Npc not found";
-		case LUA_ERROR_ITEM_NOT_FOUND: return "Item not found";
-		case LUA_ERROR_THING_NOT_FOUND: return "Thing not found";
-		case LUA_ERROR_TILE_NOT_FOUND: return "Tile not found";
-		case LUA_ERROR_HOUSE_NOT_FOUND: return "House not found";
-		case LUA_ERROR_COMBAT_NOT_FOUND: return "Combat not found";
-		case LUA_ERROR_CONDITION_NOT_FOUND: return "Condition not found";
-		case LUA_ERROR_AREA_NOT_FOUND: return "Area not found";
-		case LUA_ERROR_CONTAINER_NOT_FOUND: return "Container not found";
-		case LUA_ERROR_VARIANT_NOT_FOUND: return "Variant not found";
-		case LUA_ERROR_VARIANT_UNKNOWN: return "Unknown variant type";
-		case LUA_ERROR_SPELL_NOT_FOUND: return "Spell not found";
-		default: return "Bad error code";
+std::string LuaFunctionsLoader::getErrorDesc(ErrorCode_t code)
+{
+	switch (code)
+	{
+	case LUA_ERROR_PLAYER_NOT_FOUND: return "Player not found";
+	case LUA_ERROR_CREATURE_NOT_FOUND: return "Creature not found";
+	case LUA_ERROR_NPC_NOT_FOUND: return "Npc not found";
+	case LUA_ERROR_ITEM_NOT_FOUND: return "Item not found";
+	case LUA_ERROR_THING_NOT_FOUND: return "Thing not found";
+	case LUA_ERROR_TILE_NOT_FOUND: return "Tile not found";
+	case LUA_ERROR_HOUSE_NOT_FOUND: return "House not found";
+	case LUA_ERROR_COMBAT_NOT_FOUND: return "Combat not found";
+	case LUA_ERROR_CONDITION_NOT_FOUND: return "Condition not found";
+	case LUA_ERROR_AREA_NOT_FOUND: return "Area not found";
+	case LUA_ERROR_CONTAINER_NOT_FOUND: return "Container not found";
+	case LUA_ERROR_VARIANT_NOT_FOUND: return "Variant not found";
+	case LUA_ERROR_VARIANT_UNKNOWN: return "Unknown variant type";
+	case LUA_ERROR_SPELL_NOT_FOUND: return "Spell not found";
+	default: return "Bad error code";
 	}
 }
 
-int LuaFunctionsLoader::protectedCall(lua_State* L, int nargs, int nresults) {
-	int error_index = lua_gettop(L) - nargs;
+int LuaFunctionsLoader::protectedCall(lua_State* L, int nargs, int nresults)
+{
+	const int error_index = lua_gettop(L) - nargs;
 	lua_pushcfunction(L, luaErrorHandler);
 	lua_insert(L, error_index);
 
-	int ret = lua_pcall(L, nargs, nresults, error_index);
+	const int ret = lua_pcall(L, nargs, nresults, error_index);
 	lua_remove(L, error_index);
 	return ret;
 }
 
-void LuaFunctionsLoader::reportError(const char* function, const std::string& error_desc, bool stack_trace/* = false*/) {
+void LuaFunctionsLoader::reportError(const char* function, const std::string& error_desc, bool stack_trace/* = false*/)
+{
 	int32_t scriptId;
 	int32_t callbackId;
 	bool timerEvent;
@@ -103,18 +109,19 @@ void LuaFunctionsLoader::reportError(const char* function, const std::string& er
 	getScriptEnv()->getEventInfo(scriptId, scriptInterface, callbackId, timerEvent);
 
 	SPDLOG_ERROR("Lua script error: \nscriptInterface: [{}]\nscriptId: [{}]"
-                              "\ntimerEvent: [{}]\n callbackId:[{}]\nfunction: [{}]\nerror [{}]",
-                              scriptInterface ? scriptInterface->getInterfaceName() : "",
-                              scriptId 				? scriptInterface->getFileById(scriptId) : "",
-                              timerEvent 			? "in a timer event called from:" : "",
-                              callbackId 			? scriptInterface->getFileById(callbackId) : "",
-                              function 				? scriptInterface->getInterfaceName() : "",
-                              (stack_trace && scriptInterface) ?
-                              scriptInterface->getStackTrace(error_desc) : error_desc
+	             "\ntimerEvent: [{}]\n callbackId:[{}]\nfunction: [{}]\nerror [{}]",
+	             scriptInterface ? scriptInterface->getInterfaceName() : "",
+	             scriptId ? scriptInterface->getFileById(scriptId) : "",
+	             timerEvent ? "in a timer event called from:" : "",
+	             callbackId ? scriptInterface->getFileById(callbackId) : "",
+	             function ? scriptInterface->getInterfaceName() : "",
+	             (stack_trace && scriptInterface) ?
+	             scriptInterface->getStackTrace(error_desc) : error_desc
 	);
 }
 
-int LuaFunctionsLoader::luaErrorHandler(lua_State* L) {
+int LuaFunctionsLoader::luaErrorHandler(lua_State* L)
+{
 	const std::string& errorMessage = popString(L);
 	auto interface = getScriptEnv()->getScriptInterface();
 	assert(interface); //This fires if the ScriptEnvironment hasn't been setup
@@ -122,30 +129,35 @@ int LuaFunctionsLoader::luaErrorHandler(lua_State* L) {
 	return 1;
 }
 
-void LuaFunctionsLoader::pushVariant(lua_State* L, const LuaVariant& var) {
+void LuaFunctionsLoader::pushVariant(lua_State* L, const LuaVariant& var)
+{
 	lua_createtable(L, 0, 2);
 	setField(L, "type", var.type);
-	switch (var.type) {
-		case VARIANT_NUMBER:
-			setField(L, "number", var.number);
-			break;
-		case VARIANT_STRING:
-			setField(L, "string", var.text);
-			break;
-		case VARIANT_TARGETPOSITION:
-		case VARIANT_POSITION: {
+	switch (var.type)
+	{
+	case VARIANT_NUMBER:
+		setField(L, "number", var.number);
+		break;
+	case VARIANT_STRING:
+		setField(L, "string", var.text);
+		break;
+	case VARIANT_TARGETPOSITION:
+	case VARIANT_POSITION:
+		{
 			pushPosition(L, var.pos);
 			lua_setfield(L, -2, "pos");
 			break;
 		}
-		default:
-			break;
+	default:
+		break;
 	}
 	setMetatable(L, -1, "Variant");
 }
 
-void LuaFunctionsLoader::pushThing(lua_State* L, Thing* thing) {
-	if (!thing) {
+void LuaFunctionsLoader::pushThing(lua_State* L, Thing* thing)
+{
+	if (!thing)
+	{
 		lua_createtable(L, 0, 4);
 		setField(L, "uid", 0);
 		setField(L, "itemid", 0);
@@ -154,44 +166,63 @@ void LuaFunctionsLoader::pushThing(lua_State* L, Thing* thing) {
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (Item* item = thing->getItem())
+	{
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
-	} else if (Creature* creature = thing->getCreature()) {
+	}
+	else if (Creature* creature = thing->getCreature())
+	{
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 }
 
-void LuaFunctionsLoader::pushCylinder(lua_State* L, Cylinder* cylinder) {
-	if (Creature* creature = cylinder->getCreature()) {
+void LuaFunctionsLoader::pushCylinder(lua_State* L, Cylinder* cylinder)
+{
+	if (Creature* creature = cylinder->getCreature())
+	{
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else if (Item* parentItem = cylinder->getItem()) {
+	}
+	else if (Item* parentItem = cylinder->getItem())
+	{
 		pushUserdata<Item>(L, parentItem);
 		setItemMetatable(L, -1, parentItem);
-	} else if (Tile* tile = cylinder->getTile()) {
+	}
+	else if (Tile* tile = cylinder->getTile())
+	{
 		pushUserdata<Tile>(L, tile);
 		setMetatable(L, -1, "Tile");
-	} else if (cylinder == VirtualCylinder::virtualCylinder) {
+	}
+	else if (cylinder == VirtualCylinder::virtualCylinder)
+	{
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 }
 
-void LuaFunctionsLoader::pushString(lua_State* L, const std::string& value) {
+void LuaFunctionsLoader::pushString(lua_State* L, const std::string& value)
+{
 	lua_pushlstring(L, value.c_str(), value.length());
 }
 
-void LuaFunctionsLoader::pushCallback(lua_State* L, int32_t callback) {
+void LuaFunctionsLoader::pushCallback(lua_State* L, int32_t callback)
+{
 	lua_rawgeti(L, LUA_REGISTRYINDEX, callback);
 }
 
-std::string LuaFunctionsLoader::popString(lua_State* L) {
-	if (lua_gettop(L) == 0) {
+std::string LuaFunctionsLoader::popString(lua_State* L)
+{
+	if (lua_gettop(L) == 0)
+	{
 		return std::string();
 	}
 
@@ -200,36 +231,42 @@ std::string LuaFunctionsLoader::popString(lua_State* L) {
 	return str;
 }
 
-int32_t LuaFunctionsLoader::popCallback(lua_State* L) {
+int32_t LuaFunctionsLoader::popCallback(lua_State* L)
+{
 	return luaL_ref(L, LUA_REGISTRYINDEX);
 }
 
 // Metatables
-void LuaFunctionsLoader::setMetatable(lua_State* L, int32_t index, const std::string& name) {
+void LuaFunctionsLoader::setMetatable(lua_State* L, int32_t index, const std::string& name)
+{
 	luaL_getmetatable(L, name.c_str());
 	lua_setmetatable(L, index - 1);
 }
 
-void LuaFunctionsLoader::setWeakMetatable(lua_State* L, int32_t index, const std::string& name) {
+void LuaFunctionsLoader::setWeakMetatable(lua_State* L, int32_t index, const std::string& name)
+{
 	static std::set<std::string> weakObjectTypes;
 	const std::string& weakName = name + "_weak";
 
-	auto result = weakObjectTypes.emplace(name);
-	if (result.second) {
+	const auto result = weakObjectTypes.emplace(name);
+	if (result.second)
+	{
 		luaL_getmetatable(L, name.c_str());
-		int childMetatable = lua_gettop(L);
+		const int childMetatable = lua_gettop(L);
 
 		luaL_newmetatable(L, weakName.c_str());
-		int metatable = lua_gettop(L);
+		const int metatable = lua_gettop(L);
 
 		static const std::vector<std::string> methodKeys = {"__index", "__metatable", "__eq"};
-		for (const std::string& metaKey : methodKeys) {
+		for (const std::string& metaKey : methodKeys)
+		{
 			lua_getfield(L, childMetatable, metaKey.c_str());
 			lua_setfield(L, metatable, metaKey.c_str());
 		}
 
 		static const std::vector<int> methodIndexes = {'h', 'p', 't'};
-		for (int metaIndex : methodIndexes) {
+		for (int metaIndex : methodIndexes)
+		{
 			lua_rawgeti(L, childMetatable, metaIndex);
 			lua_rawseti(L, metatable, metaIndex);
 		}
@@ -238,35 +275,50 @@ void LuaFunctionsLoader::setWeakMetatable(lua_State* L, int32_t index, const std
 		lua_setfield(L, metatable, "__gc");
 
 		lua_remove(L, childMetatable);
-	} else {
+	}
+	else
+	{
 		luaL_getmetatable(L, weakName.c_str());
 	}
 	lua_setmetatable(L, index - 1);
 }
 
-void LuaFunctionsLoader::setItemMetatable(lua_State* L, int32_t index, const Item* item) {
-	if (item->getContainer()) {
+void LuaFunctionsLoader::setItemMetatable(lua_State* L, int32_t index, const Item* item)
+{
+	if (item->getContainer())
+	{
 		luaL_getmetatable(L, "Container");
-	} else if (item->getTeleport()) {
+	}
+	else if (item->getTeleport())
+	{
 		luaL_getmetatable(L, "Teleport");
-	} else {
+	}
+	else
+	{
 		luaL_getmetatable(L, "Item");
 	}
 	lua_setmetatable(L, index - 1);
 }
 
-void LuaFunctionsLoader::setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature) {
-	if (creature->getPlayer()) {
+void LuaFunctionsLoader::setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
+{
+	if (creature->getPlayer())
+	{
 		luaL_getmetatable(L, "Player");
-	} else if (creature->getMonster()) {
+	}
+	else if (creature->getMonster())
+	{
 		luaL_getmetatable(L, "Monster");
-	} else {
+	}
+	else
+	{
 		luaL_getmetatable(L, "Npc");
 	}
 	lua_setmetatable(L, index - 1);
 }
 
-CombatDamage LuaFunctionsLoader::getCombatDamage(lua_State* L) {
+CombatDamage LuaFunctionsLoader::getCombatDamage(lua_State* L)
+{
 	CombatDamage damage;
 	damage.primary.value = getNumber<int32_t>(L, -4);
 	damage.primary.type = getNumber<CombatType_t>(L, -3);
@@ -278,25 +330,31 @@ CombatDamage LuaFunctionsLoader::getCombatDamage(lua_State* L) {
 }
 
 // Get
-std::string LuaFunctionsLoader::getString(lua_State* L, int32_t arg) {
+std::string LuaFunctionsLoader::getString(lua_State* L, int32_t arg)
+{
 	size_t len;
 	const char* c_str = lua_tolstring(L, arg, &len);
-	if (!c_str || len == 0) {
+	if (!c_str || len == 0)
+	{
 		return std::string();
 	}
 	return std::string(c_str, len);
 }
 
-Position LuaFunctionsLoader::getPosition(lua_State* L, int32_t arg, int32_t& stackpos) {
+Position LuaFunctionsLoader::getPosition(lua_State* L, int32_t arg, int32_t& stackpos)
+{
 	Position position;
 	position.x = getField<uint16_t>(L, arg, "x");
 	position.y = getField<uint16_t>(L, arg, "y");
 	position.z = getField<uint8_t>(L, arg, "z");
 
 	lua_getfield(L, arg, "stackpos");
-	if (lua_isnil(L, -1) == 1) {
+	if (lua_isnil(L, -1) == 1)
+	{
 		stackpos = 0;
-	} else {
+	}
+	else
+	{
 		stackpos = getNumber<int32_t>(L, -1);
 	}
 
@@ -304,7 +362,8 @@ Position LuaFunctionsLoader::getPosition(lua_State* L, int32_t arg, int32_t& sta
 	return position;
 }
 
-Position LuaFunctionsLoader::getPosition(lua_State* L, int32_t arg) {
+Position LuaFunctionsLoader::getPosition(lua_State* L, int32_t arg)
+{
 	Position position;
 	position.x = getField<uint16_t>(L, arg, "x");
 	position.y = getField<uint16_t>(L, arg, "y");
@@ -314,7 +373,8 @@ Position LuaFunctionsLoader::getPosition(lua_State* L, int32_t arg) {
 	return position;
 }
 
-Outfit_t LuaFunctionsLoader::getOutfit(lua_State* L, int32_t arg) {
+Outfit_t LuaFunctionsLoader::getOutfit(lua_State* L, int32_t arg)
+{
 	Outfit_t outfit;
 	outfit.lookMountFeet = getField<uint8_t>(L, arg, "lookMountFeet");
 	outfit.lookMountLegs = getField<uint8_t>(L, arg, "lookMountLegs");
@@ -336,30 +396,36 @@ Outfit_t LuaFunctionsLoader::getOutfit(lua_State* L, int32_t arg) {
 	return outfit;
 }
 
-LuaVariant LuaFunctionsLoader::getVariant(lua_State* L, int32_t arg) {
+LuaVariant LuaFunctionsLoader::getVariant(lua_State* L, int32_t arg)
+{
 	LuaVariant var;
-	switch (var.type = getField<LuaVariantType_t>(L, arg, "type")) {
-		case VARIANT_NUMBER: {
+	switch (var.type = getField<LuaVariantType_t>(L, arg, "type"))
+	{
+	case VARIANT_NUMBER:
+		{
 			var.number = getField<uint32_t>(L, arg, "number");
 			lua_pop(L, 2);
 			break;
 		}
 
-		case VARIANT_STRING: {
+	case VARIANT_STRING:
+		{
 			var.text = getFieldString(L, arg, "string");
 			lua_pop(L, 2);
 			break;
 		}
 
-		case VARIANT_POSITION:
-		case VARIANT_TARGETPOSITION: {
+	case VARIANT_POSITION:
+	case VARIANT_TARGETPOSITION:
+		{
 			lua_getfield(L, arg, "pos");
 			var.pos = getPosition(L, lua_gettop(L));
 			lua_pop(L, 2);
 			break;
 		}
 
-		default: {
+	default:
+		{
 			var.type = VARIANT_NONE;
 			lua_pop(L, 1);
 			break;
@@ -368,77 +434,91 @@ LuaVariant LuaFunctionsLoader::getVariant(lua_State* L, int32_t arg) {
 	return var;
 }
 
-Thing* LuaFunctionsLoader::getThing(lua_State* L, int32_t arg) {
+Thing* LuaFunctionsLoader::getThing(lua_State* L, int32_t arg)
+{
 	Thing* thing;
-	if (lua_getmetatable(L, arg) != 0) {
+	if (lua_getmetatable(L, arg) != 0)
+	{
 		lua_rawgeti(L, -1, 't');
-		switch(getNumber<uint32_t>(L, -1)) {
-			case LuaData_Item:
-				thing = getUserdata<Item>(L, arg);
-				break;
-			case LuaData_Container:
-				thing = getUserdata<Container>(L, arg);
-				break;
-			case LuaData_Teleport:
-				thing = getUserdata<Teleport>(L, arg);
-				break;
-			case LuaData_Player:
-				thing = getUserdata<Player>(L, arg);
-				break;
-			case LuaData_Monster:
-				thing = getUserdata<Monster>(L, arg);
-				break;
-			case LuaData_Npc:
-				thing = getUserdata<Npc>(L, arg);
-				break;
-			default:
-				thing = nullptr;
-				break;
+		switch (getNumber<uint32_t>(L, -1))
+		{
+		case LuaData_Item:
+			thing = getUserdata<Item>(L, arg);
+			break;
+		case LuaData_Container:
+			thing = getUserdata<Container>(L, arg);
+			break;
+		case LuaData_Teleport:
+			thing = getUserdata<Teleport>(L, arg);
+			break;
+		case LuaData_Player:
+			thing = getUserdata<Player>(L, arg);
+			break;
+		case LuaData_Monster:
+			thing = getUserdata<Monster>(L, arg);
+			break;
+		case LuaData_Npc:
+			thing = getUserdata<Npc>(L, arg);
+			break;
+		default:
+			thing = nullptr;
+			break;
 		}
 		lua_pop(L, 2);
-	} else {
+	}
+	else
+	{
 		thing = getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, arg));
 	}
 	return thing;
 }
 
-Creature* LuaFunctionsLoader::getCreature(lua_State* L, int32_t arg) {
-	if (isUserdata(L, arg)) {
+Creature* LuaFunctionsLoader::getCreature(lua_State* L, int32_t arg)
+{
+	if (isUserdata(L, arg))
+	{
 		return getUserdata<Creature>(L, arg);
 	}
 	return g_game.getCreatureByID(getNumber<uint32_t>(L, arg));
 }
 
-Player* LuaFunctionsLoader::getPlayer(lua_State* L, int32_t arg) {
-	if (isUserdata(L, arg)) {
+Player* LuaFunctionsLoader::getPlayer(lua_State* L, int32_t arg)
+{
+	if (isUserdata(L, arg))
+	{
 		return getUserdata<Player>(L, arg);
 	}
 	return g_game.getPlayerByID(getNumber<uint32_t>(L, arg));
 }
 
-std::string LuaFunctionsLoader::getFieldString(lua_State* L, int32_t arg, const std::string& key) {
+std::string LuaFunctionsLoader::getFieldString(lua_State* L, int32_t arg, const std::string& key)
+{
 	lua_getfield(L, arg, key.c_str());
 	return getString(L, -1);
 }
 
-LuaDataType LuaFunctionsLoader::getUserdataType(lua_State* L, int32_t arg) {
-	if (lua_getmetatable(L, arg) == 0) {
+LuaDataType LuaFunctionsLoader::getUserdataType(lua_State* L, int32_t arg)
+{
+	if (lua_getmetatable(L, arg) == 0)
+	{
 		return LuaData_Unknown;
 	}
 	lua_rawgeti(L, -1, 't');
 
-	LuaDataType type = getNumber<LuaDataType>(L, -1);
+	const auto type = getNumber<LuaDataType>(L, -1);
 	lua_pop(L, 2);
 
 	return type;
 }
 
 // Push
-void LuaFunctionsLoader::pushBoolean(lua_State* L, bool value) {
+void LuaFunctionsLoader::pushBoolean(lua_State* L, bool value)
+{
 	lua_pushboolean(L, value ? 1 : 0);
 }
 
-void LuaFunctionsLoader::pushCombatDamage(lua_State* L, const CombatDamage& damage) {
+void LuaFunctionsLoader::pushCombatDamage(lua_State* L, const CombatDamage& damage)
+{
 	lua_pushnumber(L, damage.primary.value);
 	lua_pushnumber(L, damage.primary.type);
 	lua_pushnumber(L, damage.secondary.value);
@@ -446,7 +526,8 @@ void LuaFunctionsLoader::pushCombatDamage(lua_State* L, const CombatDamage& dama
 	lua_pushnumber(L, damage.origin);
 }
 
-void LuaFunctionsLoader::pushInstantSpell(lua_State* L, const InstantSpell& spell) {
+void LuaFunctionsLoader::pushInstantSpell(lua_State* L, const InstantSpell& spell)
+{
 	lua_createtable(L, 0, 6);
 
 	setField(L, "name", spell.getName());
@@ -459,7 +540,8 @@ void LuaFunctionsLoader::pushInstantSpell(lua_State* L, const InstantSpell& spel
 	setMetatable(L, -1, "Spell");
 }
 
-void LuaFunctionsLoader::pushPosition(lua_State* L, const Position& position, int32_t stackpos/* = 0*/) {
+void LuaFunctionsLoader::pushPosition(lua_State* L, const Position& position, int32_t stackpos/* = 0*/)
+{
 	lua_createtable(L, 0, 4);
 
 	setField(L, "x", position.x);
@@ -470,7 +552,8 @@ void LuaFunctionsLoader::pushPosition(lua_State* L, const Position& position, in
 	setMetatable(L, -1, "Position");
 }
 
-void LuaFunctionsLoader::pushOutfit(lua_State* L, const Outfit_t& outfit) {
+void LuaFunctionsLoader::pushOutfit(lua_State* L, const Outfit_t& outfit)
+{
 	lua_createtable(L, 0, 13);
 	setField(L, "lookType", outfit.lookType);
 	setField(L, "lookTypeEx", outfit.lookTypeEx);
@@ -487,25 +570,29 @@ void LuaFunctionsLoader::pushOutfit(lua_State* L, const Outfit_t& outfit) {
 	setField(L, "lookFamiliarsType", outfit.lookFamiliarsType);
 }
 
-void LuaFunctionsLoader::registerClass(lua_State* L, const std::string& className, const std::string& baseClass, lua_CFunction newFunction/* = nullptr*/) {
+void LuaFunctionsLoader::registerClass(lua_State* L, const std::string& className, const std::string& baseClass,
+                                       lua_CFunction newFunction/* = nullptr*/)
+{
 	// className = {}
 	lua_newtable(L);
 	lua_pushvalue(L, -1);
 	lua_setglobal(L, className.c_str());
-	int methods = lua_gettop(L);
+	const int methods = lua_gettop(L);
 
 	// methodsTable = {}
 	lua_newtable(L);
-	int methodsTable = lua_gettop(L);
+	const int methodsTable = lua_gettop(L);
 
-	if (newFunction) {
+	if (newFunction)
+	{
 		// className.__call = newFunction
 		lua_pushcfunction(L, newFunction);
 		lua_setfield(L, methodsTable, "__call");
 	}
 
 	uint32_t parents = 0;
-	if (!baseClass.empty()) {
+	if (!baseClass.empty())
+	{
 		lua_getglobal(L, baseClass.c_str());
 		lua_rawgeti(L, -1, 'p');
 		parents = getNumber<uint32_t>(L, -1) + 1;
@@ -518,7 +605,7 @@ void LuaFunctionsLoader::registerClass(lua_State* L, const std::string& classNam
 
 	// className.metatable = {}
 	luaL_newmetatable(L, className.c_str());
-	int metatable = lua_gettop(L);
+	const int metatable = lua_gettop(L);
 
 	// className.metatable.__metatable = className
 	lua_pushvalue(L, methods);
@@ -537,21 +624,36 @@ void LuaFunctionsLoader::registerClass(lua_State* L, const std::string& classNam
 	lua_rawseti(L, metatable, 'p');
 
 	// className.metatable['t'] = type
-	if (className == "Item") {
+	if (className == "Item")
+	{
 		lua_pushnumber(L, LuaData_Item);
-	} else if (className == "Container") {
+	}
+	else if (className == "Container")
+	{
 		lua_pushnumber(L, LuaData_Container);
-	} else if (className == "Teleport") {
+	}
+	else if (className == "Teleport")
+	{
 		lua_pushnumber(L, LuaData_Teleport);
-	} else if (className == "Player") {
+	}
+	else if (className == "Player")
+	{
 		lua_pushnumber(L, LuaData_Player);
-	} else if (className == "Monster") {
+	}
+	else if (className == "Monster")
+	{
 		lua_pushnumber(L, LuaData_Monster);
-	} else if (className == "Npc") {
+	}
+	else if (className == "Npc")
+	{
 		lua_pushnumber(L, LuaData_Npc);
-	} else if (className == "Tile") {
+	}
+	else if (className == "Tile")
+	{
 		lua_pushnumber(L, LuaData_Tile);
-	} else {
+	}
+	else
+	{
 		lua_pushnumber(L, LuaData_Unknown);
 	}
 	lua_rawseti(L, metatable, 't');
@@ -560,7 +662,9 @@ void LuaFunctionsLoader::registerClass(lua_State* L, const std::string& classNam
 	lua_pop(L, 2);
 }
 
-void LuaFunctionsLoader::registerMethod(lua_State* L, const std::string& globalName, const std::string& methodName, lua_CFunction func) {
+void LuaFunctionsLoader::registerMethod(lua_State* L, const std::string& globalName, const std::string& methodName,
+                                        lua_CFunction func)
+{
 	// globalName.methodName = func
 	lua_getglobal(L, globalName.c_str());
 	lua_pushcfunction(L, func);
@@ -570,13 +674,16 @@ void LuaFunctionsLoader::registerMethod(lua_State* L, const std::string& globalN
 	lua_pop(L, 1);
 }
 
-void LuaFunctionsLoader::registerTable(lua_State* L, const std::string& tableName) {
+void LuaFunctionsLoader::registerTable(lua_State* L, const std::string& tableName)
+{
 	// _G[tableName] = {}
 	lua_newtable(L);
 	lua_setglobal(L, tableName.c_str());
 }
 
-void LuaFunctionsLoader::registerMetaMethod(lua_State* L, const std::string& className, const std::string& methodName, lua_CFunction func) {
+void LuaFunctionsLoader::registerMetaMethod(lua_State* L, const std::string& className, const std::string& methodName,
+                                            lua_CFunction func)
+{
 	// className.metatable.methodName = func
 	luaL_getmetatable(L, className.c_str());
 	lua_pushcfunction(L, func);
@@ -586,7 +693,9 @@ void LuaFunctionsLoader::registerMetaMethod(lua_State* L, const std::string& cla
 	lua_pop(L, 1);
 }
 
-void LuaFunctionsLoader::registerVariable(lua_State* L, const std::string& tableName, const std::string& name, lua_Number value) {
+void LuaFunctionsLoader::registerVariable(lua_State* L, const std::string& tableName, const std::string& name,
+                                          lua_Number value)
+{
 	// tableName.name = value
 	lua_getglobal(L, tableName.c_str());
 	setField(L, name.c_str(), value);
@@ -595,25 +704,29 @@ void LuaFunctionsLoader::registerVariable(lua_State* L, const std::string& table
 	lua_pop(L, 1);
 }
 
-void LuaFunctionsLoader::registerGlobalBoolean(lua_State* L, const std::string& name, bool value) {
+void LuaFunctionsLoader::registerGlobalBoolean(lua_State* L, const std::string& name, bool value)
+{
 	// _G[name] = value
 	pushBoolean(L, value);
 	lua_setglobal(L, name.c_str());
 }
 
-void LuaFunctionsLoader::registerGlobalMethod(lua_State* L, const std::string& functionName, lua_CFunction func) {
+void LuaFunctionsLoader::registerGlobalMethod(lua_State* L, const std::string& functionName, lua_CFunction func)
+{
 	// _G[functionName] = func
 	lua_pushcfunction(L, func);
 	lua_setglobal(L, functionName.c_str());
 }
 
-void LuaFunctionsLoader::registerGlobalVariable(lua_State* L, const std::string& name, lua_Number value) {
+void LuaFunctionsLoader::registerGlobalVariable(lua_State* L, const std::string& name, lua_Number value)
+{
 	// _G[name] = value
 	lua_pushnumber(L, value);
 	lua_setglobal(L, name.c_str());
 }
 
-std::string LuaFunctionsLoader::escapeString(const std::string& string) {
+std::string LuaFunctionsLoader::escapeString(const std::string& string)
+{
 	std::string s = string;
 	replaceString(s, "\\", "\\\\");
 	replaceString(s, "\"", "\\\"");
@@ -622,7 +735,8 @@ std::string LuaFunctionsLoader::escapeString(const std::string& string) {
 	return s;
 }
 
-int LuaFunctionsLoader::luaUserdataCompare(lua_State* L) {
+int LuaFunctionsLoader::luaUserdataCompare(lua_State* L)
+{
 	pushBoolean(L, getUserdata<void>(L, 1) == getUserdata<void>(L, 2));
 	return 1;
 }

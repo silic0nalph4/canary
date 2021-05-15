@@ -33,14 +33,13 @@ void RSA2::decrypt(char* msg) const
 {
 	try
 	{
-		CryptoPP::Integer m{reinterpret_cast<uint8_t *>(msg), 128};
-		auto c = pk.CalculateInverse(prng, m);
-		c.Encode(reinterpret_cast<uint8_t *>(msg), 128);
+		const CryptoPP::Integer m{reinterpret_cast<uint8_t*>(msg), 128};
+		const auto c = pk.CalculateInverse(prng, m);
+		c.Encode(reinterpret_cast<uint8_t*>(msg), 128);
 	}
-	catch (const CryptoPP::Exception &e)
+	catch (const CryptoPP::Exception& e)
 	{
 		SPDLOG_ERROR("[RSA2::decrypt - Exception] - {}", e.GetWhat());
-		return;
 	}
 }
 
@@ -55,11 +54,13 @@ void RSA2::loadPEM(const std::string& filename)
 	for (std::string line; std::getline(file, line); oss << line);
 	std::string key = oss.str();
 
-	if (key.substr(0, header.size()) != header) {
+	if (key.substr(0, header.size()) != header)
+	{
 		throw std::runtime_error("Missing RSA private key header.\n>> There is no `key.pem` in the folder.");
 	}
 
-	if (key.substr(key.size() - footer.size(), footer.size()) != footer) {
+	if (key.substr(key.size() - footer.size(), footer.size()) != footer)
+	{
 		throw std::runtime_error("Missing RSA private key footer.");
 	}
 
@@ -71,13 +72,17 @@ void RSA2::loadPEM(const std::string& filename)
 	decoder.Put(reinterpret_cast<const uint8_t*>(key.c_str()), key.size());
 	decoder.MessageEnd();
 
-	try {
+	try
+	{
 		pk.BERDecodePrivateKey(queue, false, queue.MaxRetrievable());
 
-		if (!pk.Validate(prng, 3)) {
+		if (!pk.Validate(prng, 3))
+		{
 			throw std::runtime_error("RSA private key is not valid.");
 		}
-	} catch (const CryptoPP::Exception& e) {
+	}
+	catch (const CryptoPP::Exception& e)
+	{
 		SPDLOG_ERROR("{}", e.what());
 	}
 }

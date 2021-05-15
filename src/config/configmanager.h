@@ -24,32 +24,35 @@
 
 class ConfigManager
 {
-	public:
-		bool load();
-		bool reload();
+public:
+	bool load();
+	bool reload();
 
-		const std::string& getString(stringConfig_t what) const;
-		int32_t getNumber(integerConfig_t what) const;
-		int16_t getShortNumber(integerConfig_t what) const;
-		bool getBoolean(booleanConfig_t what) const;
-		float getFloat(floatingConfig_t what) const;
+	const std::string& getString(stringConfig_t what) const;
+	int32_t getNumber(integerConfig_t what) const;
+	int16_t getShortNumber(integerConfig_t what) const;
+	bool getBoolean(booleanConfig_t what) const;
+	float getFloat(floatingConfig_t what) const;
 
-		std::string const& setConfigFileLua(const std::string& what) {
-			configFileLua = { what };
-			return configFileLua;
-		};
-		std::string const& getConfigFileLua() const {
-			return configFileLua;
-		};
+	const std::string& setConfigFileLua(const std::string& what)
+	{
+		configFileLua = {what};
+		return configFileLua;
+	};
 
-	private:
-		std::string configFileLua = { "config.lua" };
-		std::string string[LAST_STRING_CONFIG] = {};
-		int32_t integer[LAST_INTEGER_CONFIG] = {};
-		bool boolean[LAST_BOOLEAN_CONFIG] = {};
-		float floating[LAST_FLOATING_CONFIG] = {};
+	const std::string& getConfigFileLua() const
+	{
+		return configFileLua;
+	};
 
-		bool loaded = false;
+private:
+	std::string configFileLua = {"config.lua"};
+	std::string string[LAST_STRING_CONFIG] = {};
+	int32_t integer[LAST_INTEGER_CONFIG] = {};
+	bool boolean[LAST_BOOLEAN_CONFIG] = {};
+	float floating[LAST_FLOATING_CONFIG] = {};
+
+	bool loaded = false;
 };
 
 #endif  // SRC_CONFIG_CONFIGMANAGER_H_

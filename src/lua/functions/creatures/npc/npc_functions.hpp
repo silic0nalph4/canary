@@ -25,57 +25,59 @@
 #include "lua/functions/creatures/npc/npc_type_functions.hpp"
 #include "lua/scripts/luascript.h"
 
-class NpcFunctions final : LuaScriptInterface {
-	private:
-			static void init(lua_State* L) {
-				registerClass(L, "Npc", "Creature", NpcFunctions::luaNpcCreate);
-				registerMetaMethod(L, "Npc", "__eq", NpcFunctions::luaUserdataCompare);
-				registerMethod(L, "Npc", "isNpc", NpcFunctions::luaNpcIsNpc);
-				registerMethod(L, "Npc", "setMasterPos", NpcFunctions::luaNpcSetMasterPos);
-				registerMethod(L, "Npc", "getCurrency", NpcFunctions::luaNpcGetCurrency);
-				registerMethod(L, "Npc", "getSpeechBubble", NpcFunctions::luaNpcGetSpeechBubble);
-				registerMethod(L, "Npc", "setSpeechBubble", NpcFunctions::luaNpcSetSpeechBubble);
-				registerMethod(L, "Npc", "getName", NpcFunctions::luaNpcGetName);
-				registerMethod(L, "Npc", "setName", NpcFunctions::luaNpcSetName);
-				registerMethod(L, "Npc", "place", NpcFunctions::luaNpcPlace);
-				registerMethod(L, "Npc", "say", NpcFunctions::luaNpcSay);
-				registerMethod(L, "Npc", "turnToCreature", NpcFunctions::luaNpcTurnToCreature);
-				registerMethod(L, "Npc", "setPlayerInteraction", NpcFunctions::luaNpcSetPlayerInteraction);
-				registerMethod(L, "Npc", "removePlayerInteraction", NpcFunctions::luaNpcRemovePlayerInteraction);
-				registerMethod(L, "Npc", "isInteractingWithPlayer", NpcFunctions::luaNpcIsInteractingWithPlayer);
-				registerMethod(L, "Npc", "isInTalkRange", NpcFunctions::luaNpcIsInTalkRange);
-				registerMethod(L, "Npc", "isPlayerInteractingOnTopic", NpcFunctions::luaNpcIsPlayerInteractingOnTopic);
-				registerMethod(L, "Npc", "openShopWindow", NpcFunctions::luaNpcOpenShopWindow);
-				registerMethod(L, "Npc", "closeShopWindow", NpcFunctions::luaNpcCloseShopWindow);
-				registerMethod(L, "Npc", "getShopItem", NpcFunctions::luaNpcGetShopItem);
+class NpcFunctions final : LuaScriptInterface
+{
+private:
+	static void init(lua_State* L)
+	{
+		registerClass(L, "Npc", "Creature", luaNpcCreate);
+		registerMetaMethod(L, "Npc", "__eq", luaUserdataCompare);
+		registerMethod(L, "Npc", "isNpc", luaNpcIsNpc);
+		registerMethod(L, "Npc", "setMasterPos", luaNpcSetMasterPos);
+		registerMethod(L, "Npc", "getCurrency", luaNpcGetCurrency);
+		registerMethod(L, "Npc", "getSpeechBubble", luaNpcGetSpeechBubble);
+		registerMethod(L, "Npc", "setSpeechBubble", luaNpcSetSpeechBubble);
+		registerMethod(L, "Npc", "getName", luaNpcGetName);
+		registerMethod(L, "Npc", "setName", luaNpcSetName);
+		registerMethod(L, "Npc", "place", luaNpcPlace);
+		registerMethod(L, "Npc", "say", luaNpcSay);
+		registerMethod(L, "Npc", "turnToCreature", luaNpcTurnToCreature);
+		registerMethod(L, "Npc", "setPlayerInteraction", luaNpcSetPlayerInteraction);
+		registerMethod(L, "Npc", "removePlayerInteraction", luaNpcRemovePlayerInteraction);
+		registerMethod(L, "Npc", "isInteractingWithPlayer", luaNpcIsInteractingWithPlayer);
+		registerMethod(L, "Npc", "isInTalkRange", luaNpcIsInTalkRange);
+		registerMethod(L, "Npc", "isPlayerInteractingOnTopic", luaNpcIsPlayerInteractingOnTopic);
+		registerMethod(L, "Npc", "openShopWindow", luaNpcOpenShopWindow);
+		registerMethod(L, "Npc", "closeShopWindow", luaNpcCloseShopWindow);
+		registerMethod(L, "Npc", "getShopItem", luaNpcGetShopItem);
 
-				NpcTypeFunctions::init(L);
-			}
+		NpcTypeFunctions::init(L);
+	}
 
-			static int luaNpcCreate(lua_State* L);
+	static int luaNpcCreate(lua_State* L);
 
-			static int luaNpcIsNpc(lua_State* L);
+	static int luaNpcIsNpc(lua_State* L);
 
-			static int luaNpcSetMasterPos(lua_State* L);
+	static int luaNpcSetMasterPos(lua_State* L);
 
-			static int luaNpcGetCurrency(lua_State* L);
-			static int luaNpcGetSpeechBubble(lua_State* L);
-			static int luaNpcSetSpeechBubble(lua_State* L);
-			static int luaNpcGetName(lua_State* L);
-			static int luaNpcSetName(lua_State* L);
-			static int luaNpcPlace(lua_State* L);
-			static int luaNpcSay(lua_State* L);
-			static int luaNpcTurnToCreature(lua_State* L);
-			static int luaNpcSetPlayerInteraction(lua_State* L);
-			static int luaNpcRemovePlayerInteraction(lua_State* L);
-			static int luaNpcIsInteractingWithPlayer(lua_State* L);
-			static int luaNpcIsInTalkRange(lua_State* L);
-			static int luaNpcIsPlayerInteractingOnTopic(lua_State* L);
-			static int luaNpcOpenShopWindow(lua_State* L);
-			static int luaNpcCloseShopWindow(lua_State* L);
-			static int luaNpcGetShopItem(lua_State* L);
+	static int luaNpcGetCurrency(lua_State* L);
+	static int luaNpcGetSpeechBubble(lua_State* L);
+	static int luaNpcSetSpeechBubble(lua_State* L);
+	static int luaNpcGetName(lua_State* L);
+	static int luaNpcSetName(lua_State* L);
+	static int luaNpcPlace(lua_State* L);
+	static int luaNpcSay(lua_State* L);
+	static int luaNpcTurnToCreature(lua_State* L);
+	static int luaNpcSetPlayerInteraction(lua_State* L);
+	static int luaNpcRemovePlayerInteraction(lua_State* L);
+	static int luaNpcIsInteractingWithPlayer(lua_State* L);
+	static int luaNpcIsInTalkRange(lua_State* L);
+	static int luaNpcIsPlayerInteractingOnTopic(lua_State* L);
+	static int luaNpcOpenShopWindow(lua_State* L);
+	static int luaNpcCloseShopWindow(lua_State* L);
+	static int luaNpcGetShopItem(lua_State* L);
 
-			friend class CreatureFunctions;
+	friend class CreatureFunctions;
 };
 
 #endif  // SRC_LUA_FUNCTIONS_CREATURES_NPC_NPC_FUNCTIONS_HPP_

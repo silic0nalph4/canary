@@ -41,7 +41,8 @@ uint32_t Npc::npcAutoID = 0x80000000;
 Npc* Npc::createNpc(const std::string& name)
 {
 	NpcType* npcType = g_npcs.getNpcType(name);
-	if (!npcType) {
+	if (!npcType)
+	{
 		return nullptr;
 	}
 	return new Npc(npcType);
@@ -54,23 +55,24 @@ Npc::Npc(NpcType* npcType) :
 {
 	defaultOutfit = npcType->info.outfit;
 	currentOutfit = npcType->info.outfit;
-	float multiplier = g_config.getFloat(RATE_NPC_HEALTH);
-	health = npcType->info.health*multiplier;
-	healthMax = npcType->info.healthMax*multiplier;
+	const float multiplier = g_config.getFloat(RATE_NPC_HEALTH);
+	health = npcType->info.health * multiplier;
+	healthMax = npcType->info.healthMax * multiplier;
 	baseSpeed = npcType->info.baseSpeed;
 	internalLight = npcType->info.light;
 	floorChange = npcType->info.floorChange;
 
 	// register creature events
-	for (const std::string& scriptName : npcType->info.scripts) {
-		if (!registerCreatureEvent(scriptName)) {
+	for (const std::string& scriptName : npcType->info.scripts)
+	{
+		if (!registerCreatureEvent(scriptName))
+		{
 			SPDLOG_WARN("Unknown event name: {}", scriptName);
 		}
 	}
 }
 
-Npc::~Npc() {
-}
+Npc::~Npc() = default;
 
 void Npc::addList()
 {
@@ -84,7 +86,8 @@ void Npc::removeList()
 
 bool Npc::canSee(const Position& pos) const
 {
-	if (pos.z != getPosition().z) {
+	if (pos.z != getPosition().z)
+	{
 		return false;
 	}
 	return Creature::canSee(getPosition(), pos, 4, 4);
@@ -95,14 +98,15 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	// onCreatureAppear(self, creature)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.creatureAppearEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.creatureAppearEvent))
+	{
 		callback.pushSpecificCreature(this);
 		callback.pushCreature(creature);
 	}
 
-	if (callback.persistLuaState()) {
-		return;
+	if (callback.persistLuaState())
+	{
 	}
 }
 
@@ -111,22 +115,26 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 	Creature::onRemoveCreature(creature, isLogout);
 
 	// onCreatureDisappear(self, creature)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.creatureDisappearEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.creatureDisappearEvent))
+	{
 		callback.pushSpecificCreature(this);
 		callback.pushCreature(creature);
 	}
 
-	if (callback.persistLuaState()) {
+	if (callback.persistLuaState())
+	{
 		return;
 	}
 
-	if (creature != this) {
+	if (creature != this)
+	{
 		updatePlayerInteractions(creature->getPlayer());
 		return;
 	}
 
-	if (spawnNpc) {
+	if (spawnNpc)
+	{
 		spawnNpc->startSpawnNpcCheck();
 	}
 
@@ -134,31 +142,35 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 }
 
 void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
-                              const Tile* oldTile, const Position& oldPos, bool teleport)
+                         const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
 	// onCreatureMove(self, creature, oldPosition, newPosition)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.creatureMoveEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.creatureMoveEvent))
+	{
 		callback.pushSpecificCreature(this);
 		callback.pushCreature(creature);
 		callback.pushPosition(oldPos);
 		callback.pushPosition(newPos);
 	}
 
-	if (callback.persistLuaState()) {
+	if (callback.persistLuaState())
+	{
 		return;
 	}
 
-	if (creature == this && !canSee(oldPos)) {
+	if (creature == this && !canSee(oldPos))
+	{
 		resetPlayerInteractions();
 		closeAllShopWindows();
 		return;
 	}
 
-	Player *player = creature->getPlayer();
-	if (player && !canSee(newPos) && canSee(oldPos)) {
+	Player* player = creature->getPlayer();
+	if (player && !canSee(newPos) && canSee(oldPos))
+	{
 		updatePlayerInteractions(player);
 		player->closeShopWindow(true);
 	}
@@ -168,21 +180,23 @@ void Npc::onCreatureSay(Creature* creature, SpeakClasses type, const std::string
 {
 	Creature::onCreatureSay(creature, type, text);
 
-	if (!creature->getPlayer()) {
+	if (!creature->getPlayer())
+	{
 		return;
 	}
 
 	// onCreatureSay(self, creature, type, message)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.creatureSayEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.creatureSayEvent))
+	{
 		callback.pushSpecificCreature(this);
 		callback.pushCreature(creature);
 		callback.pushNumber(type);
 		callback.pushString(text);
 	}
 
-	if (callback.persistLuaState()) {
-		return;
+	if (callback.persistLuaState())
+	{
 	}
 }
 
@@ -191,20 +205,24 @@ void Npc::onThink(uint32_t interval)
 	Creature::onThink(interval);
 
 	// onThink(self, interval)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.thinkEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.thinkEvent))
+	{
 		callback.pushNumber(interval);
 	}
 
-	if (callback.persistLuaState()) {
+	if (callback.persistLuaState())
+	{
 		return;
 	}
 
-	if (!npcType->canSpawn(position)) {
+	if (!npcType->canSpawn(position))
+	{
 		g_game.removeCreature(this);
 	}
 
-	if (!isInSpawnRange(position)) {
+	if (!isInSpawnRange(position))
+	{
 		g_game.internalTeleport(this, masterPos);
 		resetPlayerInteractions();
 		closeAllShopWindows();
@@ -217,29 +235,36 @@ void Npc::onThink(uint32_t interval)
 void Npc::onPlayerBuyItem(Player* player, uint16_t serverId,
                           uint8_t subType, uint8_t amount, bool ignore, bool inBackpacks)
 {
-	if (!player) {
+	if (!player)
+	{
 		return;
 	}
 
 	const ItemType& itemType = Item::items[serverId];
 
-	if (getShopItems().find(serverId) == getShopItems().end()) {
+	if (getShopItems().find(serverId) == getShopItems().end())
+	{
 		return;
 	}
 
-	ShopInfo shopInfo = getShopItems()[serverId];
-	int64_t totalCost = shopInfo.buyPrice * amount;
-	if (getCurrency() == ITEM_GOLD_COIN) {
-		if (!g_game.removeMoney(player, totalCost, 0, true)) {
+	const ShopInfo shopInfo = getShopItems()[serverId];
+	const int64_t totalCost = shopInfo.buyPrice * amount;
+	if (getCurrency() == ITEM_GOLD_COIN)
+	{
+		if (!g_game.removeMoney(player, totalCost, 0, true))
+		{
 			return;
 		}
-	} else if(!player->removeItemOfType(getCurrency(), shopInfo.buyPrice, subType, false)) {
+	}
+	else if (!player->removeItemOfType(getCurrency(), shopInfo.buyPrice, subType, false))
+	{
 		return;
 	}
 
 	// onPlayerBuyItem(self, player, itemId, subType, amount, ignore, inBackpacks)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.playerBuyEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.playerBuyEvent))
+	{
 		callback.pushSpecificCreature(this);
 		callback.pushCreature(player);
 		callback.pushNumber(serverId);
@@ -250,36 +275,40 @@ void Npc::onPlayerBuyItem(Player* player, uint16_t serverId,
 		callback.pushNumber(totalCost);
 	}
 
-	if (callback.persistLuaState()) {
-		return;
+	if (callback.persistLuaState())
+	{
 	}
 }
 
 void Npc::onPlayerSellItem(Player* player, uint16_t serverId,
-                          uint8_t subType, uint8_t amount, bool ignore)
+                           uint8_t subType, uint8_t amount, bool ignore)
 {
-	if (!player) {
+	if (!player)
+	{
 		return;
 	}
 
 	const ItemType& itemType = Item::items[serverId];
 
-	if (getShopItems().find(serverId) == getShopItems().end()) {
+	if (getShopItems().find(serverId) == getShopItems().end())
+	{
 		return;
 	}
 
-	ShopInfo shopInfo = getShopItems()[serverId];
+	const ShopInfo shopInfo = getShopItems()[serverId];
 
-	if(!player->removeItemOfType(serverId, amount, subType, false)) {
+	if (!player->removeItemOfType(serverId, amount, subType, false))
+	{
 		return;
 	}
 
-	int64_t totalCost = shopInfo.sellPrice * amount;
+	const int64_t totalCost = shopInfo.sellPrice * amount;
 	g_game.addMoney(player, totalCost, 0);
 
 	// onPlayerSellItem(self, player, itemId, subType, amount, ignore)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.playerSellEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.playerSellEvent))
+	{
 		callback.pushSpecificCreature(this);
 		callback.pushCreature(player);
 		callback.pushNumber(amount);
@@ -288,50 +317,59 @@ void Npc::onPlayerSellItem(Player* player, uint16_t serverId,
 		callback.pushNumber(itemType.clientId);
 	}
 
-	if (callback.persistLuaState()) {
-		return;
+	if (callback.persistLuaState())
+	{
 	}
 }
 
 void Npc::onPlayerCheckItem(Player* player, uint16_t serverId,
-                          uint8_t subType)
+                            uint8_t subType)
 {
-	if (!player) {
+	if (!player)
+	{
 		return;
 	}
 
 	const ItemType& itemType = Item::items[serverId];
 	// onPlayerCheckItem(self, player, clientId, subType)
-	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, this);
-	if (callback.startScriptInterface(npcType->info.playerLookEvent)) {
+	auto callback = CreatureCallback(npcType->info.scriptInterface, this);
+	if (callback.startScriptInterface(npcType->info.playerLookEvent))
+	{
 		callback.pushSpecificCreature(this);
 		callback.pushCreature(player);
 		callback.pushNumber(serverId);
 		callback.pushNumber(subType);
 	}
 
-	if (callback.persistLuaState()) {
-		return;
+	if (callback.persistLuaState())
+	{
 	}
 }
 
 void Npc::onThinkYell(uint32_t interval)
 {
-	if (npcType->info.yellSpeedTicks == 0) {
+	if (npcType->info.yellSpeedTicks == 0)
+	{
 		return;
 	}
 
 	yellTicks += interval;
-	if (yellTicks >= npcType->info.yellSpeedTicks) {
+	if (yellTicks >= npcType->info.yellSpeedTicks)
+	{
 		yellTicks = 0;
 
-		if (!npcType->info.voiceVector.empty() && (npcType->info.yellChance >= static_cast<uint32_t>(uniform_random(1, 100)))) {
-			uint32_t index = uniform_random(0, npcType->info.voiceVector.size() - 1);
+		if (!npcType->info.voiceVector.empty() && (npcType->info.yellChance >= static_cast<uint32_t>(
+			uniform_random(1, 100))))
+		{
+			const uint32_t index = uniform_random(0, npcType->info.voiceVector.size() - 1);
 			const voiceBlock_t& vb = npcType->info.voiceVector[index];
 
-			if (vb.yellText) {
+			if (vb.yellText)
+			{
 				g_game.internalCreatureSay(this, TALKTYPE_YELL, vb.text, false);
-			} else {
+			}
+			else
+			{
 				g_game.internalCreatureSay(this, TALKTYPE_SAY, vb.text, false);
 			}
 		}
@@ -340,24 +378,28 @@ void Npc::onThinkYell(uint32_t interval)
 
 void Npc::onThinkWalk(uint32_t interval)
 {
-	if (npcType->info.walkInterval == 0 || baseSpeed == 0) {
+	if (npcType->info.walkInterval == 0 || baseSpeed == 0)
+	{
 		return;
 	}
 
 	// If talking, no walking
-	if (playerInteractions.size() > 0) {
+	if (playerInteractions.size() > 0)
+	{
 		walkTicks = 0;
 		eventWalk = 0;
 		return;
 	}
 
 	walkTicks += interval;
-	if (walkTicks < npcType->info.walkInterval) {
+	if (walkTicks < npcType->info.walkInterval)
+	{
 		return;
 	}
 
-	Direction dir = Position::getRandomDirection();
-	if (canWalkTo(getPosition(), dir)) {
+	const Direction dir = Position::getRandomDirection();
+	if (canWalkTo(getPosition(), dir))
+	{
 		listWalkDir.push_front(dir);
 		addEventWalk();
 	}
@@ -372,33 +414,40 @@ void Npc::onPlacedCreature()
 
 bool Npc::isInSpawnRange(const Position& pos) const
 {
-	if (!spawnNpc) {
+	if (!spawnNpc)
+	{
 		return true;
 	}
 
-	if (Npc::despawnRadius == 0) {
+	if (despawnRadius == 0)
+	{
 		return true;
 	}
 
-	if (!SpawnsNpc::isInZone(masterPos, Npc::despawnRadius, pos)) {
+	if (!SpawnsNpc::isInZone(masterPos, despawnRadius, pos))
+	{
 		return false;
 	}
 
-	if (Npc::despawnRange == 0) {
+	if (despawnRange == 0)
+	{
 		return true;
 	}
 
-	if (Position::getDistanceZ(pos, masterPos) > Npc::despawnRange) {
+	if (Position::getDistanceZ(pos, masterPos) > despawnRange)
+	{
 		return false;
 	}
 
 	return true;
 }
 
-void Npc::setPlayerInteraction(uint32_t playerId, uint16_t topicId /*= 0*/) {
+void Npc::setPlayerInteraction(uint32_t playerId, uint16_t topicId /*= 0*/)
+{
 	Creature* creature = g_game.getCreatureByID(playerId);
-	if (!creature) {
-      return;
+	if (!creature)
+	{
+		return;
 	}
 
 	turnToCreature(creature);
@@ -406,50 +455,61 @@ void Npc::setPlayerInteraction(uint32_t playerId, uint16_t topicId /*= 0*/) {
 	playerInteractions[playerId] = topicId;
 }
 
-void Npc::updatePlayerInteractions(Player* player) {
-	if (player && !canSee(player->getPosition())) {
+void Npc::updatePlayerInteractions(Player* player)
+{
+	if (player && !canSee(player->getPosition()))
+	{
 		removePlayerInteraction(player->getID());
 	}
 }
 
-void Npc::removePlayerInteraction(uint32_t playerId) {
-	if (playerInteractions.find(playerId) != playerInteractions.end()) {
+void Npc::removePlayerInteraction(uint32_t playerId)
+{
+	if (playerInteractions.find(playerId) != playerInteractions.end())
+	{
 		playerInteractions.erase(playerId);
 	}
 }
 
-void Npc::resetPlayerInteractions() {
+void Npc::resetPlayerInteractions()
+{
 	playerInteractions.clear();
 }
 
 bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 {
-	if (npcType->info.walkRadius == 0) {
+	if (npcType->info.walkRadius == 0)
+	{
 		return false;
 	}
 
-	Position toPos = getNextPosition(dir, fromPos);
-	if (!SpawnsNpc::isInZone(masterPos, npcType->info.walkRadius, toPos)) {
+	const Position toPos = getNextPosition(dir, fromPos);
+	if (!SpawnsNpc::isInZone(masterPos, npcType->info.walkRadius, toPos))
+	{
 		return false;
 	}
 
 	Tile* toTile = g_game.map.getTile(toPos);
-	if (!toTile || toTile->queryAdd(0, *this, 1, 0) != RETURNVALUE_NOERROR) {
+	if (!toTile || toTile->queryAdd(0, *this, 1, 0) != RETURNVALUE_NOERROR)
+	{
 		return false;
 	}
 
-	if (!floorChange && (toTile->hasFlag(TILESTATE_FLOORCHANGE) || toTile->getTeleportItem())) {
+	if (!floorChange && (toTile->hasFlag(TILESTATE_FLOORCHANGE) || toTile->getTeleportItem()))
+	{
 		return false;
 	}
 
-	if (!ignoreHeight && toTile->hasHeight(1)) {
+	if (!ignoreHeight && toTile->hasHeight(1))
+	{
 		return false;
 	}
 
 	return true;
 }
 
-bool Npc::getNextStep(Direction& nextDirection, uint32_t& flags) {
+bool Npc::getNextStep(Direction& nextDirection, uint32_t& flags)
+{
 	return Creature::getNextStep(nextDirection, flags);
 }
 
@@ -460,15 +520,18 @@ void Npc::addShopPlayer(Player* player)
 
 void Npc::removeShopPlayer(Player* player)
 {
-	if (player) {
+	if (player)
+	{
 		shopPlayerSet.erase(player);
 	}
 }
 
 void Npc::closeAllShopWindows()
 {
-	for (auto shopPlayer : shopPlayerSet) {
-		if (shopPlayer) {
+	for (auto shopPlayer : shopPlayerSet)
+	{
+		if (shopPlayer)
+		{
 			shopPlayer->closeShopWindow();
 		}
 	}

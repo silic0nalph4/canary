@@ -51,11 +51,13 @@ extern LuaEnvironment g_luaEnvironment;
 extern ConfigManager g_config;
 
 Scripts::Scripts() :
-	scriptInterface("Scripts Interface") {
+	scriptInterface("Scripts Interface")
+{
 	scriptInterface.initState();
 }
 
-Scripts::~Scripts() {
+Scripts::~Scripts()
+{
 	scriptInterface.reInitState();
 
 	delete g_events;
@@ -71,44 +73,52 @@ Scripts::~Scripts() {
 	delete g_imbuements;
 }
 
-bool Scripts::loadScriptSystems() {
+bool Scripts::loadScriptSystems()
+{
 	g_chat = new Chat();
 
 	// XML loads disabled start
 	g_weapons = new Weapons();
-	if (!g_weapons) {
+	if (!g_weapons)
+	{
 		return false;
 	}
 
 	g_weapons->loadDefaults();
 
 	g_spells = new Spells();
-	if (!g_spells) {
+	if (!g_spells)
+	{
 		return false;
 	}
 
 	g_actions = new Actions();
-	if (!g_actions) {
+	if (!g_actions)
+	{
 		return false;
 	}
 
 	g_talkActions = new TalkActions();
-	if (!g_talkActions) {
+	if (!g_talkActions)
+	{
 		return false;
 	}
 
 	g_moveEvents = new MoveEvents();
-	if (!g_moveEvents) {
+	if (!g_moveEvents)
+	{
 		return false;
 	}
 
 	g_creatureEvents = new CreatureEvents();
-	if (!g_creatureEvents) {
+	if (!g_creatureEvents)
+	{
 		return false;
 	}
 
 	g_globalEvents = new GlobalEvents();
-	if (!g_globalEvents) {
+	if (!g_globalEvents)
+	{
 		return false;
 	}
 	// XML loads disabled end
@@ -116,20 +126,26 @@ bool Scripts::loadScriptSystems() {
 	return true;
 }
 
-bool Scripts::loadEventSchedulerScripts(const std::string& fileName) {
+bool Scripts::loadEventSchedulerScripts(const std::string& fileName)
+{
 	namespace fs = boost::filesystem;
 
 	const auto dir = fs::current_path() / "data" / "events" / "scripts" / "scheduler";
-	if(!fs::exists(dir) || !fs::is_directory(dir)) {
+	if (!exists(dir) || !is_directory(dir))
+	{
 		SPDLOG_WARN("Can not load folder 'scheduler' on '/data/events/scripts'");
 		return false;
 	}
 
-	fs::recursive_directory_iterator endit;
-	for(fs::recursive_directory_iterator it(dir); it != endit; ++it) {
-		if(fs::is_regular_file(*it) && it->path().extension() == ".lua") {
-			if (it->path().filename().string() == fileName) {
-				if(scriptInterface.loadFile(it->path().string()) == -1) {
+	const fs::recursive_directory_iterator endit;
+	for (fs::recursive_directory_iterator it(dir); it != endit; ++it)
+	{
+		if (is_regular_file(*it) && it->path().extension() == ".lua")
+		{
+			if (it->path().filename().string() == fileName)
+			{
+				if (scriptInterface.loadFile(it->path().string()) == -1)
+				{
 					SPDLOG_ERROR(it->path().string());
 					SPDLOG_ERROR(scriptInterface.getLastLuaError());
 					continue;
@@ -141,27 +157,34 @@ bool Scripts::loadEventSchedulerScripts(const std::string& fileName) {
 	return false;
 }
 
-bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload) {
+bool Scripts::loadScripts(const std::string& folderName, bool isLib, bool reload)
+{
 	namespace fs = boost::filesystem;
 
 	const auto dir = fs::current_path() / "data" / folderName;
-	if(!fs::exists(dir) || !fs::is_directory(dir)) {
+	if (!exists(dir) || !is_directory(dir))
+	{
 		SPDLOG_ERROR("Can not load folder {}", folderName);
 		return false;
 	}
 
-	fs::recursive_directory_iterator endit;
+	const fs::recursive_directory_iterator endit;
 	std::vector<fs::path> v;
-	std::string disable = ("#");
-	for(fs::recursive_directory_iterator it(dir); it != endit; ++it) {
+	const std::string disable = ("#");
+	for (fs::recursive_directory_iterator it(dir); it != endit; ++it)
+	{
 		auto fn = it->path().parent_path().filename();
-		if ((fn == "lib" && !isLib) || fn == "events") {
+		if ((fn == "lib" && !isLib) || fn == "events")
+		{
 			continue;
 		}
-		if(fs::is_regular_file(*it) && it->path().extension() == ".lua") {
-			size_t found = it->path().filename().string().find(disable);
-			if (found != std::string::npos) {
-				if (g_config.getBoolean(SCRIPTS_CONSOLE_LOGS)) {
+		if (is_regular_file(*it) && it->path().extension() == ".lua")
+		{
+			const size_t found = it->path().filename().string().find(disable);
+			if (found != std::string::npos)
+			{
+				if (g_config.getBoolean(SCRIPTS_CONSOLE_LOGS))
+				{
 					SPDLOG_INFO("{} [disabled]", it->path().filename().string());
 				}
 				continue;
@@ -171,28 +194,37 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload) {
 	}
 	sort(v.begin(), v.end());
 	std::string redir;
-	for (auto it = v.begin(); it != v.end(); ++it) {
+	for (auto it = v.begin(); it != v.end(); ++it)
+	{
 		const std::string scriptFile = it->string();
-		if (!isLib) {
-			if (redir.empty() || redir != it->parent_path().string()) {
+		if (!isLib)
+		{
+			if (redir.empty() || redir != it->parent_path().string())
+			{
 				auto p = it->relative_path();
-				if (g_config.getBoolean(SCRIPTS_CONSOLE_LOGS)) {
+				if (g_config.getBoolean(SCRIPTS_CONSOLE_LOGS))
+				{
 					SPDLOG_INFO("[{}]", p.parent_path().filename().string());
 				}
 				redir = it->parent_path().string();
 			}
 		}
 
-		if(scriptInterface.loadFile(scriptFile) == -1) {
+		if (scriptInterface.loadFile(scriptFile) == -1)
+		{
 			SPDLOG_ERROR(it->filename().string());
 			SPDLOG_ERROR(scriptInterface.getLastLuaError());
 			continue;
 		}
 
-		if (g_config.getBoolean(SCRIPTS_CONSOLE_LOGS)) {
-			if (!reload) {
+		if (g_config.getBoolean(SCRIPTS_CONSOLE_LOGS))
+		{
+			if (!reload)
+			{
 				SPDLOG_INFO("{} [loaded]", it->filename().string());
-			} else {
+			}
+			else
+			{
 				SPDLOG_INFO("{} [reloaded]", it->filename().string());
 			}
 		}

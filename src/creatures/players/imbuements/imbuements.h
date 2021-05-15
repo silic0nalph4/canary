@@ -29,9 +29,14 @@ class Item;
 
 class Imbuement;
 
-struct BaseImbue {
-	BaseImbue(uint16_t initId, std::string initName, uint32_t initProtection, uint32_t initPrice, uint32_t initRemovecust, int32_t initDuration, uint16_t initPercent) :
-		id(initId), name(std::move(initName)), protection(initProtection), price(initPrice), removecust(initRemovecust), duration(initDuration), percent(initPercent) {}
+struct BaseImbue
+{
+	BaseImbue(uint16_t initId, std::string initName, uint32_t initProtection, uint32_t initPrice, uint32_t initRemovecust,
+	          int32_t initDuration, uint16_t initPercent) :
+		id(initId), name(std::move(initName)), protection(initProtection), price(initPrice), removecust(initRemovecust),
+		duration(initDuration), percent(initPercent)
+	{
+	}
 
 	uint16_t id;
 	std::string name;
@@ -42,99 +47,115 @@ struct BaseImbue {
 	uint16_t percent;
 };
 
-struct Category {
+struct Category
+{
 	Category(uint16_t initId, std::string initName) :
-		id(initId), name(std::move(initName)) {}
+		id(initId), name(std::move(initName))
+	{
+	}
 
 	uint16_t id;
 	std::string name;
 };
 
-class Imbuements {
-	public:
-		bool loadFromXml(bool reloading = false);
-		bool reload();
+class Imbuements
+{
+public:
+	bool loadFromXml(bool reloading = false);
+	bool reload();
 
-		Imbuement* getImbuement(uint16_t id);
+	Imbuement* getImbuement(uint16_t id);
 
-		BaseImbue* getBaseByID(uint16_t id);
-		Category* getCategoryByID(uint16_t id);
-		std::vector<Imbuement*> getImbuements(Player* player, Item* item);
+	BaseImbue* getBaseByID(uint16_t id);
+	Category* getCategoryByID(uint16_t id);
+	std::vector<Imbuement*> getImbuements(Player* player, Item* item);
 
-	protected:
-		friend class Imbuement;
+protected:
+	friend class Imbuement;
 
-		std::map<uint32_t, Imbuement> imbues;
-		std::vector<BaseImbue> bases;
-		std::vector<Category> categories;
+	std::map<uint32_t, Imbuement> imbues;
+	std::vector<BaseImbue> bases;
+	std::vector<Category> categories;
 
-		bool loaded = false;
+	bool loaded = false;
 
-	private:
-		uint32_t runningid = 0;
-
+private:
+	uint32_t runningid = 0;
 };
 
 class Imbuement
 {
-	public:
-		Imbuement(uint16_t initId, uint16_t initBaseId) :
-				id(initId), baseid(initBaseId) {}
+public:
+	Imbuement(uint16_t initId, uint16_t initBaseId) :
+		id(initId), baseid(initBaseId)
+	{
+	}
 
-		uint16_t getId() const {
-			return id;
-		}
+	uint16_t getId() const
+	{
+		return id;
+	}
 
-		uint16_t getBaseID() const {
-			return baseid;
-		}
+	uint16_t getBaseID() const
+	{
+		return baseid;
+	}
 
-		bool isPremium() {
-			return premium;
-		}
-		std::string getName() const {
-			return name;
-		}
-		std::string getDescription() const {
-			return description;
-		}
+	bool isPremium()
+	{
+		return premium;
+	}
 
-		std::string getSubGroup() const {
-			return subgroup;
-		}
+	std::string getName() const
+	{
+		return name;
+	}
 
-		uint16_t getCategory() const {
-			return category;
-		}
+	std::string getDescription() const
+	{
+		return description;
+	}
 
-		const std::vector<std::pair<uint16_t, uint16_t>>& getItems() const {
-			return items;
-		}
+	std::string getSubGroup() const
+	{
+		return subgroup;
+	}
 
-		uint16_t getIconID() {
-			return icon + (baseid - 1);
-		}
+	uint16_t getCategory() const
+	{
+		return category;
+	}
 
-		uint16_t icon = 1;
-		int32_t stats[STAT_LAST + 1] = {};
-		int32_t skills[SKILL_LAST + 1] = {};
-		int32_t speed = 0;
-		uint32_t capacity = 0;
-		int16_t absorbPercent[COMBAT_COUNT] = {};
-		int16_t elementDamage = 0;
+	const std::vector<std::pair<uint16_t, uint16_t>>& getItems() const
+	{
+		return items;
+	}
 
-		CombatType_t combatType = COMBAT_NONE;
+	uint16_t getIconID()
+	{
+		return icon + (baseid - 1);
+	}
 
-	protected:
-		friend class Imbuements;
-		friend class Item;
+	uint16_t icon = 1;
+	int32_t stats[STAT_LAST + 1] = {};
+	int32_t skills[SKILL_LAST + 1] = {};
+	int32_t speed = 0;
+	uint32_t capacity = 0;
+	int16_t absorbPercent[COMBAT_COUNT] = {};
+	int16_t elementDamage = 0;
 
-	private:
-		bool premium = false;
-		uint16_t id, baseid, category = 0;
-		std::string name, description, subgroup = "";
+	CombatType_t combatType = COMBAT_NONE;
 
-		std::vector<std::pair<uint16_t, uint16_t>> items;
+protected:
+	friend class Imbuements;
+	friend class Item;
+
+private:
+	bool premium = false;
+	uint16_t id, baseid, category = 0;
+	std::string name, description, subgroup = "";
+
+	std::vector<std::pair<uint16_t, uint16_t>> items;
 };
 
 #endif  // SRC_CREATURES_PLAYERS_IMBUEMENTS_IMBUEMENTS_H_

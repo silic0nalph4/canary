@@ -28,33 +28,44 @@
 template <typename Derived>
 class ThreadHolder
 {
-	public:
-		ThreadHolder() {}
-		void start() {
-			setState(THREAD_STATE_RUNNING);
-			thread = std::thread(&Derived::threadMain, static_cast<Derived*>(this));
-		}
+public:
+	ThreadHolder()
+	{
+	}
 
-		void stop() {
-			setState(THREAD_STATE_CLOSING);
-		}
+	void start()
+	{
+		setState(THREAD_STATE_RUNNING);
+		thread = std::thread(&Derived::threadMain, static_cast<Derived*>(this));
+	}
 
-		void join() {
-			if (thread.joinable()) {
-				thread.join();
-			}
-		}
-	protected:
-		void setState(ThreadState newState) {
-			threadState.store(newState, std::memory_order_relaxed);
-		}
+	void stop()
+	{
+		setState(THREAD_STATE_CLOSING);
+	}
 
-		ThreadState getState() const {
-			return threadState.load(std::memory_order_relaxed);
+	void join()
+	{
+		if (thread.joinable())
+		{
+			thread.join();
 		}
-	private:
-		std::atomic<ThreadState> threadState{THREAD_STATE_TERMINATED};
-		std::thread thread;
+	}
+
+protected:
+	void setState(ThreadState newState)
+	{
+		threadState.store(newState, std::memory_order_relaxed);
+	}
+
+	ThreadState getState() const
+	{
+		return threadState.load(std::memory_order_relaxed);
+	}
+
+private:
+	std::atomic<ThreadState> threadState{THREAD_STATE_TERMINATED};
+	std::thread thread;
 };
 
 #endif  // SRC_UTILS_THREAD_HOLDER_H_

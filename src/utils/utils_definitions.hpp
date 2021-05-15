@@ -21,10 +21,11 @@
 #define SRC_UTILS_UTILS_DEFINITIONS_HPP_
 
 // Enums
-enum Icons_t {
+enum Icons_t
+{
 	ICON_POISON = 1 << 0,
 	ICON_BURN = 1 << 1,
-	ICON_ENERGY =  1 << 2,
+	ICON_ENERGY = 1 << 2,
 	ICON_DRUNK = 1 << 3,
 	ICON_MANASHIELD = 1 << 4,
 	ICON_PARALYZE = 1 << 5,
@@ -51,7 +52,8 @@ enum Icons_t {
 	ICON_NEWMANASHIELD = 1 << 26,
 };
 
-enum WieldInfo_t {
+enum WieldInfo_t
+{
 	WIELDINFO_NONE = 0,
 	WIELDINFO_LEVEL = 1 << 0,
 	WIELDINFO_MAGLV = 1 << 1,
@@ -59,14 +61,16 @@ enum WieldInfo_t {
 	WIELDINFO_PREMIUM = 1 << 3,
 };
 
-enum CreatureIcon_t {
+enum CreatureIcon_t
+{
 	CREATUREICON_NONE = 0,
 	CREATUREICON_HIGHERRECEIVEDDAMAGE = 1,
 	CREATUREICON_LOWERDEALTDAMAGE = 2,
 	CREATUREICON_TURNEDMELEE = 3,
 };
 
-enum ThreadState {
+enum ThreadState
+{
 	THREAD_STATE_RUNNING,
 	THREAD_STATE_CLOSING,
 	THREAD_STATE_TERMINATED,
@@ -81,7 +85,8 @@ enum SpawnType_t
 	RESPAWN_IN_NIGHT_CAVE = 4,
 };
 
-enum Cipbia_Elementals_t : uint8_t {
+enum Cipbia_Elementals_t : uint8_t
+{
 	CIPBIA_ELEMENTAL_PHYSICAL = 0,
 	CIPBIA_ELEMENTAL_FIRE = 1,
 	CIPBIA_ELEMENTAL_EARTH = 2,
@@ -95,7 +100,8 @@ enum Cipbia_Elementals_t : uint8_t {
 	CIPBIA_ELEMENTAL_UNDEFINED = 10
 };
 
-enum MagicEffectClasses : uint8_t {
+enum MagicEffectClasses : uint8_t
+{
 	CONST_ME_NONE,
 
 	CONST_ME_DRAWBLOOD = 1,
@@ -218,7 +224,8 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_LAST = CONST_ME_DIVINE_DAZZLE,
 };
 
-enum ShootType_t : uint8_t {
+enum ShootType_t : uint8_t
+{
 	CONST_ANI_NONE,
 
 	CONST_ANI_SPEAR = 1,
@@ -283,10 +290,12 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_LAST = CONST_ANI_ROYALSTAR,
 
 	// for internal use, don't send to client
-	CONST_ANI_WEAPONTYPE = 0xFE, // 254
+	CONST_ANI_WEAPONTYPE = 0xFE,
+	// 254
 };
 
-enum SpeakClasses : uint8_t {
+enum SpeakClasses : uint8_t
+{
 	TALKTYPE_SAY = 1,
 	TALKTYPE_WHISPER = 2,
 	TALKTYPE_YELL = 3,
@@ -297,58 +306,99 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_CHANNEL_O = 8,
 	TALKTYPE_SPELL_USE = 9,
 	TALKTYPE_PRIVATE_NP = 10,
-	TALKTYPE_NPC_UNKOWN = 11, /* no effect (?)*/
+	TALKTYPE_NPC_UNKOWN = 11,
+	/* no effect (?)*/
 	TALKTYPE_PRIVATE_PN = 12,
 	TALKTYPE_BROADCAST = 13,
-	TALKTYPE_CHANNEL_R1 = 14, //red - #c text
-	TALKTYPE_PRIVATE_RED_FROM = 15, //@name@text
-	TALKTYPE_PRIVATE_RED_TO = 16, //@name@text
+	TALKTYPE_CHANNEL_R1 = 14,
+	//red - #c text
+	TALKTYPE_PRIVATE_RED_FROM = 15,
+	//@name@text
+	TALKTYPE_PRIVATE_RED_TO = 16,
+	//@name@text
 	TALKTYPE_MONSTER_SAY = 36,
 	TALKTYPE_MONSTER_YELL = 37,
 
-	TALKTYPE_CHANNEL_R2 = 0xFF, //#d
+	TALKTYPE_CHANNEL_R2 = 0xFF,
+	//#d
 };
 
-enum MessageClasses : uint8_t {
-	MESSAGE_NONE = 0, /* None */
+enum MessageClasses : uint8_t
+{
+	MESSAGE_NONE = 0,
+	/* None */
 
-	MESSAGE_GAMEMASTER_CONSOLE = 13, /* Red message in the console*/ /* TALKTYPE_BROADCAST */
+	MESSAGE_GAMEMASTER_CONSOLE = 13,
+	/* Red message in the console*/
+	/* TALKTYPE_BROADCAST */
 
-	MESSAGE_LOGIN = 17, /* White message at the bottom of the game window and in the console*/
-	MESSAGE_ADMINISTRADOR = 18, /* Red message in game window and in the console*/
-	MESSAGE_EVENT_ADVANCE = 19, /* White message in game window and in the console*/
-	MESSAGE_GAME_HIGHLIGHT = 20, /* Red message in game window and in the console*/
-	MESSAGE_FAILURE = 21, /* White message at the bottom of the game window"*/
-	MESSAGE_LOOK = 22, /* Green message in game window and in the console*/
-	MESSAGE_DAMAGE_DEALT = 23, /* White message on the console*/
-	MESSAGE_DAMAGE_RECEIVED = 24, /* White message on the console*/
-	MESSAGE_HEALED = 25, /* White message on the console*/
-	MESSAGE_EXPERIENCE = 26, /* White message on the console*/
-	MESSAGE_DAMAGE_OTHERS = 27, /* White message on the console*/
-	MESSAGE_HEALED_OTHERS = 28, /* White message on the console*/
-	MESSAGE_EXPERIENCE_OTHERS = 29, /* White message on the console*/
-	MESSAGE_STATUS = 30, /* White message at the bottom of the game window and in the console*/
-	MESSAGE_LOOT = 31, /* White message on the game window and in the console*/
-	MESSAGE_TRADE = 32, /* Green message in game window and in the console*/
-	MESSAGE_GUILD = 33, /* White message in channel (+ channelId)*/
-	MESSAGE_PARTY_MANAGEMENT = 34, /* Green message in game window and in the console*/
-	MESSAGE_PARTY = 35, /* White message on the console*/
+	MESSAGE_LOGIN = 17,
+	/* White message at the bottom of the game window and in the console*/
+	MESSAGE_ADMINISTRADOR = 18,
+	/* Red message in game window and in the console*/
+	MESSAGE_EVENT_ADVANCE = 19,
+	/* White message in game window and in the console*/
+	MESSAGE_GAME_HIGHLIGHT = 20,
+	/* Red message in game window and in the console*/
+	MESSAGE_FAILURE = 21,
+	/* White message at the bottom of the game window"*/
+	MESSAGE_LOOK = 22,
+	/* Green message in game window and in the console*/
+	MESSAGE_DAMAGE_DEALT = 23,
+	/* White message on the console*/
+	MESSAGE_DAMAGE_RECEIVED = 24,
+	/* White message on the console*/
+	MESSAGE_HEALED = 25,
+	/* White message on the console*/
+	MESSAGE_EXPERIENCE = 26,
+	/* White message on the console*/
+	MESSAGE_DAMAGE_OTHERS = 27,
+	/* White message on the console*/
+	MESSAGE_HEALED_OTHERS = 28,
+	/* White message on the console*/
+	MESSAGE_EXPERIENCE_OTHERS = 29,
+	/* White message on the console*/
+	MESSAGE_STATUS = 30,
+	/* White message at the bottom of the game window and in the console*/
+	MESSAGE_LOOT = 31,
+	/* White message on the game window and in the console*/
+	MESSAGE_TRADE = 32,
+	/* Green message in game window and in the console*/
+	MESSAGE_GUILD = 33,
+	/* White message in channel (+ channelId)*/
+	MESSAGE_PARTY_MANAGEMENT = 34,
+	/* Green message in game window and in the console*/
+	MESSAGE_PARTY = 35,
+	/* White message on the console*/
 
-	MESSAGE_REPORT = 38, /* White message on the game window and in the console*/
-	MESSAGE_HOTKEY_PRESSED = 39, /* Green message in game window and in the console*/
-	MESSAGE_TUTORIAL_HINT = 40, /* no effect (?)*/
-	MESSAGE_THANK_YOU = 41, /* no effect (?)*/
-	MESSAGE_MARKET = 42, /* Popout a modal window with the message and a 'ok' button*/
-	MESSAGE_MANA = 43, /* no effect (?)*/
-	MESSAGE_BEYOND_LAST = 44, /* White message on the game window and in the console*/
-	MESSAGE_ATTENTION = 48, /* White message on the console*/
-	MESSAGE_BOOSTED_CREATURE = 49, /* White message on the game window and in the console*/
-	MESSAGE_OFFLINE_TRAINING = 50, /* White message on the game window and in the console*/
-	MESSAGE_TRANSACTION = 51, /* White message on the game window and in the console*/
-	MESSAGE_POTION = 52, /* Orange creature say*/
+	MESSAGE_REPORT = 38,
+	/* White message on the game window and in the console*/
+	MESSAGE_HOTKEY_PRESSED = 39,
+	/* Green message in game window and in the console*/
+	MESSAGE_TUTORIAL_HINT = 40,
+	/* no effect (?)*/
+	MESSAGE_THANK_YOU = 41,
+	/* no effect (?)*/
+	MESSAGE_MARKET = 42,
+	/* Popout a modal window with the message and a 'ok' button*/
+	MESSAGE_MANA = 43,
+	/* no effect (?)*/
+	MESSAGE_BEYOND_LAST = 44,
+	/* White message on the game window and in the console*/
+	MESSAGE_ATTENTION = 48,
+	/* White message on the console*/
+	MESSAGE_BOOSTED_CREATURE = 49,
+	/* White message on the game window and in the console*/
+	MESSAGE_OFFLINE_TRAINING = 50,
+	/* White message on the game window and in the console*/
+	MESSAGE_TRANSACTION = 51,
+	/* White message on the game window and in the console*/
+	MESSAGE_POTION = 52,
+	/* Orange creature say*/
 };
 
-enum FluidColors_t : uint8_t {
+enum FluidColors_t : uint8_t
+{
 	FLUID_EMPTY,
 	FLUID_BLUE,
 	FLUID_RED,
@@ -359,7 +409,8 @@ enum FluidColors_t : uint8_t {
 	FLUID_PURPLE,
 };
 
-enum FluidTypes_t : uint8_t {
+enum FluidTypes_t : uint8_t
+{
 	FLUID_NONE = FLUID_EMPTY,
 	FLUID_WATER = FLUID_BLUE,
 	FLUID_BLOOD = FLUID_RED,
@@ -421,7 +472,8 @@ const uint8_t clientToServerFluidMap[] = {
 	FLUID_MEAD,
 };
 
-enum ClientFluidTypes_t : uint8_t {
+enum ClientFluidTypes_t : uint8_t
+{
 	CLIENTFLUID_EMPTY = 0,
 	CLIENTFLUID_BLUE = 1,
 	CLIENTFLUID_PURPLE = 2,
@@ -445,11 +497,13 @@ const uint8_t fluidMap[] = {
 	CLIENTFLUID_PURPLE,
 };
 
-enum SquareColor_t : uint8_t {
+enum SquareColor_t : uint8_t
+{
 	SQ_COLOR_BLACK = 0,
 };
 
-enum TextColor_t : uint8_t {
+enum TextColor_t : uint8_t
+{
 	TEXTCOLOR_BLUE = 5,
 	TEXTCOLOR_LIGHTGREEN = 30,
 	TEXTCOLOR_LIGHTBLUE = 35,
@@ -467,7 +521,8 @@ enum TextColor_t : uint8_t {
 	TEXTCOLOR_NONE = 255,
 };
 
-enum WeaponType_t : uint8_t {
+enum WeaponType_t : uint8_t
+{
 	WEAPON_NONE,
 	WEAPON_SWORD,
 	WEAPON_CLUB,
@@ -479,7 +534,8 @@ enum WeaponType_t : uint8_t {
 	WEAPON_QUIVER,
 };
 
-enum Ammo_t : uint8_t {
+enum Ammo_t : uint8_t
+{
 	AMMO_NONE,
 	AMMO_BOLT,
 	AMMO_ARROW,
@@ -490,14 +546,16 @@ enum Ammo_t : uint8_t {
 	AMMO_SNOWBALL,
 };
 
-enum WeaponAction_t : uint8_t {
+enum WeaponAction_t : uint8_t
+{
 	WEAPONACTION_NONE,
 	WEAPONACTION_REMOVECOUNT,
 	WEAPONACTION_REMOVECHARGE,
 	WEAPONACTION_MOVE,
 };
 
-enum Skulls_t : uint8_t {
+enum Skulls_t : uint8_t
+{
 	SKULL_NONE = 0,
 	SKULL_YELLOW = 1,
 	SKULL_GREEN = 2,
@@ -507,7 +565,8 @@ enum Skulls_t : uint8_t {
 	SKULL_ORANGE = 6,
 };
 
-enum PartyShields_t : uint8_t {
+enum PartyShields_t : uint8_t
+{
 	SHIELD_NONE = 0,
 	SHIELD_WHITEYELLOW = 1,
 	SHIELD_WHITEBLUE = 2,
@@ -522,7 +581,8 @@ enum PartyShields_t : uint8_t {
 	SHIELD_GRAY = 11,
 };
 
-enum GuildEmblems_t : uint8_t {
+enum GuildEmblems_t : uint8_t
+{
 	GUILDEMBLEM_NONE = 0,
 	GUILDEMBLEM_ALLY = 1,
 	GUILDEMBLEM_ENEMY = 2,
@@ -531,7 +591,8 @@ enum GuildEmblems_t : uint8_t {
 	GUILDEMBLEM_OTHER = 5,
 };
 
-enum ReloadTypes_t : uint8_t  {
+enum ReloadTypes_t : uint8_t
+{
 	RELOAD_TYPE_ALL,
 	RELOAD_TYPE_CHAT,
 	RELOAD_TYPE_COMMANDS,
@@ -550,7 +611,8 @@ enum ReloadTypes_t : uint8_t  {
 	RELOAD_TYPE_STAGES,
 };
 
-enum NameEval_t : uint8_t {
+enum NameEval_t : uint8_t
+{
 	VALID,
 	INVALID,
 	INVALID_LENGTH,
@@ -559,12 +621,18 @@ enum NameEval_t : uint8_t {
 	INVALID_CHARACTER
 };
 
-enum item_t : uint16_t {
-	ITEM_BROWSEFIELD = 371, // for internal use
-	ITEM_SUPPLY_STASH_INDEX = 1, //for internal use
-	ITEM_DEPOT_NULL = 168, // for internal use
-	TRANSFORM_BOX_ID = 23398, // for internal use
-	ITEM_DOCUMENT_RO = 2834, //read-only
+enum item_t : uint16_t
+{
+	ITEM_BROWSEFIELD = 371,
+	// for internal use
+	ITEM_SUPPLY_STASH_INDEX = 1,
+	//for internal use
+	ITEM_DEPOT_NULL = 168,
+	// for internal use
+	TRANSFORM_BOX_ID = 23398,
+	// for internal use
+	ITEM_DOCUMENT_RO = 2834,
+	//read-only
 
 	ITEM_GOLD_POUCH = 23721,
 
@@ -656,7 +724,8 @@ enum item_t : uint16_t {
 	ITEM_SPIRIT_CASK_START = 25899,
 	ITEM_SPIRIT_CASK_END = 25902,
 
-	ITEM_KEG_START = 25903, //kegs ids are contiguous in item.otb
+	ITEM_KEG_START = 25903,
+	//kegs ids are contiguous in item.otb
 	ITEM_KEG_END = 25914,
 
 	ITEM_WALKABLE_SEA_START = 629,
@@ -668,7 +737,8 @@ enum item_t : uint16_t {
 	ITEM_DIAMOND_ARROW = 35901,
 };
 
-enum PlayerFlags : uint64_t {
+enum PlayerFlags : uint64_t
+{
 	PlayerFlag_CannotUseCombat = 1 << 0,
 	PlayerFlag_CannotAttackPlayer = 1 << 1,
 	PlayerFlag_CannotAttackMonster = 1 << 2,
@@ -709,9 +779,10 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IsAlwaysPremium = static_cast<uint64_t>(1) << 37,
 };
 
-enum PlayerCustomFlags : uint64_t {
-  PlayerCustomFlag_CanMapClickTeleport = 1 << 0,
-  PlayerCustomFlag_IgnoredByNpcs = 1 << 1
+enum PlayerCustomFlags : uint64_t
+{
+	PlayerCustomFlag_CanMapClickTeleport = 1 << 0,
+	PlayerCustomFlag_IgnoredByNpcs = 1 << 1
 };
 
 #endif  // SRC_UTILS_UTILS_DEFINITIONS_HPP_

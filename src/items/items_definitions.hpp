@@ -23,7 +23,8 @@
 #define IMBUEMENT_SLOT 500
 
 // Enums
-enum ItemProperty {
+enum ItemProperty
+{
 	CONST_PROP_BLOCKSOLID = 0,
 	CONST_PROP_HASHEIGHT,
 	CONST_PROP_BLOCKPROJECTILE,
@@ -38,13 +39,15 @@ enum ItemProperty {
 	CONST_PROP_SUPPORTHANGABLE,
 };
 
-enum Attr_ReadValue {
+enum Attr_ReadValue
+{
 	ATTR_READ_CONTINUE,
 	ATTR_READ_ERROR,
 	ATTR_READ_END,
 };
 
-enum ReturnValue {
+enum ReturnValue
+{
 	RETURNVALUE_NOERROR,
 	RETURNVALUE_NOTPOSSIBLE,
 	RETURNVALUE_NOTENOUGHROOM,
@@ -129,28 +132,38 @@ enum ReturnValue {
 	RETURNVALUE_REWARDCHESTISEMPTY,
 };
 
-enum ItemGroup_t {
+enum ItemGroup_t
+{
 	ITEM_GROUP_NONE,
 
 	ITEM_GROUP_GROUND,
 	ITEM_GROUP_CONTAINER,
-	ITEM_GROUP_WEAPON, //deprecated
-	ITEM_GROUP_AMMUNITION, //deprecated
-	ITEM_GROUP_ARMOR, //deprecated
+	ITEM_GROUP_WEAPON,
+	//deprecated
+	ITEM_GROUP_AMMUNITION,
+	//deprecated
+	ITEM_GROUP_ARMOR,
+	//deprecated
 	ITEM_GROUP_CHARGES,
-	ITEM_GROUP_TELEPORT, //deprecated
-	ITEM_GROUP_MAGICFIELD, //deprecated
-	ITEM_GROUP_WRITEABLE, //deprecated
-	ITEM_GROUP_KEY, //deprecated
+	ITEM_GROUP_TELEPORT,
+	//deprecated
+	ITEM_GROUP_MAGICFIELD,
+	//deprecated
+	ITEM_GROUP_WRITEABLE,
+	//deprecated
+	ITEM_GROUP_KEY,
+	//deprecated
 	ITEM_GROUP_SPLASH,
 	ITEM_GROUP_FLUID,
-	ITEM_GROUP_DOOR, //deprecated
+	ITEM_GROUP_DOOR,
+	//deprecated
 	ITEM_GROUP_DEPRECATED,
 
 	ITEM_GROUP_LAST
 };
 
-enum ClientVersion_t {
+enum ClientVersion_t
+{
 	CLIENT_VERSION_750 = 1,
 	CLIENT_VERSION_755 = 2,
 	CLIENT_VERSION_760 = 3,
@@ -209,18 +222,23 @@ enum ClientVersion_t {
 	CLIENT_VERSION_1035 = 55,
 	CLIENT_VERSION_1076 = 56,
 	CLIENT_VERSION_1098 = 57,
-	CLIENT_VERSION_1100_V1 = 58, // No relased
+	CLIENT_VERSION_1100_V1 = 58,
+	// No relased
 	CLIENT_VERSION_1100_V2 = 59,
-	CLIENT_VERSION_1100_V3 = 60, // No relased
-	CLIENT_VERSION_1100_V4 = 61, // No relased
+	CLIENT_VERSION_1100_V3 = 60,
+	// No relased
+	CLIENT_VERSION_1100_V4 = 61,
+	// No relased
 	CLIENT_VERSION_1140 = 62,
 };
 
-enum RootAttrib_ {
+enum RootAttrib_
+{
 	ROOT_ATTR_VERSION = 0x01,
 };
 
-enum ItemAttrib_t {
+enum ItemAttrib_t
+{
 	ITEM_ATTR_FIRST = 0x10,
 	ITEM_ATTR_SERVERID = ITEM_ATTR_FIRST,
 	ITEM_ATTR_CLIENTID,
@@ -245,21 +263,28 @@ enum ItemAttrib_t {
 	ITEM_ATTR_LIGHT,
 
 	//1-byte aligned
-	ITEM_ATTR_DECAY2, //deprecated
-	ITEM_ATTR_WEAPON2, //deprecated
-	ITEM_ATTR_AMU2, //deprecated
-	ITEM_ATTR_ARMOR2, //deprecated
-	ITEM_ATTR_WRITEABLE2, //deprecated
+	ITEM_ATTR_DECAY2,
+	//deprecated
+	ITEM_ATTR_WEAPON2,
+	//deprecated
+	ITEM_ATTR_AMU2,
+	//deprecated
+	ITEM_ATTR_ARMOR2,
+	//deprecated
+	ITEM_ATTR_WRITEABLE2,
+	//deprecated
 	ITEM_ATTR_LIGHT2,
 	ITEM_ATTR_TOPORDER,
-	ITEM_ATTR_WRITEABLE3, //deprecated
+	ITEM_ATTR_WRITEABLE3,
+	//deprecated
 
 	ITEM_ATTR_WAREID,
 
 	ITEM_ATTR_LAST
 };
 
-enum ItemFlags_t {
+enum ItemFlags_t
+{
 	FLAG_BLOCK_SOLID = 1 << 0,
 	FLAG_BLOCK_PROJECTILE = 1 << 1,
 	FLAG_BLOCK_PATHFIND = 1 << 2,
@@ -268,29 +293,39 @@ enum ItemFlags_t {
 	FLAG_PICKUPABLE = 1 << 5,
 	FLAG_MOVEABLE = 1 << 6,
 	FLAG_STACKABLE = 1 << 7,
-	FLAG_FLOORCHANGEDOWN = 1 << 8, // unused
-	FLAG_FLOORCHANGENORTH = 1 << 9, // unused
-	FLAG_FLOORCHANGEEAST = 1 << 10, // unused
-	FLAG_FLOORCHANGESOUTH = 1 << 11, // unused
-	FLAG_FLOORCHANGEWEST = 1 << 12, // unused
+	FLAG_FLOORCHANGEDOWN = 1 << 8,
+	// unused
+	FLAG_FLOORCHANGENORTH = 1 << 9,
+	// unused
+	FLAG_FLOORCHANGEEAST = 1 << 10,
+	// unused
+	FLAG_FLOORCHANGESOUTH = 1 << 11,
+	// unused
+	FLAG_FLOORCHANGEWEST = 1 << 12,
+	// unused
 	FLAG_ALWAYSONTOP = 1 << 13,
 	FLAG_READABLE = 1 << 14,
 	FLAG_ROTATABLE = 1 << 15,
 	FLAG_HANGABLE = 1 << 16,
 	FLAG_VERTICAL = 1 << 17,
 	FLAG_HORIZONTAL = 1 << 18,
-	FLAG_CANNOTDECAY = 1 << 19, // unused
+	FLAG_CANNOTDECAY = 1 << 19,
+	// unused
 	FLAG_ALLOWDISTREAD = 1 << 20,
-	FLAG_UNUSED = 1 << 21, // unused
-	FLAG_CLIENTCHARGES = 1 << 22, /* deprecated */
+	FLAG_UNUSED = 1 << 21,
+	// unused
+	FLAG_CLIENTCHARGES = 1 << 22,
+	/* deprecated */
 	FLAG_LOOKTHROUGH = 1 << 23,
 	FLAG_ANIMATION = 1 << 24,
-	FLAG_FULLTILE = 1 << 25, // unused
+	FLAG_FULLTILE = 1 << 25,
+	// unused
 	FLAG_FORCEUSE = 1 << 26,
 	FLAG_WRAPCONTAINER = 1 << 27,
 };
 
-enum ItemTypes_t {
+enum ItemTypes_t
+{
 	ITEM_TYPE_NONE,
 	ITEM_TYPE_DEPOT,
 	ITEM_TYPE_MAILBOX,
@@ -334,18 +369,21 @@ enum ItemTypes_t {
 	ITEM_TYPE_LAST,
 };
 
-enum TradeEvents_t {
+enum TradeEvents_t
+{
 	ON_TRADE_TRANSFER,
 	ON_TRADE_CANCEL,
 };
 
-enum ItemDecayState_t : uint8_t {
+enum ItemDecayState_t : uint8_t
+{
 	DECAYING_FALSE = 0,
 	DECAYING_TRUE,
 	DECAYING_PENDING,
 };
 
-enum AttrTypes_t {
+enum AttrTypes_t
+{
 	//ATTR_DESCRIPTION = 1,
 	//ATTR_EXT_FILE = 2,
 	ATTR_TILE_FLAGS = 3,
@@ -387,7 +425,8 @@ enum AttrTypes_t {
 	ATTR_QUICKLOOTCONTAINER = 38
 };
 
-enum SlotPositionBits : uint32_t {
+enum SlotPositionBits : uint32_t
+{
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
 	SLOTP_HEAD = 1 << 0,
 	SLOTP_NECKLACE = 1 << 1,
@@ -404,7 +443,8 @@ enum SlotPositionBits : uint32_t {
 	SLOTP_HAND = (SLOTP_LEFT | SLOTP_RIGHT)
 };
 
-enum ItemAttrTypes : uint32_t {
+enum ItemAttrTypes : uint32_t
+{
 	ITEM_ATTRIBUTE_NONE,
 
 	ITEM_ATTRIBUTE_ACTIONID = 1 << 0,
@@ -437,7 +477,8 @@ enum ItemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
 
-enum TileFlags_t : uint32_t {
+enum TileFlags_t : uint32_t
+{
 	TILESTATE_NONE = 0,
 
 	TILESTATE_FLOORCHANGE_DOWN = 1 << 0,
@@ -466,15 +507,16 @@ enum TileFlags_t : uint32_t {
 	TILESTATE_SUPPORTS_HANGABLE = 1 << 23,
 
 	TILESTATE_FLOORCHANGE = TILESTATE_FLOORCHANGE_DOWN |
-                            TILESTATE_FLOORCHANGE_NORTH |
-                            TILESTATE_FLOORCHANGE_SOUTH |
-                            TILESTATE_FLOORCHANGE_EAST |
-                            TILESTATE_FLOORCHANGE_WEST |
-                            TILESTATE_FLOORCHANGE_SOUTH_ALT |
-                            TILESTATE_FLOORCHANGE_EAST_ALT,
+	TILESTATE_FLOORCHANGE_NORTH |
+	TILESTATE_FLOORCHANGE_SOUTH |
+	TILESTATE_FLOORCHANGE_EAST |
+	TILESTATE_FLOORCHANGE_WEST |
+	TILESTATE_FLOORCHANGE_SOUTH_ALT |
+	TILESTATE_FLOORCHANGE_EAST_ALT,
 };
 
-enum ZoneType_t {
+enum ZoneType_t
+{
 	ZONE_PROTECTION,
 	ZONE_NOPVP,
 	ZONE_PVP,
@@ -482,18 +524,28 @@ enum ZoneType_t {
 	ZONE_NORMAL,
 };
 
-enum CylinderFlags_t {
-	FLAG_NOLIMIT = 1 << 0, //Bypass limits like capacity/container limits, blocking items/creatures etc.
-	FLAG_IGNOREBLOCKITEM = 1 << 1, //Bypass movable blocking item checks
-	FLAG_IGNOREBLOCKCREATURE = 1 << 2, //Bypass creature checks
-	FLAG_CHILDISOWNER = 1 << 3, //Used by containers to query capacity of the carrier (player)
-	FLAG_PATHFINDING = 1 << 4, //An additional check is done for floor changing/teleport items
-	FLAG_IGNOREFIELDDAMAGE = 1 << 5, //Bypass field damage checks
-	FLAG_IGNORENOTMOVEABLE = 1 << 6, //Bypass check for mobility
-	FLAG_IGNOREAUTOSTACK = 1 << 7, //queryDestination will not try to stack items together
+enum CylinderFlags_t
+{
+	FLAG_NOLIMIT = 1 << 0,
+	//Bypass limits like capacity/container limits, blocking items/creatures etc.
+	FLAG_IGNOREBLOCKITEM = 1 << 1,
+	//Bypass movable blocking item checks
+	FLAG_IGNOREBLOCKCREATURE = 1 << 2,
+	//Bypass creature checks
+	FLAG_CHILDISOWNER = 1 << 3,
+	//Used by containers to query capacity of the carrier (player)
+	FLAG_PATHFINDING = 1 << 4,
+	//An additional check is done for floor changing/teleport items
+	FLAG_IGNOREFIELDDAMAGE = 1 << 5,
+	//Bypass field damage checks
+	FLAG_IGNORENOTMOVEABLE = 1 << 6,
+	//Bypass check for mobility
+	FLAG_IGNOREAUTOSTACK = 1 << 7,
+	//queryDestination will not try to stack items together
 };
 
-enum CylinderLink_t {
+enum CylinderLink_t
+{
 	LINK_OWNER,
 	LINK_PARENT,
 	LINK_TOPPARENT,

@@ -33,7 +33,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 
 std::string transformToSHA1(const std::string& input);
 
-uint16_t getStashSize(StashItemList itemList);
+uint16_t getStashSize(const StashItemList& itemList);
 
 std::string generateToken(const std::string& secret, uint32_t ticks);
 
@@ -49,7 +49,9 @@ using IntegerVector = std::vector<int32_t>;
 
 StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit = -1);
 IntegerVector vectorAtoi(const StringVector& stringVector);
-constexpr bool hasBitSet(uint32_t flag, uint32_t flags) {
+
+constexpr bool hasBitSet(uint32_t flag, uint32_t flags)
+{
 	return (flags & flag) != 0;
 }
 
@@ -103,8 +105,8 @@ ItemAttrTypes stringToItemAttribute(const std::string& str);
 
 const char* getReturnMessage(ReturnValue value);
 
-void capitalizeWords(std::string &source);
-NameEval_t validateName(const std::string &name);
+void capitalizeWords(std::string& source);
+NameEval_t validateName(const std::string& name);
 
 bool isCaskItem(uint16_t itemId);
 
@@ -112,21 +114,23 @@ std::string getObjectCategoryName(ObjectCategory_t category);
 
 int64_t OTSYS_TIME();
 
-SpellGroup_t stringToSpellGroup(const std::string &value);
+SpellGroup_t stringToSpellGroup(const std::string& value);
 
-static inline Cipbia_Elementals_t getCipbiaElement(CombatType_t combatType) {
-	switch (combatType) {
-		case COMBAT_PHYSICALDAMAGE: return CIPBIA_ELEMENTAL_PHYSICAL;
-		case COMBAT_ENERGYDAMAGE: return CIPBIA_ELEMENTAL_ENERGY;
-		case COMBAT_EARTHDAMAGE: return CIPBIA_ELEMENTAL_EARTH;
-		case COMBAT_FIREDAMAGE: return CIPBIA_ELEMENTAL_FIRE;
-		case COMBAT_LIFEDRAIN: return CIPBIA_ELEMENTAL_LIFEDRAIN;
-		case COMBAT_HEALING: return CIPBIA_ELEMENTAL_HEALING;
-		case COMBAT_DROWNDAMAGE: return CIPBIA_ELEMENTAL_DROWN;
-		case COMBAT_ICEDAMAGE: return CIPBIA_ELEMENTAL_ICE;
-		case COMBAT_HOLYDAMAGE: return CIPBIA_ELEMENTAL_HOLY;
-		case COMBAT_DEATHDAMAGE: return CIPBIA_ELEMENTAL_DEATH;
-		default: return CIPBIA_ELEMENTAL_UNDEFINED;
+static inline Cipbia_Elementals_t getCipbiaElement(CombatType_t combatType)
+{
+	switch (combatType)
+	{
+	case COMBAT_PHYSICALDAMAGE: return CIPBIA_ELEMENTAL_PHYSICAL;
+	case COMBAT_ENERGYDAMAGE: return CIPBIA_ELEMENTAL_ENERGY;
+	case COMBAT_EARTHDAMAGE: return CIPBIA_ELEMENTAL_EARTH;
+	case COMBAT_FIREDAMAGE: return CIPBIA_ELEMENTAL_FIRE;
+	case COMBAT_LIFEDRAIN: return CIPBIA_ELEMENTAL_LIFEDRAIN;
+	case COMBAT_HEALING: return CIPBIA_ELEMENTAL_HEALING;
+	case COMBAT_DROWNDAMAGE: return CIPBIA_ELEMENTAL_DROWN;
+	case COMBAT_ICEDAMAGE: return CIPBIA_ELEMENTAL_ICE;
+	case COMBAT_HOLYDAMAGE: return CIPBIA_ELEMENTAL_HOLY;
+	case COMBAT_DEATHDAMAGE: return CIPBIA_ELEMENTAL_DEATH;
+	default: return CIPBIA_ELEMENTAL_UNDEFINED;
 	}
 }
 

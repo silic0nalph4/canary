@@ -27,31 +27,37 @@
 bool Outfits::loadFromXml()
 {
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/outfits.xml");
-	if (!result) {
+	const pugi::xml_parse_result result = doc.load_file("data/XML/outfits.xml");
+	if (!result)
+	{
 		printXMLError("[Outfits::loadFromXml] - ", "data/XML/outfits.xml", result);
 		return false;
 	}
 
-	for (auto outfitNode : doc.child("outfits").children()) {
+	for (auto outfitNode : doc.child("outfits").children())
+	{
 		pugi::xml_attribute attr;
-		if ((attr = outfitNode.attribute("enabled")) && !attr.as_bool()) {
+		if ((attr = outfitNode.attribute("enabled")) && !attr.as_bool())
+		{
 			continue;
 		}
 
-		if (!(attr = outfitNode.attribute("type"))) {
+		if (!(attr = outfitNode.attribute("type")))
+		{
 			SPDLOG_WARN("[Outfits::loadFromXml] - Missing outfit type");
 			continue;
 		}
 
 		uint16_t type = pugi::cast<uint16_t>(attr.value());
-		if (type > PLAYERSEX_LAST) {
+		if (type > PLAYERSEX_LAST)
+		{
 			SPDLOG_WARN("[Outfits::loadFromXml] - Invalid outfit type {}", type);
 			continue;
 		}
 
 		pugi::xml_attribute lookTypeAttribute = outfitNode.attribute("looktype");
-		if (!lookTypeAttribute) {
+		if (!lookTypeAttribute)
+		{
 			SPDLOG_WARN("[Outfits::loadFromXml] - Missing looktype on outfit");
 			continue;
 		}
@@ -64,7 +70,8 @@ bool Outfits::loadFromXml()
 			outfitNode.attribute("from").as_string()
 		);
 	}
-	for (uint8_t sex = PLAYERSEX_FEMALE; sex <= PLAYERSEX_LAST; ++sex) {
+	for (uint8_t sex = PLAYERSEX_FEMALE; sex <= PLAYERSEX_LAST; ++sex)
+	{
 		outfits[sex].shrink_to_fit();
 	}
 	return true;
@@ -72,8 +79,10 @@ bool Outfits::loadFromXml()
 
 const Outfit* Outfits::getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) const
 {
-	for (const Outfit& outfit : outfits[sex]) {
-		if (outfit.lookType == lookType) {
+	for (const Outfit& outfit : outfits[sex])
+	{
+		if (outfit.lookType == lookType)
+		{
 			return &outfit;
 		}
 	}
@@ -87,15 +96,21 @@ const Outfit* Outfits::getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) c
  * @return <b>const</b> pointer to the outfit or <b>nullptr</b> if it could not be found.
  */
 
-const Outfit *Outfits::getOpositeSexOutfitByLookType(PlayerSex_t sex, uint16_t lookType)
+const Outfit* Outfits::getOpositeSexOutfitByLookType(PlayerSex_t sex, uint16_t lookType)
 {
-	PlayerSex_t	searchSex = (sex == PLAYERSEX_MALE)?PLAYERSEX_FEMALE:PLAYERSEX_MALE;
+	const PlayerSex_t searchSex = (sex == PLAYERSEX_MALE) ? PLAYERSEX_FEMALE : PLAYERSEX_MALE;
 
-	for(uint16_t i=0; i< outfits[sex].size(); i++) {
-		if (outfits[sex].at(i).lookType == lookType) {
-			if (outfits[searchSex].size()>i) {
+	for (uint16_t i = 0; i < outfits[sex].size(); i++)
+	{
+		if (outfits[sex].at(i).lookType == lookType)
+		{
+			if (outfits[searchSex].size() > i)
+			{
 				return &outfits[searchSex].at(i);
-			} else { //looktype found but the oposite sex array doesn't have this index.
+			}
+			else
+			{
+				//looktype found but the oposite sex array doesn't have this index.
 				return nullptr;
 			}
 		}

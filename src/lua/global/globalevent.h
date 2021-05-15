@@ -19,6 +19,8 @@
 
 #ifndef SRC_LUA_GLOBAL_GLOBALEVENT_H_
 #define SRC_LUA_GLOBAL_GLOBALEVENT_H_
+#include <utility>
+
 #include "lua/global/baseevents.h"
 
 #include "utils/utils_definitions.hpp"
@@ -27,90 +29,107 @@ class GlobalEvent;
 using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
 using GlobalEventMap = std::map<std::string, GlobalEvent>;
 
-class GlobalEvents final : public BaseEvents {
-	public:
-		GlobalEvents();
-		~GlobalEvents();
+class GlobalEvents final : public BaseEvents
+{
+public:
+	GlobalEvents();
+	~GlobalEvents() override;
 
-		// non-copyable
-		GlobalEvents(const GlobalEvents&) = delete;
-		GlobalEvents& operator=(const GlobalEvents&) = delete;
+	// non-copyable
+	GlobalEvents(const GlobalEvents&) = delete;
+	GlobalEvents& operator=(const GlobalEvents&) = delete;
 
-		void startup() const;
+	void startup() const;
 
-		void timer();
-		void think();
-		void execute(GlobalEvent_t type) const;
+	void timer();
+	void think();
+	void execute(GlobalEvent_t type) const;
 
-		GlobalEventMap getEventMap(GlobalEvent_t type);
-		static void clearMap(GlobalEventMap& map, bool fromLua);
+	GlobalEventMap getEventMap(GlobalEvent_t type);
+	static void clearMap(GlobalEventMap& map, bool fromLua);
 
-		bool registerLuaEvent(GlobalEvent* event);
-		void clear(bool fromLua) override final;
+	bool registerLuaEvent(GlobalEvent* event);
+	void clear(bool fromLua);
 
-	private:
-		std::string getScriptBaseName() const override {
-			return "globalevents";
-		}
+private:
+	std::string getScriptBaseName() const override
+	{
+		return "globalevents";
+	}
 
-		Event_ptr getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
+	Event_ptr getEvent(const std::string& nodeName) override;
+	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
-		LuaScriptInterface& getScriptInterface() override {
-			return scriptInterface;
-		}
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface& getScriptInterface() override
+	{
+		return scriptInterface;
+	}
 
-		GlobalEventMap thinkMap, serverMap, timerMap;
-		int32_t thinkEventId = 0, timerEventId = 0;
+	LuaScriptInterface scriptInterface;
+
+	GlobalEventMap thinkMap, serverMap, timerMap;
+	int32_t thinkEventId = 0, timerEventId = 0;
 };
 
-class GlobalEvent final : public Event {
-	public:
-		explicit GlobalEvent(LuaScriptInterface* interface);
+class GlobalEvent final : public Event
+{
+public:
+	explicit GlobalEvent(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) override;
+	bool configureEvent(const pugi::xml_node& node) override;
 
-		bool executePeriodChange(LightState_t lightState, LightInfo lightInfo);
-		bool executeRecord(uint32_t current, uint32_t old);
-		bool executeEvent() const;
+	bool executePeriodChange(LightState_t lightState, LightInfo lightInfo);
+	bool executeRecord(uint32_t current, uint32_t old);
+	bool executeEvent() const;
 
-		GlobalEvent_t getEventType() const {
-			return eventType;
-		}
-		void setEventType(GlobalEvent_t type) {
-			eventType = type;
-		}
+	GlobalEvent_t getEventType() const
+	{
+		return eventType;
+	}
 
-		const std::string& getName() const {
-			return name;
-		}
-		void setName(std::string eventName) {
-			name = eventName;
-		}
+	void setEventType(GlobalEvent_t type)
+	{
+		eventType = type;
+	}
 
-		uint32_t getInterval() const {
-			return interval;
-		}
-		void setInterval(uint32_t eventInterval) {
-			interval |= eventInterval;
-		}
+	const std::string& getName() const
+	{
+		return name;
+	}
 
-		int64_t getNextExecution() const {
-			return nextExecution;
-		}
-		void setNextExecution(int64_t time) {
-			nextExecution = time;
-		}
+	void setName(std::string eventName)
+	{
+		name = std::move(eventName);
+	}
 
-	private:
-		GlobalEvent_t eventType = GLOBALEVENT_NONE;
+	uint32_t getInterval() const
+	{
+		return interval;
+	}
 
-		std::string getScriptEventName() const override;
+	void setInterval(uint32_t eventInterval)
+	{
+		interval |= eventInterval;
+	}
 
-		std::string name;
-		int64_t nextExecution = 0;
-		uint32_t interval = 0;
+	int64_t getNextExecution() const
+	{
+		return nextExecution;
+	}
+
+	void setNextExecution(int64_t time)
+	{
+		nextExecution = time;
+	}
+
+private:
+	GlobalEvent_t eventType = GLOBALEVENT_NONE;
+
+	std::string getScriptEventName() const override;
+
+	std::string name;
+	int64_t nextExecution = 0;
+	uint32_t interval = 0;
 };
 
 #endif  // SRC_LUA_GLOBAL_GLOBALEVENT_H_

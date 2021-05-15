@@ -22,69 +22,71 @@
 
 #include "lua/scripts/luascript.h"
 
-class VocationFunctions final : LuaScriptInterface {
-	public:
-		static void init(lua_State* L) {
-			registerClass(L, "Vocation", "", VocationFunctions::luaVocationCreate);
-			registerMetaMethod(L, "Vocation", "__eq", VocationFunctions::luaUserdataCompare);
+class VocationFunctions final : LuaScriptInterface
+{
+public:
+	static void init(lua_State* L)
+	{
+		registerClass(L, "Vocation", "", luaVocationCreate);
+		registerMetaMethod(L, "Vocation", "__eq", luaUserdataCompare);
 
-			registerMethod(L, "Vocation", "getId", VocationFunctions::luaVocationGetId);
-			registerMethod(L, "Vocation", "getClientId", VocationFunctions::luaVocationGetClientId);
-			registerMethod(L, "Vocation", "getName", VocationFunctions::luaVocationGetName);
-			registerMethod(L, "Vocation", "getDescription", VocationFunctions::luaVocationGetDescription);
+		registerMethod(L, "Vocation", "getId", luaVocationGetId);
+		registerMethod(L, "Vocation", "getClientId", luaVocationGetClientId);
+		registerMethod(L, "Vocation", "getName", luaVocationGetName);
+		registerMethod(L, "Vocation", "getDescription", luaVocationGetDescription);
 
-			registerMethod(L, "Vocation", "getRequiredSkillTries", VocationFunctions::luaVocationGetRequiredSkillTries);
-			registerMethod(L, "Vocation", "getRequiredManaSpent", VocationFunctions::luaVocationGetRequiredManaSpent);
+		registerMethod(L, "Vocation", "getRequiredSkillTries", luaVocationGetRequiredSkillTries);
+		registerMethod(L, "Vocation", "getRequiredManaSpent", luaVocationGetRequiredManaSpent);
 
-			registerMethod(L, "Vocation", "getCapacityGain", VocationFunctions::luaVocationGetCapacityGain);
+		registerMethod(L, "Vocation", "getCapacityGain", luaVocationGetCapacityGain);
 
-			registerMethod(L, "Vocation", "getHealthGain", VocationFunctions::luaVocationGetHealthGain);
-			registerMethod(L, "Vocation", "getHealthGainTicks", VocationFunctions::luaVocationGetHealthGainTicks);
-			registerMethod(L, "Vocation", "getHealthGainAmount", VocationFunctions::luaVocationGetHealthGainAmount);
+		registerMethod(L, "Vocation", "getHealthGain", luaVocationGetHealthGain);
+		registerMethod(L, "Vocation", "getHealthGainTicks", luaVocationGetHealthGainTicks);
+		registerMethod(L, "Vocation", "getHealthGainAmount", luaVocationGetHealthGainAmount);
 
-			registerMethod(L, "Vocation", "getManaGain", VocationFunctions::luaVocationGetManaGain);
-			registerMethod(L, "Vocation", "getManaGainTicks", VocationFunctions::luaVocationGetManaGainTicks);
-			registerMethod(L, "Vocation", "getManaGainAmount", VocationFunctions::luaVocationGetManaGainAmount);
+		registerMethod(L, "Vocation", "getManaGain", luaVocationGetManaGain);
+		registerMethod(L, "Vocation", "getManaGainTicks", luaVocationGetManaGainTicks);
+		registerMethod(L, "Vocation", "getManaGainAmount", luaVocationGetManaGainAmount);
 
-			registerMethod(L, "Vocation", "getMaxSoul", VocationFunctions::luaVocationGetMaxSoul);
-			registerMethod(L, "Vocation", "getSoulGainTicks", VocationFunctions::luaVocationGetSoulGainTicks);
+		registerMethod(L, "Vocation", "getMaxSoul", luaVocationGetMaxSoul);
+		registerMethod(L, "Vocation", "getSoulGainTicks", luaVocationGetSoulGainTicks);
 
-			registerMethod(L, "Vocation", "getAttackSpeed", VocationFunctions::luaVocationGetAttackSpeed);
-			registerMethod(L, "Vocation", "getBaseSpeed", VocationFunctions::luaVocationGetBaseSpeed);
+		registerMethod(L, "Vocation", "getAttackSpeed", luaVocationGetAttackSpeed);
+		registerMethod(L, "Vocation", "getBaseSpeed", luaVocationGetBaseSpeed);
 
-			registerMethod(L, "Vocation", "getDemotion", VocationFunctions::luaVocationGetDemotion);
-			registerMethod(L, "Vocation", "getPromotion", VocationFunctions::luaVocationGetPromotion);
-		}
+		registerMethod(L, "Vocation", "getDemotion", luaVocationGetDemotion);
+		registerMethod(L, "Vocation", "getPromotion", luaVocationGetPromotion);
+	}
 
-	private:
-		static int luaVocationCreate(lua_State* L);
+private:
+	static int luaVocationCreate(lua_State* L);
 
-		static int luaVocationGetId(lua_State* L);
-		static int luaVocationGetClientId(lua_State* L);
-		static int luaVocationGetName(lua_State* L);
-		static int luaVocationGetDescription(lua_State* L);
+	static int luaVocationGetId(lua_State* L);
+	static int luaVocationGetClientId(lua_State* L);
+	static int luaVocationGetName(lua_State* L);
+	static int luaVocationGetDescription(lua_State* L);
 
-		static int luaVocationGetRequiredSkillTries(lua_State* L);
-		static int luaVocationGetRequiredManaSpent(lua_State* L);
+	static int luaVocationGetRequiredSkillTries(lua_State* L);
+	static int luaVocationGetRequiredManaSpent(lua_State* L);
 
-		static int luaVocationGetCapacityGain(lua_State* L);
+	static int luaVocationGetCapacityGain(lua_State* L);
 
-		static int luaVocationGetHealthGain(lua_State* L);
-		static int luaVocationGetHealthGainTicks(lua_State* L);
-		static int luaVocationGetHealthGainAmount(lua_State* L);
+	static int luaVocationGetHealthGain(lua_State* L);
+	static int luaVocationGetHealthGainTicks(lua_State* L);
+	static int luaVocationGetHealthGainAmount(lua_State* L);
 
-		static int luaVocationGetManaGain(lua_State* L);
-		static int luaVocationGetManaGainTicks(lua_State* L);
-		static int luaVocationGetManaGainAmount(lua_State* L);
+	static int luaVocationGetManaGain(lua_State* L);
+	static int luaVocationGetManaGainTicks(lua_State* L);
+	static int luaVocationGetManaGainAmount(lua_State* L);
 
-		static int luaVocationGetMaxSoul(lua_State* L);
-		static int luaVocationGetSoulGainTicks(lua_State* L);
+	static int luaVocationGetMaxSoul(lua_State* L);
+	static int luaVocationGetSoulGainTicks(lua_State* L);
 
-		static int luaVocationGetAttackSpeed(lua_State* L);
-		static int luaVocationGetBaseSpeed(lua_State* L);
+	static int luaVocationGetAttackSpeed(lua_State* L);
+	static int luaVocationGetBaseSpeed(lua_State* L);
 
-		static int luaVocationGetDemotion(lua_State* L);
-		static int luaVocationGetPromotion(lua_State* L);
+	static int luaVocationGetDemotion(lua_State* L);
+	static int luaVocationGetPromotion(lua_State* L);
 };
 
 #endif  // SRC_LUA_FUNCTIONS_CREATURES_PLAYER_VOCATION_FUNCTIONS_HPP_

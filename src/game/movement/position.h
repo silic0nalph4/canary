@@ -22,7 +22,8 @@
 
 #include <string>
 
-enum Direction : uint8_t {
+enum Direction : uint8_t
+{
 	DIRECTION_NORTH = 0,
 	DIRECTION_EAST = 1,
 	DIRECTION_SOUTH = 2,
@@ -41,36 +42,51 @@ enum Direction : uint8_t {
 struct Position
 {
 	constexpr Position() = default;
-	constexpr Position(uint16_t initX, uint16_t initY, uint8_t initZ) : x(initX), y(initY), z(initZ) {}
 
-	template<int_fast32_t deltax, int_fast32_t deltay>
-	static bool areInRange(const Position& p1, const Position& p2) {
-		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay;
+	constexpr Position(uint16_t initX, uint16_t initY, uint8_t initZ) : x(initX), y(initY), z(initZ)
+	{
 	}
 
-	template<int_fast32_t deltax, int_fast32_t deltay, int_fast16_t deltaz>
-	static bool areInRange(const Position& p1, const Position& p2) {
-		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay && Position::getDistanceZ(p1, p2) <= deltaz;
+	template <int_fast32_t deltax, int_fast32_t deltay>
+	static bool areInRange(const Position& p1, const Position& p2)
+	{
+		return getDistanceX(p1, p2) <= deltax && getDistanceY(p1, p2) <= deltay;
 	}
 
-	static int_fast32_t getOffsetX(const Position& p1, const Position& p2) {
+	template <int_fast32_t deltax, int_fast32_t deltay, int_fast16_t deltaz>
+	static bool areInRange(const Position& p1, const Position& p2)
+	{
+		return getDistanceX(p1, p2) <= deltax && getDistanceY(p1, p2) <= deltay && getDistanceZ(p1, p2) <= deltaz;
+	}
+
+	static int_fast32_t getOffsetX(const Position& p1, const Position& p2)
+	{
 		return p1.getX() - p2.getX();
 	}
-	static int_fast32_t getOffsetY(const Position& p1, const Position& p2) {
+
+	static int_fast32_t getOffsetY(const Position& p1, const Position& p2)
+	{
 		return p1.getY() - p2.getY();
 	}
-	static int_fast16_t getOffsetZ(const Position& p1, const Position& p2) {
+
+	static int_fast16_t getOffsetZ(const Position& p1, const Position& p2)
+	{
 		return p1.getZ() - p2.getZ();
 	}
 
-	static int32_t getDistanceX(const Position& p1, const Position& p2) {
-		return std::abs(Position::getOffsetX(p1, p2));
+	static int32_t getDistanceX(const Position& p1, const Position& p2)
+	{
+		return std::abs(getOffsetX(p1, p2));
 	}
-	static int32_t getDistanceY(const Position& p1, const Position& p2) {
-		return std::abs(Position::getOffsetY(p1, p2));
+
+	static int32_t getDistanceY(const Position& p1, const Position& p2)
+	{
+		return std::abs(getOffsetY(p1, p2));
 	}
-	static int16_t getDistanceZ(const Position& p1, const Position& p2) {
-		return std::abs(Position::getOffsetZ(p1, p2));
+
+	static int16_t getDistanceZ(const Position& p1, const Position& p2)
+	{
+		return std::abs(getOffsetZ(p1, p2));
 	}
 
 	static Direction getRandomDirection();
@@ -79,63 +95,76 @@ struct Position
 	uint16_t y = 0;
 	uint8_t z = 0;
 
-	bool operator<(const Position& p) const {
-		if (z < p.z) {
+	bool operator<(const Position& p) const
+	{
+		if (z < p.z)
+		{
 			return true;
 		}
 
-		if (z > p.z) {
+		if (z > p.z)
+		{
 			return false;
 		}
 
-		if (y < p.y) {
+		if (y < p.y)
+		{
 			return true;
 		}
 
-		if (y > p.y) {
+		if (y > p.y)
+		{
 			return false;
 		}
 
-		if (x < p.x) {
+		if (x < p.x)
+		{
 			return true;
 		}
 
-		if (x > p.x) {
+		if (x > p.x)
+		{
 			return false;
 		}
 
 		return false;
 	}
 
-	bool operator>(const Position& p) const {
+	bool operator>(const Position& p) const
+	{
 		return ! (*this < p);
 	}
 
-	bool operator==(const Position& p) const {
+	bool operator==(const Position& p) const
+	{
 		return p.x == x && p.y == y && p.z == z;
 	}
 
-	bool operator!=(const Position& p) const {
+	bool operator!=(const Position& p) const
+	{
 		return p.x != x || p.y != y || p.z != z;
 	}
 
-	Position operator+(const Position& p1) const {
+	Position operator+(const Position& p1) const
+	{
 		return Position(x + p1.x, y + p1.y, z + p1.z);
 	}
 
-	Position operator-(const Position& p1) const {
+	Position operator-(const Position& p1) const
+	{
 		return Position(x - p1.x, y - p1.y, z - p1.z);
 	}
 
-	std::string toString() const {
+	std::string toString() const
+	{
 		std::string str;
 		return str.append("( ")
-                  .append(std::to_string(getX()))
-                  .append(" / ")
-                  .append(std::to_string(getY()))
-                  .append(" / ")
-                  .append(std::to_string(getZ()))
-                  .append(" )");
+		          .append(std::to_string(getX()))
+		          .append(" / ")
+		          .append(std::to_string(getY()))
+		          .append(" / ")
+		          .append(std::to_string(getZ()))
+		          .append(" )");
 	}
 
 	int_fast32_t getX() const { return x; }

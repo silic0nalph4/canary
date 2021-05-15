@@ -26,18 +26,20 @@
 
 int32_t NetworkMessage::decodeHeader()
 {
-	int32_t newSize = buffer[0] | buffer[1] << 8;
+	const int32_t newSize = buffer[0] | buffer[1] << 8;
 	info.length = newSize;
 	return info.length;
 }
 
 std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 {
-	if (stringLen == 0) {
+	if (stringLen == 0)
+	{
 		stringLen = get<uint16_t>();
 	}
 
-	if (!canRead(stringLen)) {
+	if (!canRead(stringLen))
+	{
 		return std::string();
 	}
 
@@ -57,8 +59,9 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(const std::string& value)
 {
-	size_t stringLen = value.length();
-	if (!canAdd(stringLen + 2) || stringLen > 8192) {
+	const size_t stringLen = value.length();
+	if (!canAdd(stringLen + 2) || stringLen > 8192)
+	{
 		return;
 	}
 
@@ -76,7 +79,8 @@ void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
 
 void NetworkMessage::addBytes(const char* bytes, size_t size)
 {
-	if (!canAdd(size) || size > 8192) {
+	if (!canAdd(size) || size > 8192)
+	{
 		return;
 	}
 
@@ -87,7 +91,8 @@ void NetworkMessage::addBytes(const char* bytes, size_t size)
 
 void NetworkMessage::addPaddingBytes(size_t n)
 {
-	if (!canAdd(n)) {
+	if (!canAdd(n))
+	{
 		return;
 	}
 

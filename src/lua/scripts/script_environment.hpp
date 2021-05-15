@@ -33,82 +33,93 @@ class LuaScriptInterface;
 class Cylinder;
 class Game;
 
-class ScriptEnvironment {
-	public:
-		ScriptEnvironment();
-		virtual~ScriptEnvironment();
+class ScriptEnvironment
+{
+public:
+	ScriptEnvironment();
+	virtual ~ScriptEnvironment();
 
-		// non-copyable
-		ScriptEnvironment(const ScriptEnvironment &) = delete;
-		ScriptEnvironment & operator = (const ScriptEnvironment &) = delete;
+	// non-copyable
+	ScriptEnvironment(const ScriptEnvironment&) = delete;
+	ScriptEnvironment& operator =(const ScriptEnvironment&) = delete;
 
-		void resetEnv();
+	void resetEnv();
 
-		void setScriptId(int32_t newScriptId, LuaScriptInterface * newScriptInterface) {
-				this -> scriptId = newScriptId;
-				this -> interface = newScriptInterface;
-		}
-		bool setCallbackId(int32_t callbackId, LuaScriptInterface * scriptInterface);
+	void setScriptId(int32_t newScriptId, LuaScriptInterface* newScriptInterface)
+	{
+		this->scriptId = newScriptId;
+		this->interface = newScriptInterface;
+	}
 
-		int32_t getScriptId() const {
-				return scriptId;
-		}
-		LuaScriptInterface * getScriptInterface() {
-				return interface;
-		}
+	bool setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface);
 
-		void setTimerEvent() {
-				timerEvent = true;
-		}
+	int32_t getScriptId() const
+	{
+		return scriptId;
+	}
 
-		void getEventInfo(int32_t & scriptId, LuaScriptInterface * & scriptInterface, int32_t & callbackId, bool & timerEvent) const;
+	LuaScriptInterface* getScriptInterface()
+	{
+		return interface;
+	}
 
-		void addTempItem(Item * item);
-		static void removeTempItem(Item * item);
-		uint32_t addThing(Thing * thing);
-		void insertItem(uint32_t uid, Item * item);
+	void setTimerEvent()
+	{
+		timerEvent = true;
+	}
 
-		static DBResult_ptr getResultByID(uint32_t id);
-		static uint32_t addResult(DBResult_ptr res);
-		static bool removeResult(uint32_t id);
+	void getEventInfo(int32_t& scriptId, LuaScriptInterface* & scriptInterface, int32_t& callbackId,
+	                  bool& timerEvent) const;
 
-		void setNpc(Npc * npc) {
-				curNpc = npc;
-		}
-		Npc * getNpc() const {
-				return curNpc;
-		}
+	void addTempItem(Item* item);
+	static void removeTempItem(Item* item);
+	uint32_t addThing(Thing* thing);
+	void insertItem(uint32_t uid, Item* item);
 
-		Thing * getThingByUID(uint32_t uid);
-		Item * getItemByUID(uint32_t uid);
-		Container * getContainerByUID(uint32_t uid);
-		void removeItemByUID(uint32_t uid);
+	static DBResult_ptr getResultByID(uint32_t id);
+	static uint32_t addResult(DBResult_ptr res);
+	static bool removeResult(uint32_t id);
 
-	private:
-		using VariantVector = std::vector <const LuaVariant *>;
-		using StorageMap = std::map < uint32_t, int32_t >;
-		using DBResultMap = std::map < uint32_t, DBResult_ptr>;
+	void setNpc(Npc* npc)
+	{
+		curNpc = npc;
+	}
 
-		LuaScriptInterface * interface;
+	Npc* getNpc() const
+	{
+		return curNpc;
+	}
 
-		// for npc scripts
-		Npc * curNpc = nullptr;
+	Thing* getThingByUID(uint32_t uid);
+	Item* getItemByUID(uint32_t uid);
+	Container* getContainerByUID(uint32_t uid);
+	void removeItemByUID(uint32_t uid);
 
-		// temporary item list
-		static std::multimap < ScriptEnvironment * , Item * > tempItems;
+private:
+	using VariantVector = std::vector<const LuaVariant*>;
+	using StorageMap = std::map<uint32_t, int32_t>;
+	using DBResultMap = std::map<uint32_t, DBResult_ptr>;
 
-		// local item map
-		std::unordered_map < uint32_t, Item * > localMap;
-		uint32_t lastUID = std::numeric_limits < uint16_t > ::max();
+	LuaScriptInterface* interface;
 
-		// script file id
-		int32_t scriptId;
-		int32_t callbackId;
-		bool timerEvent;
+	// for npc scripts
+	Npc* curNpc = nullptr;
 
-		// result map
-		static uint32_t lastResultId;
-		static DBResultMap tempResults;
+	// temporary item list
+	static std::multimap<ScriptEnvironment*, Item*> tempItems;
+
+	// local item map
+	std::unordered_map<uint32_t, Item*> localMap;
+	uint32_t lastUID = std::numeric_limits<uint16_t>::max();
+
+	// script file id
+	int32_t scriptId;
+	int32_t callbackId;
+	bool timerEvent;
+
+	// result map
+	static uint32_t lastResultId;
+	static DBResultMap tempResults;
 };
 
 #endif  // SRC_LUA_SCRIPTS_SCRIPT_ENVIRONMENT_HPP_

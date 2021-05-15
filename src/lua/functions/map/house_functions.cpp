@@ -26,144 +26,185 @@
 #include "lua/functions/map/house_functions.hpp"
 #include "map/house/house.h"
 
-int HouseFunctions::luaHouseCreate(lua_State* L) {
+int HouseFunctions::luaHouseCreate(lua_State* L)
+{
 	// House(id)
 	House* house = g_game.map.houses.getHouse(getNumber<uint32_t>(L, 2));
-	if (house) {
+	if (house)
+	{
 		pushUserdata<House>(L, house);
 		setMetatable(L, -1, "House");
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetId(lua_State* L) {
+int HouseFunctions::luaHouseGetId(lua_State* L)
+{
 	// house:getId()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		lua_pushnumber(L, house->getId());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetName(lua_State* L) {
+int HouseFunctions::luaHouseGetName(lua_State* L)
+{
 	// house:getName()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		pushString(L, house->getName());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetTown(lua_State* L) {
+int HouseFunctions::luaHouseGetTown(lua_State* L)
+{
 	// house:getTown()
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
 	Town* town = g_game.map.towns.getTown(house->getTownId());
-	if (town) {
+	if (town)
+	{
 		pushUserdata<Town>(L, town);
 		setMetatable(L, -1, "Town");
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetExitPosition(lua_State* L) {
+int HouseFunctions::luaHouseGetExitPosition(lua_State* L)
+{
 	// house:getExitPosition()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		pushPosition(L, house->getEntryPosition());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetRent(lua_State* L) {
+int HouseFunctions::luaHouseGetRent(lua_State* L)
+{
 	// house:getRent()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		lua_pushnumber(L, house->getRent());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetOwnerGuid(lua_State* L) {
+int HouseFunctions::luaHouseGetOwnerGuid(lua_State* L)
+{
 	// house:getOwnerGuid()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		lua_pushnumber(L, house->getOwner());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseSetOwnerGuid(lua_State* L) {
+int HouseFunctions::luaHouseSetOwnerGuid(lua_State* L)
+{
 	// house:setOwnerGuid(guid[, updateDatabase = true])
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
-		uint32_t guid = getNumber<uint32_t>(L, 2);
-		bool updateDatabase = getBoolean(L, 3, true);
+	if (house)
+	{
+		const uint32_t guid = getNumber<uint32_t>(L, 2);
+		const bool updateDatabase = getBoolean(L, 3, true);
 		house->setOwner(guid, updateDatabase);
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseStartTrade(lua_State* L) {
+int HouseFunctions::luaHouseStartTrade(lua_State* L)
+{
 	// house:startTrade(player, tradePartner)
 	House* house = getUserdata<House>(L, 1);
 	Player* player = getUserdata<Player>(L, 2);
 	Player* tradePartner = getUserdata<Player>(L, 3);
 
-	if (!player || !tradePartner || !house) {
+	if (!player || !tradePartner || !house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
+	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition()))
+	{
 		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERFARAWAY);
 		return 1;
 	}
 
-	if (house->getOwner() != player->getGUID()) {
+	if (house->getOwner() != player->getGUID())
+	{
 		lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
 		return 1;
 	}
 
-	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
+	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID()))
+	{
 		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
 		return 1;
 	}
 
-	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID()))
+	{
 		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
 		return 1;
 	}
 
 	Item* transferItem = house->getTransferItem();
-	if (!transferItem) {
+	if (!transferItem)
+	{
 		lua_pushnumber(L, RETURNVALUE_YOUCANNOTTRADETHISHOUSE);
 		return 1;
 	}
 
 	transferItem->getParent()->setParent(player);
-	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+	if (!g_game.internalStartTrade(player, tradePartner, transferItem))
+	{
 		house->resetTransferItem();
 	}
 
@@ -171,10 +212,12 @@ int HouseFunctions::luaHouseStartTrade(lua_State* L) {
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetBeds(lua_State* L) {
+int HouseFunctions::luaHouseGetBeds(lua_State* L)
+{
 	// house:getBeds()
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
@@ -183,7 +226,8 @@ int HouseFunctions::luaHouseGetBeds(lua_State* L) {
 	lua_createtable(L, beds.size(), 0);
 
 	int index = 0;
-	for (BedItem* bedItem : beds) {
+	for (BedItem* bedItem : beds)
+	{
 		pushUserdata<Item>(L, bedItem);
 		setItemMetatable(L, -1, bedItem);
 		lua_rawseti(L, -2, ++index);
@@ -191,21 +235,27 @@ int HouseFunctions::luaHouseGetBeds(lua_State* L) {
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetBedCount(lua_State* L) {
+int HouseFunctions::luaHouseGetBedCount(lua_State* L)
+{
 	// house:getBedCount()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		lua_pushnumber(L, house->getBedCount());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetDoors(lua_State* L) {
+int HouseFunctions::luaHouseGetDoors(lua_State* L)
+{
 	// house:getDoors()
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
@@ -214,7 +264,8 @@ int HouseFunctions::luaHouseGetDoors(lua_State* L) {
 	lua_createtable(L, doors.size(), 0);
 
 	int index = 0;
-	for (Door* door : doors) {
+	for (Door* door : doors)
+	{
 		pushUserdata<Item>(L, door);
 		setItemMetatable(L, -1, door);
 		lua_rawseti(L, -2, ++index);
@@ -222,38 +273,49 @@ int HouseFunctions::luaHouseGetDoors(lua_State* L) {
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetDoorCount(lua_State* L) {
+int HouseFunctions::luaHouseGetDoorCount(lua_State* L)
+{
 	// house:getDoorCount()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		lua_pushnumber(L, house->getDoors().size());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetDoorIdByPosition(lua_State* L) {
+int HouseFunctions::luaHouseGetDoorIdByPosition(lua_State* L)
+{
 	// house:getDoorIdByPosition(position)
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
 	Door* door = house->getDoorByPosition(getPosition(L, 2));
-	if (door) {
+	if (door)
+	{
 		lua_pushnumber(L, door->getDoorId());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetTiles(lua_State* L) {
+int HouseFunctions::luaHouseGetTiles(lua_State* L)
+{
 	// house:getTiles()
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
@@ -262,7 +324,8 @@ int HouseFunctions::luaHouseGetTiles(lua_State* L) {
 	lua_createtable(L, tiles.size(), 0);
 
 	int index = 0;
-	for (Tile* tile : tiles) {
+	for (Tile* tile : tiles)
+	{
 		pushUserdata<Tile>(L, tile);
 		setMetatable(L, -1, "Tile");
 		lua_rawseti(L, -2, ++index);
@@ -270,10 +333,12 @@ int HouseFunctions::luaHouseGetTiles(lua_State* L) {
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetItems(lua_State* L) {
+int HouseFunctions::luaHouseGetItems(lua_State* L)
+{
 	// house:getItems()
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
@@ -282,83 +347,100 @@ int HouseFunctions::luaHouseGetItems(lua_State* L) {
 	lua_newtable(L);
 
 	int index = 0;
-	for (Tile* tile : tiles) {
+	for (Tile* tile : tiles)
+	{
 		TileItemVector* itemVector = tile->getItemList();
-		if (itemVector) {
-			for (Item* item : *itemVector) {
+		if (itemVector)
+		{
+			for (Item* item : *itemVector)
+			{
 				pushUserdata<Item>(L, item);
 				setItemMetatable(L, -1, item);
 				lua_rawseti(L, -2, ++index);
-
 			}
 		}
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetTileCount(lua_State* L) {
+int HouseFunctions::luaHouseGetTileCount(lua_State* L)
+{
 	// house:getTileCount()
 	House* house = getUserdata<House>(L, 1);
-	if (house) {
+	if (house)
+	{
 		lua_pushnumber(L, house->getTiles().size());
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseCanEditAccessList(lua_State* L) {
+int HouseFunctions::luaHouseCanEditAccessList(lua_State* L)
+{
 	// house:canEditAccessList(listId, player)
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint32_t listId = getNumber<uint32_t>(L, 2);
+	const uint32_t listId = getNumber<uint32_t>(L, 2);
 	Player* player = getPlayer(L, 3);
 
 	pushBoolean(L, house->canEditAccessList(listId, player));
 	return 1;
 }
 
-int HouseFunctions::luaHouseGetAccessList(lua_State* L) {
+int HouseFunctions::luaHouseGetAccessList(lua_State* L)
+{
 	// house:getAccessList(listId)
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
 	std::string list;
-	uint32_t listId = getNumber<uint32_t>(L, 2);
-	if (house->getAccessList(listId, list)) {
+	const uint32_t listId = getNumber<uint32_t>(L, 2);
+	if (house->getAccessList(listId, list))
+	{
 		pushString(L, list);
-	} else {
+	}
+	else
+	{
 		pushBoolean(L, false);
 	}
 	return 1;
 }
 
-int HouseFunctions::luaHouseSetAccessList(lua_State* L) {
+int HouseFunctions::luaHouseSetAccessList(lua_State* L)
+{
 	// house:setAccessList(listId, list)
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint32_t listId = getNumber<uint32_t>(L, 2);
+	const uint32_t listId = getNumber<uint32_t>(L, 2);
 	const std::string& list = getString(L, 3);
 	house->setAccessList(listId, list);
 	pushBoolean(L, true);
 	return 1;
 }
 
-int HouseFunctions::luaHouseKickPlayer(lua_State* L) {
+int HouseFunctions::luaHouseKickPlayer(lua_State* L)
+{
 	// house:kickPlayer(player, targetPlayer)
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
@@ -367,16 +449,19 @@ int HouseFunctions::luaHouseKickPlayer(lua_State* L) {
 	return 1;
 }
 
-int HouseFunctions::luaHouseIsInvited(lua_State* L) {
+int HouseFunctions::luaHouseIsInvited(lua_State* L)
+{
 	// house:isInvited(player)
 	House* house = getUserdata<House>(L, 1);
-	if (!house) {
+	if (!house)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
 	Player* player = getPlayer(L, 2);
-	if (!player) {
+	if (!player)
+	{
 		lua_pushnil(L);
 		return 1;
 	}

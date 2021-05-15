@@ -66,20 +66,22 @@ const std::unordered_map<std::string, PlayerFlags> ParsePlayerFlagMap = {
 };
 
 const std::unordered_map<std::string, PlayerCustomFlags> ParsePlayerCustomFlagMap = {
-  {"canmapclickteleport", PlayerCustomFlag_CanMapClickTeleport},
-  {"ignoredbynpcs", PlayerCustomFlag_IgnoredByNpcs}
+	{"canmapclickteleport", PlayerCustomFlag_CanMapClickTeleport},
+	{"ignoredbynpcs", PlayerCustomFlag_IgnoredByNpcs}
 };
 
 bool Groups::load()
 {
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/groups.xml");
-	if (!result) {
+	const pugi::xml_parse_result result = doc.load_file("data/XML/groups.xml");
+	if (!result)
+	{
 		printXMLError("Error - Groups::load", "data/XML/groups.xml", result);
 		return false;
 	}
 
-	for (auto groupNode : doc.child("groups").children()) {
+	for (auto groupNode : doc.child("groups").children())
+	{
 		Group group;
 		group.id = pugi::cast<uint32_t>(groupNode.attribute("id").value());
 		group.name = groupNode.attribute("name").as_string();
@@ -87,29 +89,37 @@ bool Groups::load()
 		group.maxDepotItems = pugi::cast<uint32_t>(groupNode.attribute("maxdepotitems").value());
 		group.maxVipEntries = pugi::cast<uint32_t>(groupNode.attribute("maxvipentries").value());
 		group.flags = pugi::cast<uint64_t>(groupNode.attribute("flags").value());
-		if (pugi::xml_node node = groupNode.child("flags")) {
-			for (auto flagNode : node.children()) {
+		if (pugi::xml_node node = groupNode.child("flags"))
+		{
+			for (auto flagNode : node.children())
+			{
 				pugi::xml_attribute attr = flagNode.first_attribute();
-				if (!attr || (attr && !attr.as_bool())) {
+				if (!attr || (attr && !attr.as_bool()))
+				{
 					continue;
 				}
 
 				auto parseFlag = ParsePlayerFlagMap.find(attr.name());
-				if (parseFlag != ParsePlayerFlagMap.end()) {
+				if (parseFlag != ParsePlayerFlagMap.end())
+				{
 					group.flags |= parseFlag->second;
 				}
 			}
 		}
-    group.customflags = pugi::cast<uint64_t>(groupNode.attribute("customflags").value());
-    if (pugi::xml_node node = groupNode.child("customflags")) {
-      for (auto customflagNode : node.children()) {
+		group.customflags = pugi::cast<uint64_t>(groupNode.attribute("customflags").value());
+		if (pugi::xml_node node = groupNode.child("customflags"))
+		{
+			for (auto customflagNode : node.children())
+			{
 				pugi::xml_attribute attr = customflagNode.first_attribute();
-				if (!attr || (attr && !attr.as_bool())) {
+				if (!attr || (attr && !attr.as_bool()))
+				{
 					continue;
 				}
 
 				auto parseCustomFlag = ParsePlayerCustomFlagMap.find(attr.name());
-				if (parseCustomFlag != ParsePlayerCustomFlagMap.end()) {
+				if (parseCustomFlag != ParsePlayerCustomFlagMap.end())
+				{
 					group.customflags |= parseCustomFlag->second;
 				}
 			}
@@ -123,8 +133,10 @@ bool Groups::load()
 
 Group* Groups::getGroup(uint16_t id)
 {
-	for (Group& group : groups) {
-		if (group.id == id) {
+	for (Group& group : groups)
+	{
+		if (group.id == id)
+		{
 			return &group;
 		}
 	}

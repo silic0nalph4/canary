@@ -25,9 +25,12 @@
 #include "database/database.h"
 #include "declarations.hpp"
 
-struct DatabaseTask {
+struct DatabaseTask
+{
 	DatabaseTask(std::string&& initQuery, std::function<void(DBResult_ptr, bool)>&& initCallback, bool initStore) :
-		query(std::move(initQuery)), callback(std::move(initCallback)), store(initStore) {}
+		query(std::move(initQuery)), callback(std::move(initCallback)), store(initStore)
+	{
+	}
 
 	std::string query;
 	std::function<void(DBResult_ptr, bool)> callback;
@@ -36,25 +39,25 @@ struct DatabaseTask {
 
 class DatabaseTasks : public ThreadHolder<DatabaseTasks>
 {
-	public:
-		DatabaseTasks();
-    bool SetDatabaseInterface(Database *database);
-    void start();
-    void startThread();
-    void flush();
-    void shutdown();
+public:
+	DatabaseTasks();
+	bool SetDatabaseInterface(Database* database);
+	void start();
+	void startThread();
+	void flush();
+	void shutdown();
 
-		void addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback = nullptr, bool store = false);
+	void addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback = nullptr, bool store = false);
 
-		void threadMain();
-	private:
-		void runTask(const DatabaseTask& task);
+	void threadMain();
+private:
+	void runTask(const DatabaseTask& task);
 
-		Database *db_;
-		std::thread thread;
-		std::list<DatabaseTask> tasks;
-		std::mutex taskLock;
-		std::condition_variable taskSignal;
+	Database* db_;
+	std::thread thread;
+	std::list<DatabaseTask> tasks;
+	std::mutex taskLock;
+	std::condition_variable taskSignal;
 };
 
 extern DatabaseTasks g_databaseTasks;

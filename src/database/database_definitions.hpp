@@ -21,7 +21,8 @@
 #define SRC_DATABASE_DATABASE_DEFINITIONS_HPP_
 
 // Enum
-enum TransactionStates_t {
+enum TransactionStates_t
+{
 	STATE_NO_START,
 	STATE_START,
 	STATE_COMMIT,

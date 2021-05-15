@@ -20,6 +20,8 @@
 #ifndef SRC_CREATURES_INTERACTIONS_CHAT_H_
 #define SRC_CREATURES_INTERACTIONS_CHAT_H_
 
+#include <utility>
+
 #include "utils/utils_definitions.hpp"
 #include "lua/scripts/luascript.h"
 
@@ -31,133 +33,151 @@ using InvitedMap = std::map<uint32_t, const Player*>;
 
 class ChatChannel
 {
-	public:
-		ChatChannel() = default;
-		ChatChannel(uint16_t channelId, std::string channelName):
-			name(std::move(channelName)),
-			id(channelId) {}
+public:
+	ChatChannel() = default;
 
-		virtual ~ChatChannel() = default;
+	ChatChannel(uint16_t channelId, std::string channelName):
+		name(std::move(channelName)),
+		id(channelId)
+	{
+	}
 
-		bool addUser(Player& player);
-		bool removeUser(const Player& player);
-		bool hasUser(const Player& player);
+	virtual ~ChatChannel() = default;
 
-		bool talk(const Player& fromPlayer, SpeakClasses type, const std::string& text);
-		void sendToAll(const std::string& message, SpeakClasses type) const;
+	bool addUser(Player& player);
+	bool removeUser(const Player& player);
+	bool hasUser(const Player& player);
 
-		const std::string& getName() const {
-			return name;
-		}
-		uint16_t getId() const {
-			return id;
-		}
-		const UsersMap& getUsers() const {
-			return users;
-		}
-		virtual const InvitedMap* getInvitedUsers() const {
-			return nullptr;
-		}
+	bool talk(const Player& fromPlayer, SpeakClasses type, const std::string& text);
+	void sendToAll(const std::string& message, SpeakClasses type) const;
 
-		virtual uint32_t getOwner() const {
-			return 0;
-		}
+	const std::string& getName() const
+	{
+		return name;
+	}
 
-		bool isPublicChannel() const { return publicChannel; }
+	uint16_t getId() const
+	{
+		return id;
+	}
 
-		bool executeOnJoinEvent(const Player& player);
-		bool executeCanJoinEvent(const Player& player);
-		bool executeOnLeaveEvent(const Player& player);
-		bool executeOnSpeakEvent(const Player& player, SpeakClasses& type, const std::string& message);
+	const UsersMap& getUsers() const
+	{
+		return users;
+	}
 
-	protected:
-		UsersMap users;
+	virtual const InvitedMap* getInvitedUsers() const
+	{
+		return nullptr;
+	}
 
-		std::string name;
+	virtual uint32_t getOwner() const
+	{
+		return 0;
+	}
 
-		int32_t canJoinEvent = -1;
-		int32_t onJoinEvent = -1;
-		int32_t onLeaveEvent = -1;
-		int32_t onSpeakEvent = -1;
+	bool isPublicChannel() const { return publicChannel; }
 
-		uint16_t id;
-		bool publicChannel = false;
+	bool executeOnJoinEvent(const Player& player);
+	bool executeCanJoinEvent(const Player& player);
+	bool executeOnLeaveEvent(const Player& player);
+	bool executeOnSpeakEvent(const Player& player, SpeakClasses& type, const std::string& message);
+
+protected:
+	UsersMap users;
+
+	std::string name;
+
+	int32_t canJoinEvent = -1;
+	int32_t onJoinEvent = -1;
+	int32_t onLeaveEvent = -1;
+	int32_t onSpeakEvent = -1;
+
+	uint16_t id;
+	bool publicChannel = false;
 
 	friend class Chat;
 };
 
 class PrivateChatChannel final : public ChatChannel
 {
-	public:
-		PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, channelName) {}
+public:
+	PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, std::move(channelName))
+	{
+	}
 
-		uint32_t getOwner() const override {
-			return owner;
-		}
-		void setOwner(uint32_t newOwner) {
-			this->owner = newOwner;
-		}
+	uint32_t getOwner() const override
+	{
+		return owner;
+	}
 
-		bool isInvited(uint32_t guid) const;
+	void setOwner(uint32_t newOwner)
+	{
+		this->owner = newOwner;
+	}
 
-		void invitePlayer(const Player& player, Player& invitePlayer);
-		void excludePlayer(const Player& player, Player& excludePlayer);
+	bool isInvited(uint32_t guid) const;
 
-		bool removeInvite(uint32_t guid);
+	void invitePlayer(const Player& player, Player& invitePlayer);
+	void excludePlayer(const Player& player, Player& excludePlayer);
 
-		void closeChannel() const;
+	bool removeInvite(uint32_t guid);
 
-		const InvitedMap* getInvitedUsers() const override {
-			return &invites;
-		}
+	void closeChannel() const;
 
-	private:
-		InvitedMap invites;
-		uint32_t owner = 0;
+	const InvitedMap* getInvitedUsers() const override
+	{
+		return &invites;
+	}
+
+private:
+	InvitedMap invites;
+	uint32_t owner = 0;
 };
 
 using ChannelList = std::list<ChatChannel*>;
 
 class Chat
 {
-	public:
-		Chat();
+public:
+	Chat();
 
-		// non-copyable
-		Chat(const Chat&) = delete;
-		Chat& operator=(const Chat&) = delete;
+	// non-copyable
+	Chat(const Chat&) = delete;
+	Chat& operator=(const Chat&) = delete;
 
-		bool load();
+	bool load();
 
-		ChatChannel* createChannel(const Player& player, uint16_t channelId);
-		bool deleteChannel(const Player& player, uint16_t channelId);
+	ChatChannel* createChannel(const Player& player, uint16_t channelId);
+	bool deleteChannel(const Player& player, uint16_t channelId);
 
-		ChatChannel* addUserToChannel(Player& player, uint16_t channelId);
-		bool removeUserFromChannel(const Player& player, uint16_t channelId);
-		void removeUserFromAllChannels(const Player& player);
+	ChatChannel* addUserToChannel(Player& player, uint16_t channelId);
+	bool removeUserFromChannel(const Player& player, uint16_t channelId);
+	void removeUserFromAllChannels(const Player& player);
 
-		bool talkToChannel(const Player& player, SpeakClasses type, const std::string& text, uint16_t channelId);
+	bool talkToChannel(const Player& player, SpeakClasses type, const std::string& text, uint16_t channelId);
 
-		ChannelList getChannelList(const Player& player);
+	ChannelList getChannelList(const Player& player);
 
-		ChatChannel* getChannel(const Player& player, uint16_t channelId);
-		ChatChannel* getChannelById(uint16_t channelId);
-		ChatChannel* getGuildChannelById(uint32_t guildId);
-		PrivateChatChannel* getPrivateChannel(const Player& player);
+	ChatChannel* getChannel(const Player& player, uint16_t channelId);
+	ChatChannel* getChannelById(uint16_t channelId);
+	ChatChannel* getGuildChannelById(uint32_t guildId);
+	PrivateChatChannel* getPrivateChannel(const Player& player);
 
-		LuaScriptInterface* getScriptInterface() {
-			return &scriptInterface;
-		}
+	LuaScriptInterface* getScriptInterface()
+	{
+		return &scriptInterface;
+	}
 
-	private:
-		std::map<uint16_t, ChatChannel> normalChannels;
-		std::map<uint16_t, PrivateChatChannel> privateChannels;
-		std::map<Party*, ChatChannel> partyChannels;
-		std::map<uint32_t, ChatChannel> guildChannels;
+private:
+	std::map<uint16_t, ChatChannel> normalChannels;
+	std::map<uint16_t, PrivateChatChannel> privateChannels;
+	std::map<Party*, ChatChannel> partyChannels;
+	std::map<uint32_t, ChatChannel> guildChannels;
 
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface scriptInterface;
 
-		PrivateChatChannel dummyPrivate;
+	PrivateChatChannel dummyPrivate;
 };
 
 #endif  // SRC_CREATURES_INTERACTIONS_CHAT_H_

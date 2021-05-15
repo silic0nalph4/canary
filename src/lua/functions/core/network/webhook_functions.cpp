@@ -21,11 +21,12 @@
 #include "lua/functions/core/network/webhook_functions.hpp"
 #include "server/network/webhook/webhook.h"
 
-int WebhookFunctions::webhookSend(lua_State* L) {
+int WebhookFunctions::webhookSend(lua_State* L)
+{
 	// Webhook.send(title, message, color)
-	std::string title = getString(L, 1);
-	std::string message = getString(L, 2);
-	uint32_t color = getNumber<uint32_t>(L, 3, 0);
+	const std::string title = getString(L, 1);
+	const std::string message = getString(L, 2);
+	const uint32_t color = getNumber<uint32_t>(L, 3, 0);
 
 	webhook_send_message(title, message, color);
 	lua_pushnil(L);

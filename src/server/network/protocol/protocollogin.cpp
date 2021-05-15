@@ -51,7 +51,8 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 void ProtocolLogin::getCharacterList(const std::string& email, const std::string& password, uint16_t version)
 {
 	account::Account account;
-	if (!IOLoginData::authenticateAccountPassword(email, password, &account)) {
+	if (!IOLoginData::authenticateAccountPassword(email, password, &account))
+	{
 		disconnectClient("Email or password is not correct", version);
 		return;
 	}
@@ -61,7 +62,8 @@ void ProtocolLogin::getCharacterList(const std::string& email, const std::string
 
 	auto output = OutputMessagePool::getOutputMessage();
 	const std::string& motd = g_config.getString(MOTD);
-	if (!motd.empty()) {
+	if (!motd.empty())
+	{
 		// Add MOTD
 		output->addByte(0x14);
 
@@ -79,9 +81,9 @@ void ProtocolLogin::getCharacterList(const std::string& email, const std::string
 	account.GetAccountPlayers(&players);
 	output->addByte(0x64);
 
-	output->addByte(1);  // number of worlds
+	output->addByte(1); // number of worlds
 
-	output->addByte(0);  // world id
+	output->addByte(0); // world id
 	output->addString(g_config.getString(SERVER_NAME));
 	output->addString(g_config.getString(IP));
 
@@ -89,25 +91,29 @@ void ProtocolLogin::getCharacterList(const std::string& email, const std::string
 
 	output->addByte(0);
 
-	uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(),
-                                  players.size());
+	const uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(),
+	                                      players.size());
 	output->addByte(size);
-	for (uint8_t i = 0; i < size; i++) {
+	for (uint8_t i = 0; i < size; i++)
+	{
 		output->addByte(0);
 		output->addString(players[i].name);
 	}
 
 	// Add premium days
 	output->addByte(0);
-	if (g_config.getBoolean(FREE_PREMIUM)) {
+	if (g_config.getBoolean(FREE_PREMIUM))
+	{
 		output->addByte(1);
 		output->add<uint32_t>(0);
-	} else {
-	uint32_t days;
-	account.GetPremiumRemaningDays(&days);
-	output->addByte(0);
-	output->add<uint32_t>(time(nullptr) + (days * 86400));
-  }
+	}
+	else
+	{
+		uint32_t days;
+		account.GetPremiumRemaningDays(&days);
+		output->addByte(0);
+		output->add<uint32_t>(time(nullptr) + (days * 86400));
+	}
 
 	send(output);
 
@@ -116,12 +122,13 @@ void ProtocolLogin::getCharacterList(const std::string& email, const std::string
 
 void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
-	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
+	if (g_game.getGameState() == GAME_STATE_SHUTDOWN)
+	{
 		disconnect();
 		return;
 	}
 
-	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
+	const auto operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 
 	if (operatingSystem <= CLIENTOS_NEW_MAC)
 		enableCompact();
@@ -136,7 +143,8 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
      * 1 byte: 0
      */
 
-	if (!Protocol::RSA_decrypt(msg)) {
+	if (!RSA_decrypt(msg))
+	{
 		SPDLOG_WARN("[ProtocolLogin::onRecvFirstMessage] - RSA Decrypt Failed");
 		disconnect();
 		return;
@@ -148,47 +156,58 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	key[2] = msg.get<uint32_t>();
 	key[3] = msg.get<uint32_t>();
 	enableXTEAEncryption();
-	setXTEAKey(std::move(key));
+	setXTEAKey(key);
 
-	if (g_game.getGameState() == GAME_STATE_STARTUP) {
+	if (g_game.getGameState() == GAME_STATE_STARTUP)
+	{
 		disconnectClient("Gameworld is starting up. Please wait.", version);
 		return;
 	}
 
-	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
+	if (g_game.getGameState() == GAME_STATE_MAINTAIN)
+	{
 		disconnectClient("Gameworld is under maintenance.\nPlease re-connect in a while.", version);
 		return;
 	}
 
 	BanInfo banInfo;
 	auto curConnection = getConnection();
-	if (!curConnection) {
+	if (!curConnection)
+	{
 		return;
 	}
 
-	if (IOBan::isIpBanned(curConnection->getIP(), banInfo)) {
-		if (banInfo.reason.empty()) {
+	if (IOBan::isIpBanned(curConnection->getIP(), banInfo))
+	{
+		if (banInfo.reason.empty())
+		{
 			banInfo.reason = "(none)";
 		}
 
 		std::ostringstream ss;
-		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
+		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy <<
+			".\n\nReason specified:\n" << banInfo.reason;
 		disconnectClient(ss.str(), version);
 		return;
 	}
 
 	std::string email = msg.getString();
-	if (email.empty()) {
+	if (email.empty())
+	{
 		disconnectClient("Invalid email.", version);
 		return;
 	}
 
 	std::string password = msg.getString();
-	if (password.empty()) {
+	if (password.empty())
+	{
 		disconnectClient("Invalid password.", version);
 		return;
 	}
 
 	auto thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this());
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, thisPtr, email, password, version)));
+	g_dispatcher.addTask(createTask([thisPtr, email, password, version]
+	{
+		thisPtr->getCharacterList(email, password, version);
+	}));
 }

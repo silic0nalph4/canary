@@ -30,64 +30,72 @@
 class Module;
 using Module_ptr = std::unique_ptr<Module>;
 
-class Module final : public Event {
-	public:
-		explicit Module(LuaScriptInterface* interface);
+class Module final : public Event
+{
+public:
+	explicit Module(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) final;
+	bool configureEvent(const pugi::xml_node& node);
 
-		ModuleType_t getEventType() const {
-			return type;
-		}
-		bool isLoaded() const {
-			return loaded;
-		}
+	ModuleType_t getEventType() const
+	{
+		return type;
+	}
 
-		void clearEvent();
-		void copyEvent(Module* creatureEvent);
+	bool isLoaded() const
+	{
+		return loaded;
+	}
 
-		//scripting
-		void executeOnRecvbyte(Player* player, NetworkMessage& msg);
-		//
+	void clearEvent();
+	void copyEvent(Module* creatureEvent);
 
-		uint8_t getRecvbyte() {
-			return recvbyte;
-		}
+	//scripting
+	void executeOnRecvbyte(Player* player, NetworkMessage& msg);
+	//
 
-		int16_t getDelay() {
-			return delay;
-		}
-	protected:
-		std::string getScriptEventName() const final;
+	uint8_t getRecvbyte()
+	{
+		return recvbyte;
+	}
 
-		ModuleType_t type;
-		uint8_t recvbyte;
-		int16_t delay;
-		bool loaded;
+	int16_t getDelay()
+	{
+		return delay;
+	}
+
+protected:
+	std::string getScriptEventName() const;
+
+	ModuleType_t type;
+	uint8_t recvbyte;
+	int16_t delay;
+	bool loaded;
 };
 
-class Modules final : public BaseEvents {
-	public:
-		Modules();
+class Modules final : public BaseEvents
+{
+public:
+	Modules();
 
-		// non-copyable
-		Modules(const Modules&) = delete;
-		Modules& operator=(const Modules&) = delete;
+	// non-copyable
+	Modules(const Modules&) = delete;
+	Modules& operator=(const Modules&) = delete;
 
-		void executeOnRecvbyte(Player* player, NetworkMessage& msg, uint8_t byte) const;
-		Module* getEventByRecvbyte(uint8_t recvbyte, bool force);
+	void executeOnRecvbyte(Player* player, NetworkMessage msg, uint8_t byte) const;
+	Module* getEventByRecvbyte(uint8_t recvbyte, bool force);
 
-	protected:
-		LuaScriptInterface& getScriptInterface() override;
-		std::string getScriptBaseName() const override;
-		Event_ptr getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event_ptr  event, const pugi::xml_node& node) override;
-		void clear(bool) override final;
+protected:
+	LuaScriptInterface& getScriptInterface() override;
+	std::string getScriptBaseName() const override;
+	Event_ptr getEvent(const std::string& nodeName) override;
+	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
+	void clear(bool);
 
-		typedef std::map<uint8_t, Module> ModulesList;
-		ModulesList recvbyteList;
+	using ModulesList = std::map<uint8_t, Module>;
+	ModulesList recvbyteList;
 
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface scriptInterface;
 };
 
 #endif  // SRC_LUA_MODULES_MODULES_H_

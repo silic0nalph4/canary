@@ -24,9 +24,14 @@
 
 #include "declarations.hpp"
 
-struct Outfit {
+struct Outfit
+{
 	Outfit(std::string initName, uint16_t initLookType, bool initPremium, bool initUnlocked, std::string initFrom) :
-		name(initName), lookType(initLookType), premium(initPremium), unlocked(initUnlocked), from(initFrom) {}
+		name(std::move(std::move(initName))), lookType(initLookType), premium(initPremium), unlocked(initUnlocked), from(
+			std::move(
+				std::move(initFrom)))
+	{
+	}
 
 	std::string name;
 	uint16_t lookType;
@@ -35,9 +40,12 @@ struct Outfit {
 	std::string from;
 };
 
-struct ProtocolOutfit {
+struct ProtocolOutfit
+{
 	ProtocolOutfit(const std::string& initName, uint16_t initLookType, uint8_t initAddons) :
-		name(initName), lookType(initLookType), addons(initAddons) {}
+		name(initName), lookType(initLookType), addons(initAddons)
+	{
+	}
 
 	const std::string& name;
 	uint16_t lookType;
@@ -46,23 +54,26 @@ struct ProtocolOutfit {
 
 class Outfits
 {
-	public:
-		static Outfits& getInstance() {
-			static Outfits instance;
-			return instance;
-		}
+public:
+	static Outfits& getInstance()
+	{
+		static Outfits instance;
+		return instance;
+	}
 
-		const Outfit* getOpositeSexOutfitByLookType(PlayerSex_t sex, uint16_t lookType);
+	const Outfit* getOpositeSexOutfitByLookType(PlayerSex_t sex, uint16_t lookType);
 
-		bool loadFromXml();
+	bool loadFromXml();
 
-		const Outfit* getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) const;
-		const std::vector<Outfit>& getOutfits(PlayerSex_t sex) const {
-			return outfits[sex];
-		}
+	const Outfit* getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) const;
 
-	private:
-		std::vector<Outfit> outfits[PLAYERSEX_LAST + 1];
+	const std::vector<Outfit>& getOutfits(PlayerSex_t sex) const
+	{
+		return outfits[sex];
+	}
+
+private:
+	std::vector<Outfit> outfits[PLAYERSEX_LAST + 1];
 };
 
 #endif  // SRC_CREATURES_APPEARANCE_OUTFIT_OUTFIT_H_

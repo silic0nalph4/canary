@@ -17,17 +17,20 @@ extern ConfigManager g_config;
 // Go back while you still can.
 
 static bool init = false;
-static curl_slist *headers = NULL;
+static curl_slist* headers = nullptr;
 
-void webhook_init() {
-	if (curl_global_init(CURL_GLOBAL_ALL) != 0) {
+void webhook_init()
+{
+	if (curl_global_init(CURL_GLOBAL_ALL) != 0)
+	{
 		SPDLOG_ERROR("Failed to init curl, no webhook messages may be sent");
 		return;
 	}
 
 	headers = curl_slist_append(headers, "content-type: application/json");
 	headers = curl_slist_append(headers, "accept: application/json");
-	if (headers == NULL) {
+	if (headers == nullptr)
+	{
 		SPDLOG_ERROR("Failed to init curl, appending request headers failed");
 		return;
 	}
@@ -35,23 +38,27 @@ void webhook_init() {
 	init = true;
 }
 
-static int webhook_send_message_(const char *url, const char *payload, std::string *response_body);
-static std::string get_payload(std::string title, std::string message, int color);
+static int webhook_send_message_(const char* url, const char* payload, std::string* response_body);
+static std::string get_payload(const std::string& title, const std::string& message, int color);
 
-void webhook_send_message(std::string title, std::string message, int color) {
-	std::string url = g_config.getString(DISCORD_WEBHOOK_URL);
-	if (url.empty()) {
+void webhook_send_message(const std::string& title, const std::string& message, int color)
+{
+	const std::string url = g_config.getString(DISCORD_WEBHOOK_URL);
+	if (url.empty())
+	{
 		return;
 	}
 
-	if (!init) {
+	if (!init)
+	{
 		SPDLOG_ERROR("Failed to send webhook message; Did not (successfully) init");
 		return;
 	}
 
-	if (title.empty() || message.empty()) {
+	if (title.empty() || message.empty())
+	{
 		SPDLOG_ERROR("Failed to send webhook message; "
-                     "title or message to send was empty");
+			"title or message to send was empty");
 		return;
 	}
 
@@ -59,21 +66,23 @@ void webhook_send_message(std::string title, std::string message, int color) {
 	std::string response_body = "";
 	int response_code = webhook_send_message_(url.c_str(), payload.c_str(), &response_body);
 
-	if (response_code != 204 && response_code != -1) {
+	if (response_code != 204 && response_code != -1)
+	{
 		SPDLOG_ERROR("Failed to send webhook message; "
-                     "HTTP request failed with code: {}"
-                     "response body: {} request body: {}",
-                     response_code, response_body, payload);
+		             "HTTP request failed with code: {}"
+		             "response body: {} request body: {}",
+		             response_code, response_body, payload);
 	}
 }
 
-static std::string get_payload(std::string title, std::string message, int color) {
+static std::string get_payload(const std::string& title, const std::string& message, int color)
+{
 	time_t now;
 	time(&now);
 	struct tm tm;
 
 #ifdef _MSC_VER
-  gmtime_s(&tm, &now);
+	gmtime_s(&tm, &now);
 #else
   gmtime_r(&now, &tm);
 #endif
@@ -83,9 +92,9 @@ static std::string get_payload(std::string title, std::string message, int color
 
 	std::stringstream footer_text;
 	footer_text
-			<< g_config.getString(IP) << ":"
-			<< g_config.getNumber(GAME_PORT) << " | "
-			<< time_buf << " UTC";
+		<< g_config.getString(IP) << ":"
+		<< g_config.getNumber(GAME_PORT) << " | "
+		<< time_buf << " UTC";
 
 	Json::Value footer(Json::objectValue);
 	footer["text"] = Json::Value(footer_text.str());
@@ -94,7 +103,8 @@ static std::string get_payload(std::string title, std::string message, int color
 	embed["title"] = Json::Value(title);
 	embed["description"] = Json::Value(message);
 	embed["footer"] = footer;
-	if (color >= 0) {
+	if (color >= 0)
+	{
 		embed["color"] = color;
 	}
 
@@ -115,14 +125,17 @@ static std::string get_payload(std::string title, std::string message, int color
 }
 
 // Can't labmda this for some reason
-static size_t write_data(void *ptr, size_t size, size_t nmemb, void *userdata) {
-	(*static_cast<std::string *>(userdata)).append(static_cast<char *>(ptr), size * nmemb);
+static size_t write_data(void* ptr, size_t size, size_t nmemb, void* userdata)
+{
+	(*static_cast<std::string*>(userdata)).append(static_cast<char*>(ptr), size * nmemb);
 	return size * nmemb;
 }
 
-static int webhook_send_message_(const char *url, const char *payload, std::string *response_body) {
-	CURL *curl = curl_easy_init();
-	if (!curl) {
+static int webhook_send_message_(const char* url, const char* payload, std::string* response_body)
+{
+	CURL* curl = curl_easy_init();
+	if (!curl)
+	{
 		SPDLOG_ERROR("Failed to send webhook message; curl_easy_init failed");
 		return -1;
 	}
@@ -132,19 +145,22 @@ static int webhook_send_message_(const char *url, const char *payload, std::stri
 	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload);
 
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &write_data);
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, reinterpret_cast<void *>(&response_body));
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, reinterpret_cast<void*>(&response_body));
 
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "canary (https://github.com/Hydractify/canary)");
 
-	CURLcode res = curl_easy_perform(curl);
+	const CURLcode res = curl_easy_perform(curl);
 
 	int response_code = -1;
-	if (res == CURLE_OK) {
+	if (res == CURLE_OK)
+	{
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-	} else {
+	}
+	else
+	{
 		SPDLOG_ERROR("Failed to send webhook message with the error: {}",
-                     curl_easy_strerror(res));
+		             curl_easy_strerror(res));
 	}
 
 	curl_easy_cleanup(curl);

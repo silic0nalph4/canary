@@ -20,7 +20,8 @@
 #ifndef SRC_CREATURES_PLAYERS_GROUPING_GROUPS_H_
 #define SRC_CREATURES_PLAYERS_GROUPING_GROUPS_H_
 
-struct Group {
+struct Group
+{
 	std::string name;
 	uint64_t flags;
 	uint64_t customflags;
@@ -30,13 +31,14 @@ struct Group {
 	bool access;
 };
 
-class Groups {
-	public:
-		bool load();
-		Group* getGroup(uint16_t id);
+class Groups
+{
+public:
+	bool load();
+	Group* getGroup(uint16_t id);
 
-	private:
-		std::vector<Group> groups;
+private:
+	std::vector<Group> groups;
 };
 
 #endif  // SRC_CREATURES_PLAYERS_GROUPING_GROUPS_H_

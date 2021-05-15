@@ -23,29 +23,34 @@
 #include "declarations.hpp"
 #include "lua/scripts/luascript.h"
 
-class Scripts {
-	public:
-		Scripts();
-		~Scripts();
+class Scripts
+{
+public:
+	Scripts();
+	~Scripts();
 
-		// non-copyable
-		Scripts(const Scripts&) = delete;
-		Scripts& operator=(const Scripts&) = delete;
+	// non-copyable
+	Scripts(const Scripts&) = delete;
+	Scripts& operator=(const Scripts&) = delete;
 
-		static Scripts& getInstance() {
-			static Scripts instance;
-			return instance;
-		}
+	static Scripts& getInstance()
+	{
+		static Scripts instance;
+		return instance;
+	}
 
 
-		bool loadEventSchedulerScripts(const std::string& fileName);
-		bool loadScripts(std::string folderName, bool isLib, bool reload);
-		bool loadScriptSystems();
-		LuaScriptInterface& getScriptInterface() {
-			return scriptInterface;
-		}
-	private:
-		LuaScriptInterface scriptInterface;
+	bool loadEventSchedulerScripts(const std::string& fileName);
+	bool loadScripts(const std::string& folderName, bool isLib, bool reload);
+	bool loadScriptSystems();
+
+	LuaScriptInterface& getScriptInterface()
+	{
+		return scriptInterface;
+	}
+
+private:
+	LuaScriptInterface scriptInterface;
 };
 
 #endif  // SRC_LUA_SCRIPTS_SCRIPTS_H_

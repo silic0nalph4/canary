@@ -20,6 +20,8 @@
 #ifndef SRC_LUA_CREATURE_TALKACTION_H_
 #define SRC_LUA_CREATURE_TALKACTION_H_
 
+#include <utility>
+
 #include "lua/global/baseevents.h"
 #include "utils/utils_definitions.hpp"
 #include "declarations.hpp"
@@ -28,64 +30,77 @@
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;
 
-class TalkAction : public Event {
-	public:
-		explicit TalkAction(LuaScriptInterface* interface) : Event(interface) {}
+class TalkAction : public Event
+{
+public:
+	explicit TalkAction(LuaScriptInterface* interface) : Event(interface)
+	{
+	}
 
-		bool configureEvent(const pugi::xml_node& node) override;
+	bool configureEvent(const pugi::xml_node& node) override;
 
-		const std::string& getWords() const {
-			return words;
-		}
-		const std::vector<std::string>& getWordsMap() const {
-			return wordsMap;
-		}
-		void setWords(std::string word) {
-			words = word;
-			wordsMap.push_back(word);
-		}
-		std::string getSeparator() const {
-			return separator;
-		}
-		void setSeparator(std::string sep) {
-			separator = sep;
-		}
+	const std::string& getWords() const
+	{
+		return words;
+	}
 
-		//scripting
-		bool executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
-		//
+	const std::vector<std::string>& getWordsMap() const
+	{
+		return wordsMap;
+	}
 
-	private:
-		std::string getScriptEventName() const override;
+	void setWords(const std::string& word)
+	{
+		words = word;
+		wordsMap.push_back(word);
+	}
 
-		std::string words;
-		std::vector<std::string> wordsMap;
-		std::string separator = "\"";
+	std::string getSeparator() const
+	{
+		return separator;
+	}
+
+	void setSeparator(std::string sep)
+	{
+		separator = std::move(sep);
+	}
+
+	//scripting
+	bool executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
+	//
+
+private:
+	std::string getScriptEventName() const override;
+
+	std::string words;
+	std::vector<std::string> wordsMap;
+	std::string separator = "\"";
 };
 
-class TalkActions final : public BaseEvents {
-	public:
-		TalkActions();
-		~TalkActions();
+class TalkActions final : public BaseEvents
+{
+public:
+	TalkActions();
+	~TalkActions() override;
 
-		// non-copyable
-		TalkActions(const TalkActions&) = delete;
-		TalkActions& operator=(const TalkActions&) = delete;
+	// non-copyable
+	TalkActions(const TalkActions&) = delete;
+	TalkActions& operator=(const TalkActions&) = delete;
 
-		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
+	TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
 
-		bool registerLuaEvent(TalkAction* event);
-		void clear(bool fromLua) override final;
+	bool registerLuaEvent(TalkAction* event);
+	void clear(bool fromLua);
 
-	private:
-		LuaScriptInterface& getScriptInterface() override;
-		std::string getScriptBaseName() const override;
-		Event_ptr getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
+private:
+	LuaScriptInterface& getScriptInterface() override;
+	std::string getScriptBaseName() const override;
+	Event_ptr getEvent(const std::string& nodeName) override;
+	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
-		std::map<std::string, TalkAction> talkActions;
+	std::map<std::string, TalkAction> talkActions;
 
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface scriptInterface;
 };
 
 #endif  // SRC_LUA_CREATURE_TALKACTION_H_

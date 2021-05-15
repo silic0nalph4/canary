@@ -22,20 +22,22 @@
 
 #include "lua/scripts/luascript.h"
 
-class TeleportFunctions final : LuaScriptInterface {
-	public:
-		static void init(lua_State* L) {
-			registerClass(L, "Teleport", "Item", TeleportFunctions::luaTeleportCreate);
-			registerMetaMethod(L, "Teleport", "__eq", TeleportFunctions::luaUserdataCompare);
+class TeleportFunctions final : LuaScriptInterface
+{
+public:
+	static void init(lua_State* L)
+	{
+		registerClass(L, "Teleport", "Item", luaTeleportCreate);
+		registerMetaMethod(L, "Teleport", "__eq", luaUserdataCompare);
 
-			registerMethod(L, "Teleport", "getDestination", TeleportFunctions::luaTeleportGetDestination);
-			registerMethod(L, "Teleport", "setDestination", TeleportFunctions::luaTeleportSetDestination);
-			}
+		registerMethod(L, "Teleport", "getDestination", luaTeleportGetDestination);
+		registerMethod(L, "Teleport", "setDestination", luaTeleportSetDestination);
+	}
 
-	private:
-		static int luaTeleportCreate(lua_State* L);
-		static int luaTeleportGetDestination(lua_State* L);
-		static int luaTeleportSetDestination(lua_State* L);
+private:
+	static int luaTeleportCreate(lua_State* L);
+	static int luaTeleportGetDestination(lua_State* L);
+	static int luaTeleportSetDestination(lua_State* L);
 };
 
 #endif  // SRC_LUA_FUNCTIONS_MAP_TELEPORT_FUNCTIONS_HPP_

@@ -27,95 +27,126 @@
 extern GlobalEvents* g_globalEvents;
 extern Scripts* g_scripts;
 
-int GlobalEventFunctions::luaCreateGlobalEvent(lua_State* L) {
+int GlobalEventFunctions::luaCreateGlobalEvent(lua_State* L)
+{
 	// GlobalEvent(eventName)
-	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface())
+	{
 		reportErrorFunc("GlobalEvents can only be registered in the Scripts interface.");
 		lua_pushnil(L);
 		return 1;
 	}
 
-	GlobalEvent* global = new GlobalEvent(getScriptEnv()->getScriptInterface());
-	if (global) {
+	auto global = new GlobalEvent(getScriptEnv()->getScriptInterface());
+	if (global)
+	{
 		global->setName(getString(L, 2));
 		global->setEventType(GLOBALEVENT_NONE);
 		global->fromLua = true;
 		pushUserdata<GlobalEvent>(L, global);
 		setMetatable(L, -1, "GlobalEvent");
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GlobalEventFunctions::luaGlobalEventType(lua_State* L) {
+int GlobalEventFunctions::luaGlobalEventType(lua_State* L)
+{
 	// globalevent:type(callback)
 	GlobalEvent* global = getUserdata<GlobalEvent>(L, 1);
-	if (global) {
+	if (global)
+	{
 		std::string typeName = getString(L, 2);
-		std::string tmpStr = asLowerCaseString(typeName);
-		if (tmpStr == "startup") {
+		const std::string tmpStr = asLowerCaseString(typeName);
+		if (tmpStr == "startup")
+		{
 			global->setEventType(GLOBALEVENT_STARTUP);
-		} else if (tmpStr == "shutdown") {
+		}
+		else if (tmpStr == "shutdown")
+		{
 			global->setEventType(GLOBALEVENT_SHUTDOWN);
-		} else if (tmpStr == "record") {
+		}
+		else if (tmpStr == "record")
+		{
 			global->setEventType(GLOBALEVENT_RECORD);
-		} else if (tmpStr == "periodchange") {
+		}
+		else if (tmpStr == "periodchange")
+		{
 			global->setEventType(GLOBALEVENT_PERIODCHANGE);
-		} else {
+		}
+		else
+		{
 			SPDLOG_ERROR("[GlobalEventFunctions::luaGlobalEventType] - "
-                         "Invalid type for global event: {}", typeName);
+			             "Invalid type for global event: {}", typeName);
 			pushBoolean(L, false);
 		}
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GlobalEventFunctions::luaGlobalEventRegister(lua_State* L) {
+int GlobalEventFunctions::luaGlobalEventRegister(lua_State* L)
+{
 	// globalevent:register()
 	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
-		if (!globalevent->isScripted()) {
+	if (globalevent)
+	{
+		if (!globalevent->isScripted())
+		{
 			pushBoolean(L, false);
 			return 1;
 		}
 		pushBoolean(L, g_globalEvents->registerLuaEvent(globalevent));
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GlobalEventFunctions::luaGlobalEventOnCallback(lua_State* L) {
+int GlobalEventFunctions::luaGlobalEventOnCallback(lua_State* L)
+{
 	// globalevent:onThink / record / etc. (callback)
 	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
-		if (!globalevent->loadCallback()) {
+	if (globalevent)
+	{
+		if (!globalevent->loadCallback())
+		{
 			pushBoolean(L, false);
 			return 1;
 		}
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GlobalEventFunctions::luaGlobalEventTime(lua_State* L) {
+int GlobalEventFunctions::luaGlobalEventTime(lua_State* L)
+{
 	// globalevent:time(time)
 	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
+	if (globalevent)
+	{
 		std::string timer = getString(L, 2);
 		std::vector<int32_t> params = vectorAtoi(explodeString(timer, ":"));
 
-		int32_t hour = params.front();
-		if (hour < 0 || hour > 23) {
+		const int32_t hour = params.front();
+		if (hour < 0 || hour > 23)
+		{
 			SPDLOG_ERROR("[GlobalEventFunctions::luaGlobalEventTime] - "
-                         "Invalid hour {} for globalevent with name: {}",
-                         timer, globalevent->getName());
+			             "Invalid hour {} for globalevent with name: {}",
+			             timer, globalevent->getName());
 			pushBoolean(L, false);
 			return 1;
 		}
@@ -124,22 +155,26 @@ int GlobalEventFunctions::luaGlobalEventTime(lua_State* L) {
 
 		int32_t min = 0;
 		int32_t sec = 0;
-		if (params.size() > 1) {
+		if (params.size() > 1)
+		{
 			min = params[1];
-			if (min < 0 || min > 59) {
+			if (min < 0 || min > 59)
+			{
 				SPDLOG_ERROR("[GlobalEventFunctions::luaGlobalEventTime] - "
-                              "Invalid minute: {} for globalevent with name: {}",
-                              timer, globalevent->getName());
+				             "Invalid minute: {} for globalevent with name: {}",
+				             timer, globalevent->getName());
 				pushBoolean(L, false);
 				return 1;
 			}
 
-			if (params.size() > 2) {
+			if (params.size() > 2)
+			{
 				sec = params[2];
-				if (sec < 0 || sec > 59) {
+				if (sec < 0 || sec > 59)
+				{
 					SPDLOG_ERROR("[GlobalEventFunctions::luaGlobalEventTime] - "
-                              "Invalid minute: {} for globalevent with name: {}",
-                              timer, globalevent->getName());
+					             "Invalid minute: {} for globalevent with name: {}",
+					             timer, globalevent->getName());
 					pushBoolean(L, false);
 					return 1;
 				}
@@ -153,27 +188,34 @@ int GlobalEventFunctions::luaGlobalEventTime(lua_State* L) {
 		timeinfo->tm_sec = sec;
 
 		time_t difference = static_cast<time_t>(difftime(mktime(timeinfo), current_time));
-		if (difference < 0) {
+		if (difference < 0)
+		{
 			difference += 86400;
 		}
 
 		globalevent->setNextExecution(current_time + difference);
 		globalevent->setEventType(GLOBALEVENT_TIMER);
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GlobalEventFunctions::luaGlobalEventInterval(lua_State* L) {
+int GlobalEventFunctions::luaGlobalEventInterval(lua_State* L)
+{
 	// globalevent:interval(interval)
 	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
+	if (globalevent)
+	{
 		globalevent->setInterval(getNumber<uint32_t>(L, 2));
 		globalevent->setNextExecution(OTSYS_TIME() + getNumber<uint32_t>(L, 2));
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;

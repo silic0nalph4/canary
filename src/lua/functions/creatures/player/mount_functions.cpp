@@ -24,70 +24,95 @@
 
 extern Game g_game;
 
-int MountFunctions::luaCreateMount(lua_State* L) {
+int MountFunctions::luaCreateMount(lua_State* L)
+{
 	// Mount(id or name)
 	Mount* mount;
-	if (isNumber(L, 2)) {
+	if (isNumber(L, 2))
+	{
 		mount = g_game.mounts.getMountByID(getNumber<uint32_t>(L, 2));
-	} else if (isString(L, 2)) {
-		std::string mountName = getString(L, 2);
+	}
+	else if (isString(L, 2))
+	{
+		const std::string mountName = getString(L, 2);
 		mount = g_game.mounts.getMountByName(mountName);
-	} else {
+	}
+	else
+	{
 		mount = nullptr;
 	}
 
-	if (mount) {
+	if (mount)
+	{
 		pushUserdata<Mount>(L, mount);
 		setMetatable(L, -1, "Mount");
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 
 	return 1;
 }
 
-int MountFunctions::luaMountGetName(lua_State* L) {
+int MountFunctions::luaMountGetName(lua_State* L)
+{
 	// mount:getName()
 	Mount* mount = getUserdata<Mount>(L, 1);
-	if (mount) {
+	if (mount)
+	{
 		pushString(L, mount->name);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 
 	return 1;
 }
 
-int MountFunctions::luaMountGetId(lua_State* L) {
+int MountFunctions::luaMountGetId(lua_State* L)
+{
 	// mount:getId()
 	Mount* mount = getUserdata<Mount>(L, 1);
-	if (mount) {
+	if (mount)
+	{
 		lua_pushnumber(L, mount->id);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 
 	return 1;
 }
 
-int MountFunctions::luaMountGetClientId(lua_State* L) {
+int MountFunctions::luaMountGetClientId(lua_State* L)
+{
 	// mount:getClientId()
 	Mount* mount = getUserdata<Mount>(L, 1);
-	if (mount) {
+	if (mount)
+	{
 		lua_pushnumber(L, mount->clientId);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 
 	return 1;
 }
 
-int MountFunctions::luaMountGetSpeed(lua_State* L) {
+int MountFunctions::luaMountGetSpeed(lua_State* L)
+{
 	// mount:getSpeed()
 	Mount* mount = getUserdata<Mount>(L, 1);
-	if (mount) {
+	if (mount)
+	{
 		lua_pushnumber(L, mount->speed);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 

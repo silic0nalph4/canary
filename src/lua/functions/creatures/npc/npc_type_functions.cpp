@@ -26,7 +26,8 @@
 extern Npcs g_npcs;
 extern Scripts* g_scripts;
 
-int NpcTypeFunctions::luaNpcTypeCreate(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeCreate(lua_State* L)
+{
 	// NpcType(name)
 	NpcType* npcType = g_npcs.getNpcType(getString(L, 1), true);
 	pushUserdata<NpcType>(L, npcType);
@@ -34,156 +35,218 @@ int NpcTypeFunctions::luaNpcTypeCreate(lua_State* L) {
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeIsPushable(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeIsPushable(lua_State* L)
+{
 	// get: npcType:isPushable() set: npcType:isPushable(bool)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			pushBoolean(L, npcType->info.pushable);
-		} else {
+		}
+		else
+		{
 			npcType->info.pushable = getBoolean(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeFloorChange(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeFloorChange(lua_State* L)
+{
 	// get: npcType:floorChange() set: npcType:floorChange(bool)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			pushBoolean(L, npcType->info.floorChange);
-		} else {
+		}
+		else
+		{
 			npcType->info.floorChange = getBoolean(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeCanSpawn(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeCanSpawn(lua_State* L)
+{
 	// monsterType:canSpawn(pos)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	const Position& position = getPosition(L, 2);
-	if (npcType) {
+	if (npcType)
+	{
 		pushBoolean(L, npcType->canSpawn(position));
 	}
-	else {
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeCanPushItems(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeCanPushItems(lua_State* L)
+{
 	// get: npcType:canPushItems() set: npcType:canPushItems(bool)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			pushBoolean(L, npcType->info.canPushItems);
-		} else {
+		}
+		else
+		{
 			npcType->info.canPushItems = getBoolean(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeCanPushCreatures(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeCanPushCreatures(lua_State* L)
+{
 	// get: npcType:canPushCreatures() set: npcType:canPushCreatures(bool)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			pushBoolean(L, npcType->info.canPushCreatures);
-		} else {
+		}
+		else
+		{
 			npcType->info.canPushCreatures = getBoolean(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int32_t NpcTypeFunctions::luaNpcTypeName(lua_State* L) {
+int32_t NpcTypeFunctions::luaNpcTypeName(lua_State* L)
+{
 	// get: npcType:name() set: npcType:name(name)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			pushString(L, npcType->name);
-		} else {
+		}
+		else
+		{
 			npcType->name = getString(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeNameDescription(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeNameDescription(lua_State* L)
+{
 	// get: npcType:nameDescription() set: npcType:nameDescription(desc)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			pushString(L, npcType->nameDescription);
-		} else {
+		}
+		else
+		{
 			npcType->nameDescription = getString(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeHealth(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeHealth(lua_State* L)
+{
 	// get: npcType:health() set: npcType:health(health)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.health);
-		} else {
+		}
+		else
+		{
 			npcType->info.health = getNumber<int32_t>(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeMaxHealth(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeMaxHealth(lua_State* L)
+{
 	// get: npcType:maxHealth() set: npcType:maxHealth(health)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.healthMax);
-		} else {
+		}
+		else
+		{
 			npcType->info.healthMax = getNumber<int32_t>(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeAddShopItem(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeAddShopItem(lua_State* L)
+{
 	// npcType:addShopItem(shopItem)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (!npcType) {
+	if (!npcType)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (!isTable(L, 2)) {
+	if (!isTable(L, 2))
+	{
 		reportErrorFunc("Shop Item is not a table");
 		pushBoolean(L, false);
 		return 1;
@@ -197,7 +260,7 @@ int NpcTypeFunctions::luaNpcTypeAddShopItem(lua_State* L) {
 	shopItem.sellPrice = static_cast<uint16_t>(getField<uint32_t>(L, table, "sell"));
 	shopItem.subType = static_cast<uint16_t>(getField<uint32_t>(L, table, "count"));
 
-	const ItemType &it = Item::items.getItemIdByClientId(shopItem.itemClientId);
+	const ItemType& it = Item::items.getItemIdByClientId(shopItem.itemClientId);
 
 	shopItem.name = it.name;
 
@@ -206,10 +269,12 @@ int NpcTypeFunctions::luaNpcTypeAddShopItem(lua_State* L) {
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeAddVoice(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeAddVoice(lua_State* L)
+{
 	// npcType:addVoice(sentence, interval, chance, yell)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
+	if (npcType)
+	{
 		voiceBlock_t voice;
 		voice.text = getString(L, 2);
 		npcType->info.yellSpeedTicks = getNumber<uint32_t>(L, 3);
@@ -217,23 +282,28 @@ int NpcTypeFunctions::luaNpcTypeAddVoice(lua_State* L) {
 		voice.yellText = getBoolean(L, 5);
 		npcType->info.voiceVector.push_back(voice);
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeGetVoices(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeGetVoices(lua_State* L)
+{
 	// npcType:getVoices()
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (!npcType) {
+	if (!npcType)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
 	int index = 0;
 	lua_createtable(L, npcType->info.voiceVector.size(), 0);
-	for (const auto& voiceBlock : npcType->info.voiceVector) {
+	for (const auto& voiceBlock : npcType->info.voiceVector)
+	{
 		lua_createtable(L, 0, 2);
 		setField(L, "text", voiceBlock.text);
 		setField(L, "yellText", voiceBlock.yellText);
@@ -242,36 +312,44 @@ int NpcTypeFunctions::luaNpcTypeGetVoices(lua_State* L) {
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeGetCreatureEvents(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeGetCreatureEvents(lua_State* L)
+{
 	// npcType:getCreatureEvents()
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (!npcType) {
+	if (!npcType)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
 	int index = 0;
 	lua_createtable(L, npcType->info.scripts.size(), 0);
-	for (const std::string& creatureEvent : npcType->info.scripts) {
+	for (const std::string& creatureEvent : npcType->info.scripts)
+	{
 		pushString(L, creatureEvent);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeRegisterEvent(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeRegisterEvent(lua_State* L)
+{
 	// npcType:registerEvent(name)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
+	if (npcType)
+	{
 		npcType->info.scripts.push_back(getString(L, 2));
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeEventOnCallback(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeEventOnCallback(lua_State* L)
+{
 	// npcType:onThink(callback)
 	// npcType:onAppear(callback)
 	// npcType:onDisappear(callback)
@@ -281,107 +359,148 @@ int NpcTypeFunctions::luaNpcTypeEventOnCallback(lua_State* L) {
 	// npcType:onPlayerSellItem(callback)
 	// npcType:onPlayerCheckItem(callback)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (npcType->loadCallback(&g_scripts->getScriptInterface())) {
+	if (npcType)
+	{
+		if (npcType->loadCallback(&g_scripts->getScriptInterface()))
+		{
 			pushBoolean(L, true);
 			return 1;
-		 }
+		}
 		pushBoolean(L, false);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeEventType(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeEventType(lua_State* L)
+{
 	// npcType:eventType(event)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
+	if (npcType)
+	{
 		npcType->info.eventType = getNumber<NpcsEvent_t>(L, 2);
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeOutfit(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeOutfit(lua_State* L)
+{
 	// get: npcType:outfit() set: npcType:outfit(outfit)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			pushOutfit(L, npcType->info.outfit);
-		} else {
+		}
+		else
+		{
 			npcType->info.outfit = getOutfit(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeBaseSpeed(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeBaseSpeed(lua_State* L)
+{
 	// npcType:getBaseSpeed()
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.baseSpeed);
-		} else {
+		}
+		else
+		{
 			npcType->info.baseSpeed = getNumber<uint32_t>(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeWalkInterval(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeWalkInterval(lua_State* L)
+{
 	// get: npcType:walkInterval() set: npcType:walkInterval(interval)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.walkInterval);
-		} else {
+		}
+		else
+		{
 			npcType->info.walkInterval = getNumber<uint32_t>(L, 2);
 			lua_pushboolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeWalkRadius(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeWalkRadius(lua_State* L)
+{
 	// get: npcType:walkRadius() set: npcType:walkRadius(id)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.walkRadius);
-		} else {
+		}
+		else
+		{
 			npcType->info.walkRadius = getNumber<int32_t>(L, 2);
 			lua_pushboolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeLight(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeLight(lua_State* L)
+{
 	// get: npcType:light() set: npcType:light(color, level)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (!npcType) {
+	if (!npcType)
+	{
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (lua_gettop(L) == 1) {
+	if (lua_gettop(L) == 1)
+	{
 		lua_pushnumber(L, npcType->info.light.level);
 		lua_pushnumber(L, npcType->info.light.color);
 		return 2;
-	} else {
+	}
+	else
+	{
 		npcType->info.light.color = getNumber<uint8_t>(L, 2);
 		npcType->info.light.level = getNumber<uint8_t>(L, 3);
 		pushBoolean(L, true);
@@ -389,38 +508,55 @@ int NpcTypeFunctions::luaNpcTypeLight(lua_State* L) {
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeYellChance(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeYellChance(lua_State* L)
+{
 	// get: npcType:yellChance() set: npcType:yellChance(chance)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->info.yellChance);
-		} else {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
+			if (lua_gettop(L) == 1)
+			{
+				lua_pushnumber(L, npcType->info.yellChance);
+			}
+			else
+			{
+				npcType->info.yellChance = getNumber<uint32_t>(L, 2);
+				pushBoolean(L, true);
+			}
+		}
+		else
+		{
 			npcType->info.yellChance = getNumber<uint32_t>(L, 2);
 			pushBoolean(L, true);
 		}
-		} else {
-			npcType->info.yellChance = getNumber<uint32_t>(L, 2);
-			pushBoolean(L, true);
-		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeYellSpeedTicks(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeYellSpeedTicks(lua_State* L)
+{
 	// get: npcType:yellSpeedTicks() set: npcType:yellSpeedTicks(rate)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.yellSpeedTicks);
-		} else {
+		}
+		else
+		{
 			npcType->info.yellSpeedTicks = getNumber<uint32_t>(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
@@ -430,33 +566,47 @@ int NpcTypeFunctions::luaNpcTypeYellSpeedTicks(lua_State* L) {
  * Respawn Type
  */
 
-int NpcTypeFunctions::luaNpcTypeRespawnTypePeriod(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeRespawnTypePeriod(lua_State* L)
+{
 	// npcType:respawnTypePeriod()
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.respawnType.period);
-		} else {
+		}
+		else
+		{
 			npcType->info.respawnType.period = getNumber<RespawnPeriod_t>(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int NpcTypeFunctions::luaNpcTypeRespawnTypeIsUnderground(lua_State* L) {
+int NpcTypeFunctions::luaNpcTypeRespawnTypeIsUnderground(lua_State* L)
+{
 	// npcType:respawnTypeIsUnderground()
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
+	if (npcType)
+	{
+		if (lua_gettop(L) == 1)
+		{
 			lua_pushnumber(L, npcType->info.respawnType.underground);
-		} else {
+		}
+		else
+		{
 			npcType->info.respawnType.underground = getNumber<RespawnPeriod_t>(L, 2);
 			pushBoolean(L, true);
 		}
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;

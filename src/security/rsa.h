@@ -26,18 +26,18 @@
 
 class RSA2
 {
-	public:
-		RSA2() = default;
+public:
+	RSA2() = default;
 
-		// non-copyable
-		RSA2(const RSA2&) = delete;
-		RSA2& operator=(const RSA2&) = delete;
+	// non-copyable
+	RSA2(const RSA2&) = delete;
+	RSA2& operator=(const RSA2&) = delete;
 
-		void loadPEM(const std::string& filename);
-		void decrypt(char* msg) const;
+	void loadPEM(const std::string& filename);
+	void decrypt(char* msg) const;
 
-	private:
-		CryptoPP::RSA::PrivateKey pk;
+private:
+	CryptoPP::RSA::PrivateKey pk;
 };
 
 #endif  // SRC_SECURITY_RSA_H_

@@ -34,7 +34,8 @@ extern ConfigManager g_config;
 
 #pragma pack(1)
 
-struct OTBM_root_header {
+struct OTBM_root_header
+{
 	uint32_t version;
 	uint16_t width;
 	uint16_t height;
@@ -42,13 +43,15 @@ struct OTBM_root_header {
 	uint32_t minorVersionItems;
 };
 
-struct OTBM_Destination_coords {
+struct OTBM_Destination_coords
+{
 	uint16_t x;
 	uint16_t y;
 	uint8_t z;
 };
 
-struct OTBM_Tile_coords {
+struct OTBM_Tile_coords
+{
 	uint8_t x;
 	uint8_t y;
 };
@@ -59,56 +62,64 @@ class IOMap
 {
 	static Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z);
 
-	public:
-		bool loadMap(Map* map, const std::string& identifier);
+public:
+	bool loadMap(Map* map, const std::string& identifier);
 
-		static bool loadMonsters(Map* map) {
-			if (map->monsterfile.empty()) {
-				// OTBM file doesn't tell us about the monsterfile,
-				// Lets guess it is mapname-monster.xml.
-				map->monsterfile = g_config.getString(MAP_NAME);
-				map->monsterfile += "-monster.xml";
-			}
-
-			return map->spawnsMonster.loadFromXML(map->monsterfile);
+	static bool loadMonsters(Map* map)
+	{
+		if (map->monsterfile.empty())
+		{
+			// OTBM file doesn't tell us about the monsterfile,
+			// Lets guess it is mapname-monster.xml.
+			map->monsterfile = g_config.getString(MAP_NAME);
+			map->monsterfile += "-monster.xml";
 		}
 
-		static bool loadNpcs(Map* map) {
-			if (map->npcfile.empty()) {
-				// OTBM file doesn't tell us about the npcfile,
-				// Lets guess it is mapname-npc.xml.
-				map->npcfile = g_config.getString(MAP_NAME);
-				map->npcfile += "-npc.xml";
-			}
+		return map->spawnsMonster.loadFromXML(map->monsterfile);
+	}
 
-			return map->spawnsNpc.loadFromXml(map->npcfile);
+	static bool loadNpcs(Map* map)
+	{
+		if (map->npcfile.empty())
+		{
+			// OTBM file doesn't tell us about the npcfile,
+			// Lets guess it is mapname-npc.xml.
+			map->npcfile = g_config.getString(MAP_NAME);
+			map->npcfile += "-npc.xml";
 		}
 
-		static bool loadHouses(Map* map) {
-			if (map->housefile.empty()) {
-				// OTBM file doesn't tell us about the housefile,
-				// Lets guess it is mapname-house.xml.
-				map->housefile = g_config.getString(MAP_NAME);
-				map->housefile += "-house.xml";
-			}
+		return map->spawnsNpc.loadFromXml(map->npcfile);
+	}
 
-			return map->houses.loadHousesXML(map->housefile);
+	static bool loadHouses(Map* map)
+	{
+		if (map->housefile.empty())
+		{
+			// OTBM file doesn't tell us about the housefile,
+			// Lets guess it is mapname-house.xml.
+			map->housefile = g_config.getString(MAP_NAME);
+			map->housefile += "-house.xml";
 		}
 
-		const std::string& getLastErrorString() const {
-			return errorString;
-		}
+		return map->houses.loadHousesXML(map->housefile);
+	}
 
-		void setLastErrorString(std::string error) {
-			errorString = std::move(error);
-		}
+	const std::string& getLastErrorString() const
+	{
+		return errorString;
+	}
 
-	private:
-		bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::string& fileName);
-		bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
-		bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
-		bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);
-		std::string errorString;
+	void setLastErrorString(std::string error)
+	{
+		errorString = std::move(error);
+	}
+
+private:
+	bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::string& fileName);
+	bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
+	bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
+	bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);
+	std::string errorString;
 };
 
 #endif  // SRC_IO_IOMAP_H_

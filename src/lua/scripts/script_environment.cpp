@@ -22,6 +22,7 @@
 #include <boost/range/adaptor/reversed.hpp>
 #include <limits>
 #include <map>
+#include <utility>
 
 #include "declarations.hpp"
 #include "game/game.h"
@@ -30,15 +31,18 @@
 
 extern Game g_game;
 
-ScriptEnvironment::ScriptEnvironment() {
+ScriptEnvironment::ScriptEnvironment()
+{
 	resetEnv();
 }
 
-ScriptEnvironment::~ScriptEnvironment() {
+ScriptEnvironment::~ScriptEnvironment()
+{
 	resetEnv();
 }
 
-void ScriptEnvironment::resetEnv() {
+void ScriptEnvironment::resetEnv()
+{
 	scriptId = 0;
 	callbackId = 0;
 	timerEvent = false;
@@ -46,55 +50,68 @@ void ScriptEnvironment::resetEnv() {
 	localMap.clear();
 	tempResults.clear();
 
-	auto pair = tempItems.equal_range(this);
+	const auto pair = tempItems.equal_range(this);
 	auto it = pair.first;
-	while (it != pair.second) {
-		Item * item = it -> second;
-		if (item -> getParent() == VirtualCylinder::virtualCylinder) {
+	while (it != pair.second)
+	{
+		Item* item = it->second;
+		if (item->getParent() == VirtualCylinder::virtualCylinder)
+		{
 			g_game.ReleaseItem(item);
 		}
 		it = tempItems.erase(it);
 	}
 }
 
-bool ScriptEnvironment::setCallbackId(int32_t newCallbackId, LuaScriptInterface * scriptInterface) {
-	if (this -> callbackId != 0) {
+bool ScriptEnvironment::setCallbackId(int32_t newCallbackId, LuaScriptInterface* scriptInterface)
+{
+	if (this->callbackId != 0)
+	{
 		// nested callbacks are not allowed
-		if (interface) {
-			interface -> reportErrorFunc("Nested callbacks!");
+		if (interface)
+		{
+			interface->reportErrorFunc("Nested callbacks!");
 		}
 		return false;
 	}
 
-	this -> callbackId = newCallbackId;
+	this->callbackId = newCallbackId;
 	interface = scriptInterface;
 	return true;
 }
 
-void ScriptEnvironment::getEventInfo(int32_t & retScriptId, LuaScriptInterface * & retScriptInterface, int32_t & retCallbackId, bool & retTimerEvent) const {
-	retScriptId = this -> scriptId;
+void ScriptEnvironment::getEventInfo(int32_t& retScriptId, LuaScriptInterface* & retScriptInterface,
+                                     int32_t& retCallbackId, bool& retTimerEvent) const
+{
+	retScriptId = this->scriptId;
 	retScriptInterface = interface;
-	retCallbackId = this -> callbackId;
-	retTimerEvent = this -> timerEvent;
+	retCallbackId = this->callbackId;
+	retTimerEvent = this->timerEvent;
 }
 
-uint32_t ScriptEnvironment::addThing(Thing * thing) {
-	if (!thing || thing -> isRemoved()) {
+uint32_t ScriptEnvironment::addThing(Thing* thing)
+{
+	if (!thing || thing->isRemoved())
+	{
 		return 0;
 	}
 
-	Creature * creature = thing -> getCreature();
-	if (creature) {
-		return creature -> getID();
+	Creature* creature = thing->getCreature();
+	if (creature)
+	{
+		return creature->getID();
 	}
 
-	Item * item = thing -> getItem();
-	if (item && item -> hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
-		return item -> getUniqueId();
+	Item* item = thing->getItem();
+	if (item && item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))
+	{
+		return item->getUniqueId();
 	}
 
-	for (const auto & it: localMap) {
-		if (it.second == item) {
+	for (const auto& it : localMap)
+	{
+		if (it.second == item)
+		{
 			return it.first;
 		}
 	}
@@ -103,85 +120,107 @@ uint32_t ScriptEnvironment::addThing(Thing * thing) {
 	return lastUID;
 }
 
-void ScriptEnvironment::insertItem(uint32_t uid, Item * item) {
-	auto result = localMap.emplace(uid, item);
-	if (!result.second) {
+void ScriptEnvironment::insertItem(uint32_t uid, Item* item)
+{
+	const auto result = localMap.emplace(uid, item);
+	if (!result.second)
+	{
 		SPDLOG_ERROR("Thing uid already taken: {}", uid);
 	}
 }
 
-Thing * ScriptEnvironment::getThingByUID(uint32_t uid) {
-	if (uid >= 0x10000000) {
+Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
+{
+	if (uid >= 0x10000000)
+	{
 		return g_game.getCreatureByID(uid);
 	}
 
-	if (uid <= std::numeric_limits < uint16_t > ::max()) {
-		Item * item = g_game.getUniqueItem(uid);
-		if (item && !item -> isRemoved()) {
+	if (uid <= std::numeric_limits<uint16_t>::max())
+	{
+		Item* item = g_game.getUniqueItem(uid);
+		if (item && !item->isRemoved())
+		{
 			return item;
 		}
 		return nullptr;
 	}
 
-	auto it = localMap.find(uid);
-	if (it != localMap.end()) {
-		Item * item = it -> second;
-		if (!item -> isRemoved()) {
+	const auto it = localMap.find(uid);
+	if (it != localMap.end())
+	{
+		Item* item = it->second;
+		if (!item->isRemoved())
+		{
 			return item;
 		}
 	}
 	return nullptr;
 }
 
-Item * ScriptEnvironment::getItemByUID(uint32_t uid) {
-	Thing * thing = getThingByUID(uid);
-	if (!thing) {
+Item* ScriptEnvironment::getItemByUID(uint32_t uid)
+{
+	Thing* thing = getThingByUID(uid);
+	if (!thing)
+	{
 		return nullptr;
 	}
-	return thing -> getItem();
+	return thing->getItem();
 }
 
-Container * ScriptEnvironment::getContainerByUID(uint32_t uid) {
-	Item * item = getItemByUID(uid);
-	if (!item) {
+Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
+{
+	Item* item = getItemByUID(uid);
+	if (!item)
+	{
 		return nullptr;
 	}
-	return item -> getContainer();
+	return item->getContainer();
 }
 
-void ScriptEnvironment::removeItemByUID(uint32_t uid) {
-	if (uid <= std::numeric_limits < uint16_t > ::max()) {
+void ScriptEnvironment::removeItemByUID(uint32_t uid)
+{
+	if (uid <= std::numeric_limits<uint16_t>::max())
+	{
 		g_game.removeUniqueItem(uid);
 		return;
 	}
 
-	auto it = localMap.find(uid);
-	if (it != localMap.end()) {
+	const auto it = localMap.find(uid);
+	if (it != localMap.end())
+	{
 		localMap.erase(it);
 	}
 }
 
-void ScriptEnvironment::addTempItem(Item * item) {
+void ScriptEnvironment::addTempItem(Item* item)
+{
 	tempItems.emplace(this, item);
 }
 
-void ScriptEnvironment::removeTempItem(Item * item) {
-	for (auto it = tempItems.begin(), end = tempItems.end(); it != end; ++it) {
-		if (it -> second == item) {
+void ScriptEnvironment::removeTempItem(Item* item)
+{
+	for (auto it = tempItems.begin(), end = tempItems.end(); it != end; ++it)
+	{
+		if (it->second == item)
+		{
 			tempItems.erase(it);
 			break;
 		}
 	}
 }
 
-uint32_t ScriptEnvironment::addResult(DBResult_ptr res) {
-	tempResults[++lastResultId] = res;
+uint32_t ScriptEnvironment::addResult(DBResult_ptr res)
+{
+	tempResults[++lastResultId] = std::move(res);
 	return lastResultId;
 }
 
-bool ScriptEnvironment::removeResult(uint32_t id) {
-	auto it = tempResults.find(id);
-	if (it == tempResults.end()) {
+bool ScriptEnvironment::removeResult(uint32_t id)
+{
+	const auto it = tempResults.find(id);
+	if (it == tempResults.end())
+	{
 		return false;
 	}
 
@@ -189,10 +228,12 @@ bool ScriptEnvironment::removeResult(uint32_t id) {
 	return true;
 }
 
-DBResult_ptr ScriptEnvironment::getResultByID(uint32_t id) {
-	auto it = tempResults.find(id);
-	if (it == tempResults.end()) {
+DBResult_ptr ScriptEnvironment::getResultByID(uint32_t id)
+{
+	const auto it = tempResults.find(id);
+	if (it == tempResults.end())
+	{
 		return nullptr;
 	}
-	return it -> second;
+	return it->second;
 }

@@ -24,59 +24,78 @@
 
 extern TalkActions* g_talkActions;
 
-int TalkActionFunctions::luaCreateTalkAction(lua_State* L) {
+int TalkActionFunctions::luaCreateTalkAction(lua_State* L)
+{
 	// TalkAction(words)
-	TalkAction* talk = new TalkAction(getScriptEnv()->getScriptInterface());
-	if (talk) {
-		for (int i = 2; i <= lua_gettop(L); i++) {
+	auto talk = new TalkAction(getScriptEnv()->getScriptInterface());
+	if (talk)
+	{
+		for (int i = 2; i <= lua_gettop(L); i++)
+		{
 			talk->setWords(getString(L, i));
 		}
 		talk->fromLua = true;
 		pushUserdata<TalkAction>(L, talk);
 		setMetatable(L, -1, "TalkAction");
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int TalkActionFunctions::luaTalkActionOnSay(lua_State* L) {
+int TalkActionFunctions::luaTalkActionOnSay(lua_State* L)
+{
 	// talkAction:onSay(callback)
 	TalkAction* talk = getUserdata<TalkAction>(L, 1);
-	if (talk) {
-		if (!talk->loadCallback()) {
+	if (talk)
+	{
+		if (!talk->loadCallback())
+		{
 			pushBoolean(L, false);
 			return 1;
 		}
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int TalkActionFunctions::luaTalkActionRegister(lua_State* L) {
+int TalkActionFunctions::luaTalkActionRegister(lua_State* L)
+{
 	// talkAction:register()
 	TalkAction* talk = getUserdata<TalkAction>(L, 1);
-	if (talk) {
-		if (!talk->isScripted()) {
+	if (talk)
+	{
+		if (!talk->isScripted())
+		{
 			pushBoolean(L, false);
 			return 1;
 		}
 		pushBoolean(L, g_talkActions->registerLuaEvent(talk));
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int TalkActionFunctions::luaTalkActionSeparator(lua_State* L) {
+int TalkActionFunctions::luaTalkActionSeparator(lua_State* L)
+{
 	// talkAction:separator(sep)
 	TalkAction* talk = getUserdata<TalkAction>(L, 1);
-	if (talk) {
+	if (talk)
+	{
 		talk->setSeparator(getString(L, 2).c_str());
 		pushBoolean(L, true);
-	} else {
+	}
+	else
+	{
 		lua_pushnil(L);
 	}
 	return 1;

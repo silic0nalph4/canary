@@ -22,31 +22,33 @@
 
 #include "lua/scripts/luascript.h"
 
-class CreatureEventFunctions final : LuaScriptInterface {
-	public:
-		static void init(lua_State* L) {
-			registerClass(L, "CreatureEvent", "", CreatureEventFunctions::luaCreateCreatureEvent);
-			registerMethod(L, "CreatureEvent", "type", CreatureEventFunctions::luaCreatureEventType);
-			registerMethod(L, "CreatureEvent", "register", CreatureEventFunctions::luaCreatureEventRegister);
-			registerMethod(L, "CreatureEvent", "onLogin", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onLogout", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onThink", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onPrepareDeath", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onDeath", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onKill", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onAdvance", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onModalWindow", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onTextEdit", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onHealthChange", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onManaChange", CreatureEventFunctions::luaCreatureEventOnCallback);
-			registerMethod(L, "CreatureEvent", "onExtendedOpcode", CreatureEventFunctions::luaCreatureEventOnCallback);
-		}
+class CreatureEventFunctions final : LuaScriptInterface
+{
+public:
+	static void init(lua_State* L)
+	{
+		registerClass(L, "CreatureEvent", "", luaCreateCreatureEvent);
+		registerMethod(L, "CreatureEvent", "type", luaCreatureEventType);
+		registerMethod(L, "CreatureEvent", "register", luaCreatureEventRegister);
+		registerMethod(L, "CreatureEvent", "onLogin", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onLogout", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onThink", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onPrepareDeath", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onDeath", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onKill", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onAdvance", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onModalWindow", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onTextEdit", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onHealthChange", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onManaChange", luaCreatureEventOnCallback);
+		registerMethod(L, "CreatureEvent", "onExtendedOpcode", luaCreatureEventOnCallback);
+	}
 
-	private:
-		static int luaCreateCreatureEvent(lua_State* L);
-		static int luaCreatureEventType(lua_State* L);
-		static int luaCreatureEventRegister(lua_State* L);
-		static int luaCreatureEventOnCallback(lua_State* L);
+private:
+	static int luaCreateCreatureEvent(lua_State* L);
+	static int luaCreatureEventType(lua_State* L);
+	static int luaCreatureEventRegister(lua_State* L);
+	static int luaCreatureEventOnCallback(lua_State* L);
 };
 
 #endif  // SRC_LUA_FUNCTIONS_EVENTS_CREATURE_EVENT_FUNCTIONS_HPP_

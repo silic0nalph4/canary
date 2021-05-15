@@ -27,33 +27,37 @@
 extern Scheduler g_scheduler;
 
 const uint16_t OUTPUTMESSAGE_FREE_LIST_CAPACITY = 2048;
-const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY {10};
+const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY{10};
 
 void OutputMessagePool::scheduleSendAll()
 {
-	auto functor = std::bind(&OutputMessagePool::sendAll, this);
+	const auto functor = [this] { sendAll(); };
 	g_scheduler.addEvent(createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), functor));
 }
 
 void OutputMessagePool::sendAll()
 {
 	//dispatcher thread
-	for (auto& protocol : bufferedProtocols) {
+	for (auto& protocol : bufferedProtocols)
+	{
 		auto& msg = protocol->getCurrentBuffer();
-		if (msg) {
+		if (msg)
+		{
 			protocol->send(std::move(msg));
 		}
 	}
 
-	if (!bufferedProtocols.empty()) {
+	if (!bufferedProtocols.empty())
+	{
 		scheduleSendAll();
 	}
 }
 
-void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
+void OutputMessagePool::addProtocolToAutosend(const Protocol_ptr& protocol)
 {
 	//dispatcher thread
-	if (bufferedProtocols.empty()) {
+	if (bufferedProtocols.empty())
+	{
 		scheduleSendAll();
 	}
 	bufferedProtocols.emplace_back(protocol);
@@ -62,8 +66,9 @@ void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
 void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)
 {
 	//dispatcher thread
-	auto it = std::find(bufferedProtocols.begin(), bufferedProtocols.end(), protocol);
-	if (it != bufferedProtocols.end()) {
+	const auto it = std::find(bufferedProtocols.begin(), bufferedProtocols.end(), protocol);
+	if (it != bufferedProtocols.end())
+	{
 		std::swap(*it, bufferedProtocols.back());
 		bufferedProtocols.pop_back();
 	}
