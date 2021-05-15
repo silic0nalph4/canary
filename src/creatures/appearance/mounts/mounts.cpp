@@ -25,24 +25,20 @@
 #include "utils/pugicast.h"
 #include "utils/tools.h"
 
-bool Mounts::reload()
-{
+bool Mounts::reload() {
 	mounts.clear();
 	return loadFromXml();
 }
 
-bool Mounts::loadFromXml()
-{
+bool Mounts::loadFromXml() {
 	pugi::xml_document doc;
 	const pugi::xml_parse_result result = doc.load_file("data/XML/mounts.xml");
-	if (!result)
-	{
+	if (!result) {
 		printXMLError("Error - Mounts::loadFromXml", "data/XML/mounts.xml", result);
 		return false;
 	}
 
-	for (auto mountNode : doc.child("mounts").children())
-	{
+	for (auto mountNode : doc.child("mounts").children()) {
 		mounts.emplace_back(
 			static_cast<uint8_t>(pugi::cast<uint16_t>(mountNode.attribute("id").value())),
 			pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
@@ -56,23 +52,18 @@ bool Mounts::loadFromXml()
 	return true;
 }
 
-Mount* Mounts::getMountByID(uint8_t id)
-{
-	const auto it = std::find_if(mounts.begin(), mounts.end(), [id](const Mount& mount)
-	{
+Mount* Mounts::getMountByID(uint8_t id) {
+	const auto it = std::find_if(mounts.begin(), mounts.end(), [id](const Mount& mount) {
 		return mount.id == id;
 	});
 
 	return it != mounts.end() ? &*it : nullptr;
 }
 
-Mount* Mounts::getMountByName(const std::string& name)
-{
+Mount* Mounts::getMountByName(const std::string& name) {
 	const auto mountName = name.c_str();
-	for (auto& it : mounts)
-	{
-		if (strcasecmp(mountName, it.name.c_str()) == 0)
-		{
+	for (auto& it : mounts) {
+		if (strcasecmp(mountName, it.name.c_str()) == 0) {
 			return &it;
 		}
 	}
@@ -80,10 +71,8 @@ Mount* Mounts::getMountByName(const std::string& name)
 	return nullptr;
 }
 
-Mount* Mounts::getMountByClientID(uint16_t clientId)
-{
-	const auto it = std::find_if(mounts.begin(), mounts.end(), [clientId](const Mount& mount)
-	{
+Mount* Mounts::getMountByClientID(uint16_t clientId) {
+	const auto it = std::find_if(mounts.begin(), mounts.end(), [clientId](const Mount& mount) {
 		return mount.clientId == clientId;
 	});
 

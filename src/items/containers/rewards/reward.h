@@ -22,18 +22,15 @@
 
 #include "items/containers/container.h"
 
-class Reward : public Container
-{
+class Reward : public Container {
 public:
 	explicit Reward();
 
-	Reward* getReward() final
-	{
+	Reward* getReward() final {
 		return this;
 	}
 
-	const Reward* getReward() const final
-	{
+	const Reward* getReward() const final {
 		return this;
 	}
 
@@ -47,15 +44,13 @@ public:
 	                            CylinderLink_t link = LINK_OWNER) final;
 
 	//overrides
-	bool canRemove() const final
-	{
+	bool canRemove() const final {
 		return true;
 	}
 
 	Cylinder* getParent() const final;
 
-	Cylinder* getRealParent() const final
-	{
+	Cylinder* getRealParent() const final {
 		return parent;
 	}
 };

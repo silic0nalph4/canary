@@ -34,8 +34,7 @@ enum { MAX_BODY_LENGTH = NETWORKMESSAGE_MAXSIZE - HEADER_LENGTH - CHECKSUM_LENGT
 
 enum { MAX_PROTOCOL_BODY_LENGTH = MAX_BODY_LENGTH - 10 };
 
-enum ConnectionState_t : int8_t
-{
+enum ConnectionState_t : int8_t {
 	CONNECTION_STATE_DISCONNECTED,
 	CONNECTION_STATE_CONNECTING_STAGE1,
 	CONNECTION_STATE_CONNECTING_STAGE2,
@@ -46,8 +45,7 @@ enum ConnectionState_t : int8_t
 // Connection and networkmessage.
 
 // Protocol.
-enum RequestedInfo_t : uint16_t
-{
+enum RequestedInfo_t : uint16_t {
 	REQUEST_BASIC_SERVER_INFO = 1 << 0,
 	REQUEST_OWNER_SERVER_INFO = 1 << 1,
 	REQUEST_MISC_SERVER_INFO = 1 << 2,
@@ -58,8 +56,7 @@ enum RequestedInfo_t : uint16_t
 	REQUEST_SERVER_SOFTWARE_INFO = 1 << 7,
 };
 
-enum SessionEndInformations : uint8_t
-{
+enum SessionEndInformations : uint8_t {
 	// Guessing unknown types are ban/protocol error or something.
 	// But since there aren't any difference from logout should we care?
 	SESSION_END_LOGOUT,
@@ -68,15 +65,13 @@ enum SessionEndInformations : uint8_t
 	SESSION_END_UNK3,
 };
 
-enum PreySlotNum_t : uint8_t
-{
+enum PreySlotNum_t : uint8_t {
 	PREY_SLOTNUM_FIRST = 0,
 	PREY_SLOTNUM_SECOND = 1,
 	PREY_SLOTNUM_THIRD = 2,
 };
 
-enum PreyState_t : uint8_t
-{
+enum PreyState_t : uint8_t {
 	PREY_STATE_LOCKED = 0,
 	PREY_STATE_INACTIVE = 1,
 	PREY_STATE_ACTIVE = 2,
@@ -84,30 +79,26 @@ enum PreyState_t : uint8_t
 	PREY_STATE_SELECTION_CHANGE_MONSTER = 4,
 };
 
-enum Resource_t : uint8_t
-{
+enum Resource_t : uint8_t {
 	RESOURCE_BANK = 0x00,
 	RESOURCE_INVENTORY = 0x01,
 	RESOURCE_PREY = 0x0A,
 };
 
-enum InspectObjectTypes : uint8_t
-{
+enum InspectObjectTypes : uint8_t {
 	INSPECT_NORMALOBJECT = 0,
 	INSPECT_NPCTRADE = 1,
 	INSPECT_UNKNOWN = 2,
 	INSPECT_CYCLOPEDIA = 3
 };
 
-enum CyclopediaCharacterInfo_OutfitType_t : uint8_t
-{
+enum CyclopediaCharacterInfo_OutfitType_t : uint8_t {
 	CYCLOPEDIA_CHARACTERINFO_OUTFITTYPE_NONE = 0,
 	CYCLOPEDIA_CHARACTERINFO_OUTFITTYPE_QUEST = 1,
 	CYCLOPEDIA_CHARACTERINFO_OUTFITTYPE_STORE = 2
 };
 
-enum MagicEffectsType_t : uint8_t
-{
+enum MagicEffectsType_t : uint8_t {
 	//ends magic effect loop
 	MAGIC_EFFECTS_END_LOOP = 0,
 	// needs uint8_t delta after type to adjust position
@@ -122,15 +113,13 @@ enum MagicEffectsType_t : uint8_t
 	MAGIC_EFFECTS_CREATE_DISTANCEEFFECT_REVERSED = 5,
 };
 
-enum ImpactAnalyzerAndTracker_t : uint8_t
-{
+enum ImpactAnalyzerAndTracker_t : uint8_t {
 	ANALYZER_HEAL = 0,
 	ANALYZER_DAMAGE_DEALT = 1,
 	ANALYZER_DAMAGE_RECEIVED = 2
 };
 
-enum Supply_Stash_Actions_t : uint8_t
-{
+enum Supply_Stash_Actions_t : uint8_t {
 	SUPPLY_STASH_ACTION_STOW_ITEM = 0,
 	SUPPLY_STASH_ACTION_STOW_CONTAINER = 1,
 	SUPPLY_STASH_ACTION_STOW_STACK = 2,
@@ -138,20 +127,17 @@ enum Supply_Stash_Actions_t : uint8_t
 };
 
 // Structs
-struct HighscoreCategory
-{
+struct HighscoreCategory {
 	HighscoreCategory(const char* name, uint8_t id) :
 		name(name),
-		id(id)
-	{
+		id(id) {
 	}
 
 	const char* name;
 	uint8_t id;
 };
 
-struct HighscoreCharacter
-{
+struct HighscoreCharacter {
 	HighscoreCharacter(std::string name, uint64_t points,
 	                   uint32_t id, uint32_t rank,
 	                   uint16_t level, uint8_t vocation) :
@@ -160,8 +146,7 @@ struct HighscoreCharacter
 		id(id),
 		rank(rank),
 		level(level),
-		vocation(vocation)
-	{
+		vocation(vocation) {
 	}
 
 	std::string name;

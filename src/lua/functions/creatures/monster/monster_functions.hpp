@@ -28,11 +28,9 @@
 #include "lua/functions/creatures/monster/monster_spell_functions.hpp"
 #include "lua/functions/creatures/monster/monster_type_functions.hpp"
 
-class MonsterFunctions final : LuaScriptInterface
-{
+class MonsterFunctions final : LuaScriptInterface {
 private:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Monster", "Creature", luaMonsterCreate);
 		registerMetaMethod(L, "Monster", "__eq", luaUserdataCompare);
 		registerMethod(L, "Monster", "isMonster", luaMonsterIsMonster);

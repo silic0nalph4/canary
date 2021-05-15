@@ -31,15 +31,13 @@ extern Vocations g_vocations;
 class MoveEvent;
 using MoveEvent_ptr = std::unique_ptr<MoveEvent>;
 
-struct MoveEventList
-{
+struct MoveEventList {
 	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
 };
 
 using VocEquipMap = std::map<uint16_t, bool>;
 
-class MoveEvents final : public BaseEvents
-{
+class MoveEvents final : public BaseEvents {
 public:
 	MoveEvents();
 	~MoveEvents() override;
@@ -92,8 +90,7 @@ using MoveFunction = std::function<uint32_t(Item* item, Item* tileItem, const Po
 using EquipFunction = std::function<uint32_t(MoveEvent* moveEvent, Player* player, Item* item, Slots_t slot,
                                              bool boolean)>;
 
-class MoveEvent final : public Event
-{
+class MoveEvent final : public Event {
 public:
 	explicit MoveEvent(LuaScriptInterface* interface);
 
@@ -107,8 +104,7 @@ public:
 	uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
 	uint32_t fireEquip(Player* player, Item* item, Slots_t slot, bool isCheck);
 
-	uint32_t getSlot() const
-	{
+	uint32_t getSlot() const {
 		return slot;
 	}
 
@@ -119,142 +115,114 @@ public:
 	//
 
 	//onEquip information
-	uint32_t getReqLevel() const
-	{
+	uint32_t getReqLevel() const {
 		return reqLevel;
 	}
 
-	uint32_t getReqMagLv() const
-	{
+	uint32_t getReqMagLv() const {
 		return reqMagLevel;
 	}
 
-	bool isPremium() const
-	{
+	bool isPremium() const {
 		return premium;
 	}
 
-	const std::string& getVocationString() const
-	{
+	const std::string& getVocationString() const {
 		return vocationString;
 	}
 
-	void setVocationString(const std::string& str)
-	{
+	void setVocationString(const std::string& str) {
 		vocationString = str;
 	}
 
-	uint32_t getWieldInfo() const
-	{
+	uint32_t getWieldInfo() const {
 		return wieldInfo;
 	}
 
-	const VocEquipMap& getVocEquipMap() const
-	{
+	const VocEquipMap& getVocEquipMap() const {
 		return vocEquipMap;
 	}
 
-	void addVocEquipMap(const std::string& vocName)
-	{
+	void addVocEquipMap(const std::string& vocName) {
 		const int32_t vocationId = g_vocations.getVocationId(vocName);
-		if (vocationId != -1)
-		{
+		if (vocationId != -1) {
 			vocEquipMap[vocationId] = true;
 		}
 	}
 
-	bool getTileItem() const
-	{
+	bool getTileItem() const {
 		return tileItem;
 	}
 
-	void setTileItem(bool b)
-	{
+	void setTileItem(bool b) {
 		tileItem = b;
 	}
 
-	std::vector<uint32_t> getItemIdRange()
-	{
+	std::vector<uint32_t> getItemIdRange() {
 		return itemIdRange;
 	}
 
-	void addItemId(uint32_t id)
-	{
+	void addItemId(uint32_t id) {
 		itemIdRange.emplace_back(id);
 	}
 
-	std::vector<uint32_t> getActionIdRange()
-	{
+	std::vector<uint32_t> getActionIdRange() {
 		return actionIdRange;
 	}
 
-	void addActionId(uint32_t id)
-	{
+	void addActionId(uint32_t id) {
 		actionIdRange.emplace_back(id);
 	}
 
-	std::vector<uint32_t> getUniqueIdRange()
-	{
+	std::vector<uint32_t> getUniqueIdRange() {
 		return uniqueIdRange;
 	}
 
-	void addUniqueId(uint32_t id)
-	{
+	void addUniqueId(uint32_t id) {
 		uniqueIdRange.emplace_back(id);
 	}
 
-	std::vector<Position> getPosList()
-	{
+	std::vector<Position> getPosList() {
 		return posList;
 	}
 
-	void addPosList(Position pos)
-	{
+	void addPosList(Position pos) {
 		posList.emplace_back(pos);
 	}
 
-	void setSlot(uint32_t s)
-	{
+	void setSlot(uint32_t s) {
 		slot = s;
 	}
 
-	uint32_t getRequiredLevel()
-	{
+	uint32_t getRequiredLevel() {
 		return reqLevel;
 	}
 
-	void setRequiredLevel(uint32_t level)
-	{
+	void setRequiredLevel(uint32_t level) {
 		reqLevel = level;
 	}
 
-	uint32_t getRequiredMagLevel()
-	{
+	uint32_t getRequiredMagLevel() {
 		return reqMagLevel;
 	}
 
-	void setRequiredMagLevel(uint32_t level)
-	{
+	void setRequiredMagLevel(uint32_t level) {
 		reqMagLevel = level;
 	}
 
-	bool needPremium()
-	{
+	bool needPremium() {
 		return premium;
 	}
 
-	void setNeedPremium(bool b)
-	{
+	void setNeedPremium(bool b) {
 		premium = b;
 	}
 
-	uint32_t getWieldInfo()
-	{
+	uint32_t getWieldInfo() {
 		return wieldInfo;
 	}
 
-	void setWieldInfo(WieldInfo_t info)
-	{
+	void setWieldInfo(WieldInfo_t info) {
 		wieldInfo |= info;
 	}
 

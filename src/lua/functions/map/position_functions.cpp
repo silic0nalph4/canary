@@ -25,24 +25,20 @@
 #include "game/movement/position.h"
 #include "lua/functions/map/position_functions.hpp"
 
-int PositionFunctions::luaPositionCreate(lua_State* L)
-{
+int PositionFunctions::luaPositionCreate(lua_State* L) {
 	// Position([x = 0[, y = 0[, z = 0[, stackpos = 0]]]])
 	// Position([position])
-	if (lua_gettop(L) <= 1)
-	{
+	if (lua_gettop(L) <= 1) {
 		pushPosition(L, Position());
 		return 1;
 	}
 
 	int32_t stackpos;
-	if (isTable(L, 2))
-	{
+	if (isTable(L, 2)) {
 		const Position& position = getPosition(L, 2, stackpos);
 		pushPosition(L, position, stackpos);
 	}
-	else
-	{
+	else {
 		const uint16_t x = getNumber<uint16_t>(L, 2, 0);
 		const uint16_t y = getNumber<uint16_t>(L, 3, 0);
 		const uint8_t z = getNumber<uint8_t>(L, 4, 0);
@@ -53,19 +49,16 @@ int PositionFunctions::luaPositionCreate(lua_State* L)
 	return 1;
 }
 
-int PositionFunctions::luaPositionAdd(lua_State* L)
-{
+int PositionFunctions::luaPositionAdd(lua_State* L) {
 	// positionValue = position + positionEx
 	int32_t stackpos;
 	const Position& position = getPosition(L, 1, stackpos);
 
 	Position positionEx;
-	if (stackpos == 0)
-	{
+	if (stackpos == 0) {
 		positionEx = getPosition(L, 2, stackpos);
 	}
-	else
-	{
+	else {
 		positionEx = getPosition(L, 2);
 	}
 
@@ -73,19 +66,16 @@ int PositionFunctions::luaPositionAdd(lua_State* L)
 	return 1;
 }
 
-int PositionFunctions::luaPositionSub(lua_State* L)
-{
+int PositionFunctions::luaPositionSub(lua_State* L) {
 	// positionValue = position - positionEx
 	int32_t stackpos;
 	const Position& position = getPosition(L, 1, stackpos);
 
 	Position positionEx;
-	if (stackpos == 0)
-	{
+	if (stackpos == 0) {
 		positionEx = getPosition(L, 2, stackpos);
 	}
-	else
-	{
+	else {
 		positionEx = getPosition(L, 2);
 	}
 
@@ -93,8 +83,7 @@ int PositionFunctions::luaPositionSub(lua_State* L)
 	return 1;
 }
 
-int PositionFunctions::luaPositionCompare(lua_State* L)
-{
+int PositionFunctions::luaPositionCompare(lua_State* L) {
 	// position == positionEx
 	const Position& positionEx = getPosition(L, 2);
 	const Position& position = getPosition(L, 1);
@@ -102,8 +91,7 @@ int PositionFunctions::luaPositionCompare(lua_State* L)
 	return 1;
 }
 
-int PositionFunctions::luaPositionGetDistance(lua_State* L)
-{
+int PositionFunctions::luaPositionGetDistance(lua_State* L) {
 	// position:getDistance(positionEx)
 	const Position& positionEx = getPosition(L, 2);
 	const Position& position = getPosition(L, 1);
@@ -117,8 +105,7 @@ int PositionFunctions::luaPositionGetDistance(lua_State* L)
 	return 1;
 }
 
-int PositionFunctions::luaPositionGetPathTo(lua_State* L)
-{
+int PositionFunctions::luaPositionGetPathTo(lua_State* L) {
 	// position:getPathTo(pos[, minTargetDist = 0[, maxTargetDist = 1[, fullPathSearch = true[, clearSight = true[, maxSearchDist = 0]]]]])
 	const Position& pos = getPosition(L, 1);
 	const Position& position = getPosition(L, 2);
@@ -131,26 +118,22 @@ int PositionFunctions::luaPositionGetPathTo(lua_State* L)
 	fpp.maxSearchDist = getNumber<int32_t>(L, 7, fpp.maxSearchDist);
 
 	std::forward_list<Direction> dirList;
-	if (g_game.map.getPathMatching(pos, dirList, FrozenPathingConditionCall(position), fpp))
-	{
+	if (g_game.map.getPathMatching(pos, dirList, FrozenPathingConditionCall(position), fpp)) {
 		lua_newtable(L);
 
 		int index = 0;
-		for (Direction dir : dirList)
-		{
+		for (Direction dir : dirList) {
 			lua_pushnumber(L, dir);
 			lua_rawseti(L, -2, ++index);
 		}
 	}
-	else
-	{
+	else {
 		pushBoolean(L, false);
 	}
 	return 1;
 }
 
-int PositionFunctions::luaPositionIsSightClear(lua_State* L)
-{
+int PositionFunctions::luaPositionIsSightClear(lua_State* L) {
 	// position:isSightClear(positionEx[, sameFloor = true])
 	const bool sameFloor = getBoolean(L, 3, true);
 	const Position& positionEx = getPosition(L, 2);
@@ -159,27 +142,22 @@ int PositionFunctions::luaPositionIsSightClear(lua_State* L)
 	return 1;
 }
 
-int PositionFunctions::luaPositionSendMagicEffect(lua_State* L)
-{
+int PositionFunctions::luaPositionSendMagicEffect(lua_State* L) {
 	// position:sendMagicEffect(magicEffect[, player = nullptr])
 	SpectatorHashSet spectators;
-	if (lua_gettop(L) >= 3)
-	{
+	if (lua_gettop(L) >= 3) {
 		Player* player = getPlayer(L, 3);
-		if (player)
-		{
+		if (player) {
 			spectators.insert(player);
 		}
 	}
 
 	const auto magicEffect = getNumber<MagicEffectClasses>(L, 2);
 	const Position& position = getPosition(L, 1);
-	if (!spectators.empty())
-	{
+	if (!spectators.empty()) {
 		Game::addMagicEffect(spectators, position, magicEffect);
 	}
-	else
-	{
+	else {
 		g_game.addMagicEffect(position, magicEffect);
 	}
 
@@ -187,15 +165,12 @@ int PositionFunctions::luaPositionSendMagicEffect(lua_State* L)
 	return 1;
 }
 
-int PositionFunctions::luaPositionSendDistanceEffect(lua_State* L)
-{
+int PositionFunctions::luaPositionSendDistanceEffect(lua_State* L) {
 	// position:sendDistanceEffect(positionEx, distanceEffect[, player = nullptr])
 	SpectatorHashSet spectators;
-	if (lua_gettop(L) >= 4)
-	{
+	if (lua_gettop(L) >= 4) {
 		Player* player = getPlayer(L, 4);
-		if (player)
-		{
+		if (player) {
 			spectators.insert(player);
 		}
 	}
@@ -203,12 +178,10 @@ int PositionFunctions::luaPositionSendDistanceEffect(lua_State* L)
 	const auto distanceEffect = getNumber<ShootType_t>(L, 3);
 	const Position& positionEx = getPosition(L, 2);
 	const Position& position = getPosition(L, 1);
-	if (!spectators.empty())
-	{
+	if (!spectators.empty()) {
 		Game::addDistanceEffect(spectators, position, positionEx, distanceEffect);
 	}
-	else
-	{
+	else {
 		g_game.addDistanceEffect(position, positionEx, distanceEffect);
 	}
 

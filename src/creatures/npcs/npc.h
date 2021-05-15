@@ -30,8 +30,7 @@ class Creature;
 class Game;
 class SpawnNpc;
 
-class Npc final : public Creature
-{
+class Npc final : public Creature {
 public:
 	static Npc* createNpc(const std::string& name);
 	static int32_t despawnRange;
@@ -44,20 +43,16 @@ public:
 	Npc(const Npc&) = delete;
 	Npc& operator=(const Npc&) = delete;
 
-	Npc* getNpc() override
-	{
+	Npc* getNpc() override {
 		return this;
 	}
 
-	const Npc* getNpc() const override
-	{
+	const Npc* getNpc() const override {
 		return this;
 	}
 
-	void setID() override
-	{
-		if (id == 0)
-		{
+	void setID() override {
+		if (id == 0) {
 			id = npcAutoID++;
 		}
 	}
@@ -65,92 +60,75 @@ public:
 	void removeList() override;
 	void addList() override;
 
-	const std::string& getName() const override
-	{
+	const std::string& getName() const override {
 		return npcType->name;
 	}
 
-	const std::string& getNameDescription() const override
-	{
+	const std::string& getNameDescription() const override {
 		return npcType->nameDescription;
 	}
 
-	std::string getDescription(int32_t) const override
-	{
+	std::string getDescription(int32_t) const override {
 		return strDescription + '.';
 	}
 
-	void setName(std::string newName)
-	{
+	void setName(std::string newName) {
 		npcType->name = std::move(newName);
 	}
 
-	CreatureType_t getType() const override
-	{
+	CreatureType_t getType() const override {
 		return CREATURETYPE_NPC;
 	}
 
-	const Position& getMasterPos() const
-	{
+	const Position& getMasterPos() const {
 		return masterPos;
 	}
 
-	void setMasterPos(Position pos)
-	{
+	void setMasterPos(Position pos) {
 		masterPos = pos;
 	}
 
 	void onPlayerCloseChannel(Player* player);
 
-	uint8_t getSpeechBubble() const override
-	{
+	uint8_t getSpeechBubble() const override {
 		return npcType->info.speechBubble;
 	}
 
-	void setSpeechBubble(const uint8_t bubble)
-	{
+	void setSpeechBubble(const uint8_t bubble) {
 		npcType->info.speechBubble = bubble;
 	}
 
-	uint16_t getCurrencyTrading() const
-	{
+	uint16_t getCurrencyTrading() const {
 		return Item::items[npcType->info.currencyServerId].clientId;
 	}
 
-	uint16_t getCurrency() const
-	{
+	uint16_t getCurrency() const {
 		return npcType->info.currencyServerId;
 	}
 
-	ShopInfoMap getShopItems()
-	{
+	ShopInfoMap getShopItems() {
 		return npcType->info.shopItems;
 	}
 
-	bool isPushable() const override
-	{
+	bool isPushable() const override {
 		return npcType->info.pushable;
 	}
 
-	bool isAttackable() const override
-	{
+	bool isAttackable() const override {
 		return false;
 	}
 
 	bool canSee(const Position& pos) const override;
 
-	bool canSeeInvisibility() const override
-	{
+	bool canSeeInvisibility() const override {
 		return true;
 	}
 
-	RespawnType getRespawnType() const
-	{
+	RespawnType getRespawnType() const {
 		return npcType->info.respawnType;
 	}
 
-	void setSpawnNpc(SpawnNpc* newSpawn)
-	{
+	void setSpawnNpc(SpawnNpc* newSpawn) {
 		this->spawnNpc = newSpawn;
 	}
 
@@ -159,20 +137,16 @@ public:
 	void removePlayerInteraction(uint32_t playerId);
 	void resetPlayerInteractions();
 
-	bool isInteractingWithPlayer(uint32_t playerId)
-	{
-		if (playerInteractions.find(playerId) == playerInteractions.end())
-		{
+	bool isInteractingWithPlayer(uint32_t playerId) {
+		if (playerInteractions.find(playerId) == playerInteractions.end()) {
 			return false;
 		}
 		return true;
 	}
 
-	bool isPlayerInteractingOnTopic(uint32_t playerId, uint16_t topicId)
-	{
+	bool isPlayerInteractingOnTopic(uint32_t playerId, uint16_t topicId) {
 		const auto it = playerInteractions.find(playerId);
-		if (it == playerInteractions.end())
-		{
+		if (it == playerInteractions.end()) {
 			return false;
 		}
 		return it->second == topicId;
@@ -195,8 +169,7 @@ public:
 	bool canWalkTo(const Position& fromPos, Direction dir) const;
 	bool getNextStep(Direction& direction, uint32_t& flags) override;
 
-	void setNormalCreatureLight() override
-	{
+	void setNormalCreatureLight() override {
 		internalLight = npcType->info.light;
 	}
 

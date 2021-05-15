@@ -27,11 +27,9 @@
 #include "lua/functions/events/move_event_functions.hpp"
 #include "lua/functions/events/talk_action_functions.hpp"
 
-class EventFunctions final : LuaScriptInterface
-{
+class EventFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		ActionFunctions::init(L);
 		CreatureEventFunctions::init(L);
 		GlobalEventFunctions::init(L);

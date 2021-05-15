@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class ActionFunctions final : LuaScriptInterface
-{
+class ActionFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Action", "", luaCreateAction);
 		registerMethod(L, "Action", "onUse", luaActionOnUse);
 		registerMethod(L, "Action", "register", luaActionRegister);

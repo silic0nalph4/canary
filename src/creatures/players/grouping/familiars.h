@@ -26,19 +26,16 @@
 
 #include "declarations.hpp"
 
-class Familiars
-{
+class Familiars {
 public:
-	static Familiars& getInstance()
-	{
+	static Familiars& getInstance() {
 		static Familiars instance;
 		return instance;
 	}
 
 	bool loadFromXml();
 
-	const std::vector<Familiar>& getFamiliars(uint16_t vocation) const
-	{
+	const std::vector<Familiar>& getFamiliars(uint16_t vocation) const {
 		return familiars[vocation];
 	}
 

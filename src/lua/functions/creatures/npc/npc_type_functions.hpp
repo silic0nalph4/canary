@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class NpcTypeFunctions final : LuaScriptInterface
-{
+class NpcTypeFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "NpcType", "", luaNpcTypeCreate);
 		registerMetaMethod(L, "NpcType", "__eq", luaUserdataCompare);
 

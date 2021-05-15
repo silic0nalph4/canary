@@ -26,8 +26,7 @@
 
 class Protocol;
 
-class ServiceBase
-{
+class ServiceBase {
 public:
 	virtual bool is_single_socket() const = 0;
 	virtual bool is_checksummed() const = 0;
@@ -38,40 +37,32 @@ public:
 };
 
 template <typename ProtocolType>
-class Service final : public ServiceBase
-{
+class Service final : public ServiceBase {
 public:
-	bool is_single_socket() const override
-	{
+	bool is_single_socket() const override {
 		return ProtocolType::SERVER_SENDS_FIRST;
 	}
 
-	bool is_checksummed() const override
-	{
+	bool is_checksummed() const override {
 		return ProtocolType::USE_CHECKSUM;
 	}
 
-	uint8_t get_protocol_identifier() const override
-	{
+	uint8_t get_protocol_identifier() const override {
 		return ProtocolType::PROTOCOL_IDENTIFIER;
 	}
 
-	const char* get_protocol_name() const override
-	{
+	const char* get_protocol_name() const override {
 		return ProtocolType::protocol_name();
 	}
 
-	Protocol_ptr make_protocol(const Connection_ptr& c) const override
-	{
+	Protocol_ptr make_protocol(const Connection_ptr& c) const override {
 		return std::make_shared<ProtocolType>(c);
 	}
 };
 
-class ServicePort : public std::enable_shared_from_this<ServicePort>
-{
+class ServicePort : public std::enable_shared_from_this<ServicePort> {
 public:
-	explicit ServicePort(boost::asio::io_service& init_io_service) : io_service(init_io_service)
-	{
+	explicit ServicePort(boost::asio::io_service& init_io_service) : io_service(init_io_service) {
 	}
 
 	~ServicePort();
@@ -103,8 +94,7 @@ private:
 	bool pendingStart = false;
 };
 
-class ServiceManager
-{
+class ServiceManager {
 public:
 	ServiceManager() = default;
 	~ServiceManager();
@@ -119,8 +109,7 @@ public:
 	template <typename ProtocolType>
 	bool add(uint16_t port);
 
-	bool is_running() const
-	{
+	bool is_running() const {
 		return acceptors.empty() == false;
 	}
 
@@ -136,10 +125,8 @@ private:
 };
 
 template <typename ProtocolType>
-bool ServiceManager::add(uint16_t port)
-{
-	if (port == 0)
-	{
+bool ServiceManager::add(uint16_t port) {
+	if (port == 0) {
 		SPDLOG_ERROR("[ServiceManager::add] - "
 		             "No port provided for service {}, service disabled",
 		             ProtocolType::protocol_name());
@@ -150,18 +137,15 @@ bool ServiceManager::add(uint16_t port)
 
 	const auto foundServicePort = acceptors.find(port);
 
-	if (foundServicePort == acceptors.end())
-	{
+	if (foundServicePort == acceptors.end()) {
 		service_port = std::make_shared<ServicePort>(io_service);
 		service_port->open(port);
 		acceptors[port] = service_port;
 	}
-	else
-	{
+	else {
 		service_port = foundServicePort->second;
 
-		if (service_port->is_single_socket() || ProtocolType::SERVER_SENDS_FIRST)
-		{
+		if (service_port->is_single_socket() || ProtocolType::SERVER_SENDS_FIRST) {
 			SPDLOG_ERROR("[ServiceManager::add] - "
 			             "{} and {} cannot use the same port {}",
 			             ProtocolType::protocol_name(),

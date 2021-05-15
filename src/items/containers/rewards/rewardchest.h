@@ -22,18 +22,15 @@
 
 #include "items/containers/container.h"
 
-class RewardChest final : public Container
-{
+class RewardChest final : public Container {
 public:
 	explicit RewardChest(uint16_t type);
 
-	RewardChest* getRewardChest()
-	{
+	RewardChest* getRewardChest() {
 		return this;
 	}
 
-	const RewardChest* getRewardChest() const
-	{
+	const RewardChest* getRewardChest() const {
 		return this;
 	}
 
@@ -44,8 +41,7 @@ public:
 	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, CylinderLink_t link = LINK_OWNER);
 	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, CylinderLink_t link = LINK_OWNER);
 
-	bool canRemove() const
-	{
+	bool canRemove() const {
 		return false;
 	}
 };

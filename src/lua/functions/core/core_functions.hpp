@@ -25,11 +25,9 @@
 #include "lua/functions/core/libs/core_libs_functions.hpp"
 #include "lua/functions/core/network/core_network_functions.hpp"
 
-class CoreFunctions final : LuaScriptInterface
-{
+class CoreFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		CoreGameFunctions::init(L);
 		CoreLibsFunctions::init(L);
 		CoreNetworkFunctions::init(L);

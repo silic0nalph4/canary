@@ -28,11 +28,9 @@
 #include "lua/functions/creatures/player/player_functions.hpp"
 #include "lua/scripts/luascript.h"
 
-class CreatureFunctions final : LuaScriptInterface
-{
+class CreatureFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Creature", "", luaCreatureCreate);
 		registerMetaMethod(L, "Creature", "__eq", luaUserdataCompare);
 		registerMethod(L, "Creature", "getEvents", luaCreatureGetEvents);

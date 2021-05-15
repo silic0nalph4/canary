@@ -24,8 +24,7 @@
 
 class House;
 
-class HouseTile final : public DynamicTile
-{
+class HouseTile final : public DynamicTile {
 public:
 	HouseTile(int32_t x, int32_t y, int32_t z, House* house);
 
@@ -41,8 +40,7 @@ public:
 	void addThing(int32_t index, Thing* thing) override;
 	void internalAddThing(uint32_t index, Thing* thing) override;
 
-	House* getHouse()
-	{
+	House* getHouse() {
 		return house;
 	}
 

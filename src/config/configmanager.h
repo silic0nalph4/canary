@@ -22,8 +22,7 @@
 
 #include "declarations.hpp"
 
-class ConfigManager
-{
+class ConfigManager {
 public:
 	bool load();
 	bool reload();
@@ -34,14 +33,12 @@ public:
 	bool getBoolean(booleanConfig_t what) const;
 	float getFloat(floatingConfig_t what) const;
 
-	const std::string& setConfigFileLua(const std::string& what)
-	{
+	const std::string& setConfigFileLua(const std::string& what) {
 		configFileLua = {what};
 		return configFileLua;
 	};
 
-	const std::string& getConfigFileLua() const
-	{
+	const std::string& getConfigFileLua() const {
 		return configFileLua;
 	};
 

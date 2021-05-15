@@ -23,8 +23,7 @@
 #include "server/network/message/networkmessage.h"
 #include "server/network/protocol/protocol.h"
 
-class ProtocolStatus final : public Protocol
-{
+class ProtocolStatus final : public Protocol {
 public:
 	// static protocol information
 	enum { SERVER_SENDS_FIRST = false };
@@ -33,13 +32,11 @@ public:
 
 	enum { USE_CHECKSUM = false };
 
-	static const char* protocol_name()
-	{
+	static const char* protocol_name() {
 		return "status protocol";
 	}
 
-	explicit ProtocolStatus(const Connection_ptr& conn) : Protocol(conn)
-	{
+	explicit ProtocolStatus(const Connection_ptr& conn) : Protocol(conn) {
 	}
 
 	void onRecvFirstMessage(NetworkMessage& msg) override;

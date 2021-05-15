@@ -20,8 +20,7 @@
 #ifndef SRC_SECURITY_XTEA_H_
 #define SRC_SECURITY_XTEA_H_
 
-namespace xtea
-{
+namespace xtea {
 	using key = std::array<uint32_t, 4>;
 
 	void encrypt(uint8_t* data, size_t length, const key& k);

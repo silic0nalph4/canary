@@ -34,8 +34,7 @@ extern ConfigManager g_config;
 
 #pragma pack(1)
 
-struct OTBM_root_header
-{
+struct OTBM_root_header {
 	uint32_t version;
 	uint16_t width;
 	uint16_t height;
@@ -43,32 +42,27 @@ struct OTBM_root_header
 	uint32_t minorVersionItems;
 };
 
-struct OTBM_Destination_coords
-{
+struct OTBM_Destination_coords {
 	uint16_t x;
 	uint16_t y;
 	uint8_t z;
 };
 
-struct OTBM_Tile_coords
-{
+struct OTBM_Tile_coords {
 	uint8_t x;
 	uint8_t y;
 };
 
 #pragma pack()
 
-class IOMap
-{
+class IOMap {
 	static Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z);
 
 public:
 	bool loadMap(Map* map, const std::string& identifier);
 
-	static bool loadMonsters(Map* map)
-	{
-		if (map->monsterfile.empty())
-		{
+	static bool loadMonsters(Map* map) {
+		if (map->monsterfile.empty()) {
 			// OTBM file doesn't tell us about the monsterfile,
 			// Lets guess it is mapname-monster.xml.
 			map->monsterfile = g_config.getString(MAP_NAME);
@@ -78,10 +72,8 @@ public:
 		return map->spawnsMonster.loadFromXML(map->monsterfile);
 	}
 
-	static bool loadNpcs(Map* map)
-	{
-		if (map->npcfile.empty())
-		{
+	static bool loadNpcs(Map* map) {
+		if (map->npcfile.empty()) {
 			// OTBM file doesn't tell us about the npcfile,
 			// Lets guess it is mapname-npc.xml.
 			map->npcfile = g_config.getString(MAP_NAME);
@@ -91,10 +83,8 @@ public:
 		return map->spawnsNpc.loadFromXml(map->npcfile);
 	}
 
-	static bool loadHouses(Map* map)
-	{
-		if (map->housefile.empty())
-		{
+	static bool loadHouses(Map* map) {
+		if (map->housefile.empty()) {
 			// OTBM file doesn't tell us about the housefile,
 			// Lets guess it is mapname-house.xml.
 			map->housefile = g_config.getString(MAP_NAME);
@@ -104,13 +94,11 @@ public:
 		return map->houses.loadHousesXML(map->housefile);
 	}
 
-	const std::string& getLastErrorString() const
-	{
+	const std::string& getLastErrorString() const {
 		return errorString;
 	}
 
-	void setLastErrorString(std::string error)
-	{
+	void setLastErrorString(std::string error) {
 		errorString = std::move(error);
 	}
 

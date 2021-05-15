@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class TalkActionFunctions final : LuaScriptInterface
-{
+class TalkActionFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "TalkAction", "", luaCreateTalkAction);
 		registerMethod(L, "TalkAction", "onSay", luaTalkActionOnSay);
 		registerMethod(L, "TalkAction", "register", luaTalkActionRegister);

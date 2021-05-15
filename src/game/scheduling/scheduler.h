@@ -28,27 +28,22 @@
 
 static constexpr int32_t SCHEDULER_MINTICKS = 50;
 
-class SchedulerTask : public Task
-{
+class SchedulerTask : public Task {
 public:
-	void setEventId(uint32_t id)
-	{
+	void setEventId(uint32_t id) {
 		eventId = id;
 	}
 
-	uint32_t getEventId() const
-	{
+	uint32_t getEventId() const {
 		return eventId;
 	}
 
-	std::chrono::system_clock::time_point getCycle() const
-	{
+	std::chrono::system_clock::time_point getCycle() const {
 		return expiration;
 	}
 
 private:
-	SchedulerTask(uint32_t delay, std::function<void (void)>&& f) : Task(delay, std::move(f))
-	{
+	SchedulerTask(uint32_t delay, std::function<void (void)>&& f) : Task(delay, std::move(f)) {
 	}
 
 	uint32_t eventId = 0;
@@ -58,16 +53,13 @@ private:
 
 SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f);
 
-struct TaskComparator
-{
-	bool operator()(const SchedulerTask* lhs, const SchedulerTask* rhs) const
-	{
+struct TaskComparator {
+	bool operator()(const SchedulerTask* lhs, const SchedulerTask* rhs) const {
 		return lhs->getCycle() > rhs->getCycle();
 	}
 };
 
-class Scheduler : public ThreadHolder<Scheduler>
-{
+class Scheduler : public ThreadHolder<Scheduler> {
 public:
 	uint32_t addEvent(SchedulerTask* task);
 	bool stopEvent(uint32_t eventId);

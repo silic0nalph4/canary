@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class HouseFunctions final : LuaScriptInterface
-{
+class HouseFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "House", "", luaHouseCreate);
 		registerMetaMethod(L, "House", "__eq", luaUserdataCompare);
 

@@ -51,8 +51,7 @@ static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
 static constexpr int32_t EVENT_IMBUEMENTINTERVAL = 250;
 static constexpr int32_t EVENT_IMBUEMENT_BUCKETS = 4;
 
-class Game
-{
+class Game {
 public:
 	Game();
 	~Game();
@@ -70,31 +69,26 @@ public:
 	bool loadMainMap(const std::string& filename);
 	void loadMap(const std::string& path);
 
-	void getMapDimensions(uint32_t& width, uint32_t& height) const
-	{
+	void getMapDimensions(uint32_t& width, uint32_t& height) const {
 		width = map.width;
 		height = map.height;
 	}
 
 	void setWorldType(WorldType_t type);
 
-	WorldType_t getWorldType() const
-	{
+	WorldType_t getWorldType() const {
 		return worldType;
 	}
 
-	std::map<uint32_t, TeamFinder*> getTeamFinderList() const
-	{
+	std::map<uint32_t, TeamFinder*> getTeamFinderList() const {
 		return teamFinderMap;
 	}
 
-	void registerTeamFinderAssemble(uint32_t leaderGuid, TeamFinder* teamFinder)
-	{
+	void registerTeamFinderAssemble(uint32_t leaderGuid, TeamFinder* teamFinder) {
 		teamFinderMap[leaderGuid] = teamFinder;
 	}
 
-	void removeTeamFinderListed(uint32_t leaderGuid)
-	{
+	void removeTeamFinderListed(uint32_t leaderGuid) {
 		teamFinderMap.erase(leaderGuid);
 	}
 
@@ -139,28 +133,23 @@ public:
 	void addCreatureCheck(Creature* creature);
 	static void removeCreatureCheck(Creature* creature);
 
-	size_t getPlayersOnline() const
-	{
+	size_t getPlayersOnline() const {
 		return players.size();
 	}
 
-	size_t getMonstersOnline() const
-	{
+	size_t getMonstersOnline() const {
 		return monsters.size();
 	}
 
-	size_t getNpcsOnline() const
-	{
+	size_t getNpcsOnline() const {
 		return npcs.size();
 	}
 
-	uint32_t getPlayersRecord() const
-	{
+	uint32_t getPlayersRecord() const {
 		return playersRecord;
 	}
 
-	uint16_t getItemsPriceCount() const
-	{
+	uint16_t getItemsPriceCount() const {
 		return itemsSaleCount;
 	}
 
@@ -378,13 +367,11 @@ public:
 	void addBestiaryList(uint16_t raceid, const std::string& name);
 	const std::map<uint16_t, std::string>& getBestiaryList() const { return BestiaryList; }
 
-	void setBoostedName(std::string name)
-	{
+	void setBoostedName(std::string name) {
 		boostedCreature = std::move(name);
 	}
 
-	std::string getBoostedMonsterName() const
-	{
+	std::string getBoostedMonsterName() const {
 		return boostedCreature;
 	}
 
@@ -434,16 +421,14 @@ public:
 	static void addDistanceEffect(const SpectatorHashSet& spectators, const Position& fromPos, const Position& toPos,
 	                              uint8_t effect);
 
-	void startImbuementCountdown(Item* item)
-	{
+	void startImbuementCountdown(Item* item) {
 		item->incrementReferenceCounter();
 		toImbuedItems.push_front(item);
 	}
 
 	void startDecay(Item* item);
 
-	int32_t getLightHour() const
-	{
+	int32_t getLightHour() const {
 		return lightHour;
 	}
 
@@ -501,80 +486,66 @@ public:
 
 	std::forward_list<Item*> toDecayItems;
 
-	std::unordered_set<Tile*> getTilesToClean() const
-	{
+	std::unordered_set<Tile*> getTilesToClean() const {
 		return tilesToClean;
 	}
 
-	void addTileToClean(Tile* tile)
-	{
+	void addTileToClean(Tile* tile) {
 		tilesToClean.emplace(tile);
 	}
 
-	void removeTileToClean(Tile* tile)
-	{
+	void removeTileToClean(Tile* tile) {
 		tilesToClean.erase(tile);
 	}
 
-	void clearTilesToClean()
-	{
+	void clearTilesToClean() {
 		tilesToClean.clear();
 	}
 
 	std::forward_list<Item*> toImbuedItems;
 
 	// Event schedule
-	uint16_t getExpSchedule() const
-	{
+	uint16_t getExpSchedule() const {
 		return expSchedule;
 	}
 
-	void setExpSchedule(uint16_t exprate)
-	{
+	void setExpSchedule(uint16_t exprate) {
 		expSchedule = (expSchedule * exprate) / 100;
 	}
 
-	uint16_t getLootSchedule() const
-	{
+	uint16_t getLootSchedule() const {
 		return lootSchedule;
 	}
 
-	void setLootSchedule(uint16_t lootrate)
-	{
+	void setLootSchedule(uint16_t lootrate) {
 		lootSchedule = (lootSchedule * lootrate) / 100;
 	}
 
-	uint32_t getSpawnMonsterSchedule() const
-	{
+	uint32_t getSpawnMonsterSchedule() const {
 		return spawnMonsterSchedule;
 	}
 
-	void setSpawnMonsterSchedule(uint32_t spawnrate)
-	{
+	void setSpawnMonsterSchedule(uint32_t spawnrate) {
 		spawnMonsterSchedule = (spawnMonsterSchedule * spawnrate) / 100;
 	}
 
-	uint16_t getSkillSchedule() const
-	{
+	uint16_t getSkillSchedule() const {
 		return skillSchedule;
 	}
 
-	void setSkillSchedule(uint16_t skillrate)
-	{
+	void setSkillSchedule(uint16_t skillrate) {
 		skillSchedule = (skillSchedule * skillrate) / 100;
 	}
 
 	void playerInspectItem(Player* player, const Position& pos);
 	void playerInspectItem(Player* player, uint16_t itemId, uint8_t itemCount, bool cyclopedia);
 
-	void addCharmRune(Charm* charm)
-	{
+	void addCharmRune(Charm* charm) {
 		CharmList.push_back(charm);
 		CharmList.shrink_to_fit();
 	}
 
-	std::vector<Charm*> getCharmList()
-	{
+	std::vector<Charm*> getCharmList() {
 		return CharmList;
 	}
 

@@ -22,67 +22,55 @@
 
 class Player;
 
-struct GuildRank
-{
+struct GuildRank {
 	uint32_t id;
 	std::string name;
 	uint8_t level;
 
 	GuildRank(uint32_t initId, std::string initName, uint8_t initLevel) :
-		id(initId), name(std::move(initName)), level(initLevel)
-	{
+		id(initId), name(std::move(initName)), level(initLevel) {
 	}
 };
 
 using GuildRank_ptr = std::shared_ptr<GuildRank>;
 
-class Guild
-{
+class Guild {
 public:
-	Guild(uint32_t initId, std::string initName) : name(std::move(initName)), id(initId)
-	{
+	Guild(uint32_t initId, std::string initName) : name(std::move(initName)), id(initId) {
 	}
 
 	void addMember(Player* player);
 	void removeMember(Player* player);
 
-	uint32_t getId() const
-	{
+	uint32_t getId() const {
 		return id;
 	}
 
-	const std::string& getName() const
-	{
+	const std::string& getName() const {
 		return name;
 	}
 
-	const std::list<Player*>& getMembersOnline() const
-	{
+	const std::list<Player*>& getMembersOnline() const {
 		return membersOnline;
 	}
 
-	uint32_t getMemberCount() const
-	{
+	uint32_t getMemberCount() const {
 		return memberCount;
 	}
 
-	void setMemberCount(uint32_t count)
-	{
+	void setMemberCount(uint32_t count) {
 		memberCount = count;
 	}
 
-	uint64_t getBankBalance() const
-	{
+	uint64_t getBankBalance() const {
 		return bankBalance;
 	}
 
-	void setBankBalance(uint64_t balance)
-	{
+	void setBankBalance(uint64_t balance) {
 		bankBalance = balance;
 	}
 
-	const std::vector<GuildRank_ptr>& getRanks() const
-	{
+	const std::vector<GuildRank_ptr>& getRanks() const {
 		return ranks;
 	}
 
@@ -91,13 +79,11 @@ public:
 	GuildRank_ptr getRankByLevel(uint8_t level) const;
 	void addRank(uint32_t id, const std::string& name, uint8_t level);
 
-	const std::string& getMotd() const
-	{
+	const std::string& getMotd() const {
 		return motd;
 	}
 
-	void setMotd(const std::string& newMotd)
-	{
+	void setMotd(const std::string& newMotd) {
 		this->motd = newMotd;
 	}
 

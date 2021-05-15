@@ -32,8 +32,7 @@
 class DBResult;
 using DBResult_ptr = std::shared_ptr<DBResult>;
 
-class Database
-{
+class Database {
 public:
 	Database() = default;
 	~Database();
@@ -42,8 +41,7 @@ public:
 	Database(const Database&) = delete;
 	Database& operator=(const Database&) = delete;
 
-	static Database& getInstance()
-	{
+	static Database& getInstance() {
 		// Guaranteed to be destroyed.
 		static Database instance;
 		// Instantiated on first use.
@@ -63,18 +61,15 @@ public:
 
 	std::string escapeBlob(const char* s, uint32_t length) const;
 
-	uint64_t getLastInsertId() const
-	{
+	uint64_t getLastInsertId() const {
 		return mysql_insert_id(handle);
 	}
 
-	static const char* getClientVersion()
-	{
+	static const char* getClientVersion() {
 		return mysql_get_client_info();
 	}
 
-	uint64_t getMaxPacketSize() const
-	{
+	uint64_t getMaxPacketSize() const {
 		return maxPacketSize;
 	}
 
@@ -91,8 +86,7 @@ private:
 	friend class DBTransaction;
 };
 
-class DBResult
-{
+class DBResult {
 public:
 	explicit DBResult(MYSQL_RES* res);
 	~DBResult();
@@ -102,38 +96,30 @@ public:
 	DBResult& operator=(const DBResult&) = delete;
 
 	template <typename T>
-	T getNumber(const std::string& s) const
-	{
+	T getNumber(const std::string& s) const {
 		const auto it = listNames.find(s);
-		if (it == listNames.end())
-		{
+		if (it == listNames.end()) {
 			SPDLOG_ERROR("[DBResult::getNumber] - Column '{}' doesn't exist in the result set", s);
 			return static_cast<T>(0);
 		}
 
-		if (row[it->second] == nullptr)
-		{
+		if (row[it->second] == nullptr) {
 			return static_cast<T>(0);
 		}
 
 		T data = {0};
-		try
-		{
+		try {
 			data = boost::lexical_cast<T>(row[it->second]);
 		}
-		catch (boost::bad_lexical_cast&)
-		{
-			try
-			{
+		catch (boost::bad_lexical_cast&) {
+			try {
 				uint64_t u64data = boost::lexical_cast<uint64_t>(row[it->second]);
-				if (u64data > 0)
-				{
+				if (u64data > 0) {
 					// is a valid! thus truncate into int max for data type;
 					data = std::numeric_limits<T>::max();
 				}
 			}
-			catch (boost::bad_lexical_cast& e)
-			{
+			catch (boost::bad_lexical_cast& e) {
 				// invalid! discard value.
 				SPDLOG_ERROR("Column '{}' has an invalid value set: {}", s, e.what());
 				data = 0;
@@ -161,8 +147,7 @@ private:
 /**
  * INSERT statement.
  */
-class DBInsert
-{
+class DBInsert {
 public:
 	explicit DBInsert(std::string query);
 	bool addRow(const std::string& row);
@@ -175,15 +160,12 @@ private:
 	size_t length;
 };
 
-class DBTransaction
-{
+class DBTransaction {
 public:
 	constexpr DBTransaction() = default;
 
-	~DBTransaction()
-	{
-		if (state == STATE_START)
-		{
+	~DBTransaction() {
+		if (state == STATE_START) {
 			Database::getInstance().rollback();
 		}
 	}
@@ -192,16 +174,13 @@ public:
 	DBTransaction(const DBTransaction&) = delete;
 	DBTransaction& operator=(const DBTransaction&) = delete;
 
-	bool begin()
-	{
+	bool begin() {
 		state = STATE_START;
 		return Database::getInstance().beginTransaction();
 	}
 
-	bool commit()
-	{
-		if (state != STATE_START)
-		{
+	bool commit() {
+		if (state != STATE_START) {
 			return false;
 		}
 

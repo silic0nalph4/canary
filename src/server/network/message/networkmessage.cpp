@@ -24,22 +24,18 @@
 #include "items/containers/container.h"
 #include "creatures/creature.h"
 
-int32_t NetworkMessage::decodeHeader()
-{
+int32_t NetworkMessage::decodeHeader() {
 	const int32_t newSize = buffer[0] | buffer[1] << 8;
 	info.length = newSize;
 	return info.length;
 }
 
-std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
-{
-	if (stringLen == 0)
-	{
+std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/) {
+	if (stringLen == 0) {
 		stringLen = get<uint16_t>();
 	}
 
-	if (!canRead(stringLen))
-	{
+	if (!canRead(stringLen)) {
 		return std::string();
 	}
 
@@ -48,8 +44,7 @@ std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 	return std::string(v, stringLen);
 }
 
-Position NetworkMessage::getPosition()
-{
+Position NetworkMessage::getPosition() {
 	Position pos;
 	pos.x = get<uint16_t>();
 	pos.y = get<uint16_t>();
@@ -57,11 +52,9 @@ Position NetworkMessage::getPosition()
 	return pos;
 }
 
-void NetworkMessage::addString(const std::string& value)
-{
+void NetworkMessage::addString(const std::string& value) {
 	const size_t stringLen = value.length();
-	if (!canAdd(stringLen + 2) || stringLen > 8192)
-	{
+	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
@@ -71,16 +64,13 @@ void NetworkMessage::addString(const std::string& value)
 	info.length += stringLen;
 }
 
-void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
-{
+void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/) {
 	addByte(precision);
 	add<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + std::numeric_limits<int32_t>::max());
 }
 
-void NetworkMessage::addBytes(const char* bytes, size_t size)
-{
-	if (!canAdd(size) || size > 8192)
-	{
+void NetworkMessage::addBytes(const char* bytes, size_t size) {
+	if (!canAdd(size) || size > 8192) {
 		return;
 	}
 
@@ -89,10 +79,8 @@ void NetworkMessage::addBytes(const char* bytes, size_t size)
 	info.length += size;
 }
 
-void NetworkMessage::addPaddingBytes(size_t n)
-{
-	if (!canAdd(n))
-	{
+void NetworkMessage::addPaddingBytes(size_t n) {
+	if (!canAdd(n)) {
 		return;
 	}
 
@@ -100,14 +88,12 @@ void NetworkMessage::addPaddingBytes(size_t n)
 	info.length += n;
 }
 
-void NetworkMessage::addPosition(const Position& pos)
-{
+void NetworkMessage::addPosition(const Position& pos) {
 	add<uint16_t>(pos.x);
 	add<uint16_t>(pos.y);
 	addByte(pos.z);
 }
 
-void NetworkMessage::addItemId(uint16_t itemId)
-{
+void NetworkMessage::addItemId(uint16_t itemId) {
 	add<uint16_t>(Item::items[itemId].clientId);
 }

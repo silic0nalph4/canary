@@ -26,8 +26,7 @@
 
 class Protocol;
 
-class OutputMessage : public NetworkMessage
-{
+class OutputMessage : public NetworkMessage {
 public:
 	OutputMessage() = default;
 
@@ -35,40 +34,33 @@ public:
 	OutputMessage(const OutputMessage&) = delete;
 	OutputMessage& operator=(const OutputMessage&) = delete;
 
-	uint8_t* getOutputBuffer()
-	{
+	uint8_t* getOutputBuffer() {
 		return buffer + outputBufferStart;
 	}
 
-	void writeMessageLength()
-	{
+	void writeMessageLength() {
 		add_header(info.length);
 	}
 
-	void addCryptoHeader(uint8_t addChecksum, uint32_t& sequence)
-	{
-		if (addChecksum == 1)
-		{
+	void addCryptoHeader(uint8_t addChecksum, uint32_t& sequence) {
+		if (addChecksum == 1) {
 			add_header(adlerChecksum(buffer + outputBufferStart, info.length));
 		}
-		else if (addChecksum == 2)
-		{
+		else if (addChecksum == 2) {
 			add_header(sequence++);
 		}
 
 		writeMessageLength();
 	}
 
-	void append(const NetworkMessage& msg)
-	{
+	void append(const NetworkMessage& msg) {
 		const auto msgLen = msg.getLength();
 		memcpy(buffer + info.position, msg.getBuffer() + 8, msgLen);
 		info.length += msgLen;
 		info.position += msgLen;
 	}
 
-	void append(const OutputMessage_ptr& msg)
-	{
+	void append(const OutputMessage_ptr& msg) {
 		const auto msgLen = msg->getLength();
 		memcpy(buffer + info.position, msg->getBuffer() + 8, msgLen);
 		info.length += msgLen;
@@ -77,8 +69,7 @@ public:
 
 private:
 	template <typename T>
-	void add_header(T addHeader)
-	{
+	void add_header(T addHeader) {
 		assert(outputBufferStart >= sizeof(T));
 		outputBufferStart -= sizeof(T);
 		memcpy(buffer + outputBufferStart, &addHeader, sizeof(T));
@@ -89,15 +80,13 @@ private:
 	MsgSize_t outputBufferStart = INITIAL_BUFFER_POSITION;
 };
 
-class OutputMessagePool
-{
+class OutputMessagePool {
 public:
 	// non-copyable
 	OutputMessagePool(const OutputMessagePool&) = delete;
 	OutputMessagePool& operator=(const OutputMessagePool&) = delete;
 
-	static OutputMessagePool& getInstance()
-	{
+	static OutputMessagePool& getInstance() {
 		static OutputMessagePool instance;
 		return instance;
 	}

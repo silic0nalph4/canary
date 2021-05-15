@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class TownFunctions final : LuaScriptInterface
-{
+class TownFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Town", "", luaTownCreate);
 		registerMetaMethod(L, "Town", "__eq", luaUserdataCompare);
 

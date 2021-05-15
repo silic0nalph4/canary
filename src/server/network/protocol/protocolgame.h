@@ -44,28 +44,24 @@ using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 extern ConfigManager g_config;
 extern Game g_game;
 
-struct TextMessage
-{
+struct TextMessage {
 	MessageClasses type = MESSAGE_STATUS;
 	std::string text;
 	Position position;
 	uint16_t channelId;
 
-	struct
-	{
+	struct {
 		int32_t value = 0;
 		TextColor_t color;
 	} primary, secondary;
 
 	TextMessage() = default;
 
-	TextMessage(MessageClasses initType, std::string initText) : type(initType), text(std::move(initText))
-	{
+	TextMessage(MessageClasses initType, std::string initText) : type(initType), text(std::move(initText)) {
 	}
 };
 
-class ProtocolGame final : public Protocol
-{
+class ProtocolGame final : public Protocol {
 public:
 	// Static protocol information.
 	enum { SERVER_SENDS_FIRST = true };
@@ -75,13 +71,11 @@ public:
 
 	enum { USE_CHECKSUM = true };
 
-	static const char* protocol_name()
-	{
+	static const char* protocol_name() {
 		return "gameworld protocol";
 	}
 
-	explicit ProtocolGame(const Connection_ptr& initConnection) : Protocol(initConnection)
-	{
+	explicit ProtocolGame(const Connection_ptr& initConnection) : Protocol(initConnection) {
 	}
 
 	void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
@@ -92,14 +86,12 @@ public:
 
 	void sendLockerItems(const std::map<uint16_t, uint16_t>& itemMap, uint16_t count);
 
-	uint32_t getVersion() const
-	{
+	uint32_t getVersion() const {
 		return version;
 	}
 
 private:
-	ProtocolGame_ptr getThis()
-	{
+	ProtocolGame_ptr getThis() {
 		return std::static_pointer_cast<ProtocolGame>(shared_from_this());
 	}
 
@@ -459,14 +451,12 @@ private:
 
 	// Helpers so we don't need to bind every time
 	template <typename Callable, typename... Args>
-	void addGameTask(Callable function, Args&&... args)
-	{
+	void addGameTask(Callable function, Args&&... args) {
 		g_dispatcher.addTask(createTask(std::bind(function, &g_game, std::forward<Args>(args)...)));
 	}
 
 	template <typename Callable, typename... Args>
-	void addGameTaskTimed(uint32_t delay, Callable function, Args&&... args)
-	{
+	void addGameTaskTimed(uint32_t delay, Callable function, Args&&... args) {
 		g_dispatcher.addTask(createTask(delay, std::bind(function, &g_game, std::forward<Args>(args)...)));
 	}
 

@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class SpellFunctions final : LuaScriptInterface
-{
+class SpellFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Spell", "", luaSpellCreate);
 		registerMetaMethod(L, "Spell", "__eq", luaUserdataCompare);
 

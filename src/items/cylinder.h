@@ -28,8 +28,7 @@ class Creature;
 
 static constexpr int32_t INDEX_WHEREEVER = -1;
 
-class Cylinder : virtual public Thing
-{
+class Cylinder : virtual public Thing {
 public:
 	/**
 	 * Query if the cylinder can add an object
@@ -189,76 +188,60 @@ public:
 	virtual void startDecaying();
 };
 
-class VirtualCylinder final : public Cylinder
-{
+class VirtualCylinder final : public Cylinder {
 public:
 	static VirtualCylinder* virtualCylinder;
 
-	ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
-	{
+	ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const override
-	{
+	ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const override {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
-	{
+	ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override
-	{
+	Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override {
 		return nullptr;
 	}
 
-	void addThing(Thing*) override
-	{
+	void addThing(Thing*) override {
 	}
 
-	void addThing(int32_t, Thing*) override
-	{
+	void addThing(int32_t, Thing*) override {
 	}
 
-	void updateThing(Thing*, uint16_t, uint32_t) override
-	{
+	void updateThing(Thing*, uint16_t, uint32_t) override {
 	}
 
-	void replaceThing(uint32_t, Thing*) override
-	{
+	void replaceThing(uint32_t, Thing*) override {
 	}
 
-	void removeThing(Thing*, uint32_t) override
-	{
+	void removeThing(Thing*, uint32_t) override {
 	}
 
-	void postAddNotification(Thing*, const Cylinder*, int32_t, CylinderLink_t = LINK_OWNER) override
-	{
+	void postAddNotification(Thing*, const Cylinder*, int32_t, CylinderLink_t = LINK_OWNER) override {
 	}
 
-	void postRemoveNotification(Thing*, const Cylinder*, int32_t, CylinderLink_t = LINK_OWNER) override
-	{
+	void postRemoveNotification(Thing*, const Cylinder*, int32_t, CylinderLink_t = LINK_OWNER) override {
 	}
 
-	bool isPushable() const override
-	{
+	bool isPushable() const override {
 		return false;
 	}
 
-	int32_t getThrowRange() const override
-	{
+	int32_t getThrowRange() const override {
 		return 1;
 	}
 
-	std::string getDescription(int32_t) const override
-	{
+	std::string getDescription(int32_t) const override {
 		return {};
 	}
 
-	bool isRemoved() const override
-	{
+	bool isRemoved() const override {
 		return false;
 	}
 };

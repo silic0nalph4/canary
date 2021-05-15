@@ -31,11 +31,9 @@ class DepotLocker;
 class RewardChest;
 class Reward;
 
-class ContainerIterator
-{
+class ContainerIterator {
 public:
-	bool hasNext() const
-	{
+	bool hasNext() const {
 		return !over.empty();
 	}
 
@@ -49,8 +47,7 @@ private:
 	friend class Container;
 };
 
-class Container : public Item, public Cylinder
-{
+class Container : public Item, public Cylinder {
 public:
 	explicit Container(uint16_t type);
 	Container(uint16_t type, uint16_t size, bool unlocked = true, bool pagination = false);
@@ -63,43 +60,35 @@ public:
 
 	Item* clone() const final;
 
-	Container* getContainer() final
-	{
+	Container* getContainer() final {
 		return this;
 	}
 
-	const Container* getContainer() const final
-	{
+	const Container* getContainer() const final {
 		return this;
 	}
 
-	virtual DepotLocker* getDepotLocker()
-	{
+	virtual DepotLocker* getDepotLocker() {
 		return nullptr;
 	}
 
-	virtual const DepotLocker* getDepotLocker() const
-	{
+	virtual const DepotLocker* getDepotLocker() const {
 		return nullptr;
 	}
 
-	virtual RewardChest* getRewardChest()
-	{
+	virtual RewardChest* getRewardChest() {
 		return nullptr;
 	}
 
-	virtual const RewardChest* getRewardChest() const
-	{
+	virtual const RewardChest* getRewardChest() const {
 		return nullptr;
 	}
 
-	virtual Reward* getReward()
-	{
+	virtual Reward* getReward() {
 		return nullptr;
 	}
 
-	virtual const Reward* getReward() const
-	{
+	virtual const Reward* getReward() const {
 		return nullptr;
 	}
 
@@ -107,35 +96,29 @@ public:
 	bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;
 	std::string getContentDescription() const;
 
-	size_t size() const
-	{
+	size_t size() const {
 		return itemlist.size();
 	}
 
-	bool empty() const
-	{
+	bool empty() const {
 		return itemlist.empty();
 	}
 
-	uint32_t capacity() const
-	{
+	uint32_t capacity() const {
 		return maxSize;
 	}
 
 	ContainerIterator iterator() const;
 
-	const ItemDeque& getItemList() const
-	{
+	const ItemDeque& getItemList() const {
 		return itemlist;
 	}
 
-	ItemDeque::const_reverse_iterator getReversedItems() const
-	{
+	ItemDeque::const_reverse_iterator getReversedItems() const {
 		return itemlist.rbegin();
 	}
 
-	ItemDeque::const_reverse_iterator getReversedEnd() const
-	{
+	ItemDeque::const_reverse_iterator getReversedEnd() const {
 		return itemlist.rend();
 	}
 
@@ -151,13 +134,11 @@ public:
 	uint16_t getFreeSlots() const;
 	uint32_t getWeight() const final;
 
-	bool isUnlocked() const
-	{
+	bool isUnlocked() const {
 		return !this->isCorpse() && unlocked;
 	}
 
-	bool hasPagination() const
-	{
+	bool hasPagination() const {
 		return pagination;
 	}
 

@@ -24,15 +24,12 @@
 
 extern Dispatcher g_dispatcher;
 
-DatabaseTasks::DatabaseTasks()
-{
+DatabaseTasks::DatabaseTasks() {
 	db_ = &Database::getInstance();
 }
 
-bool DatabaseTasks::SetDatabaseInterface(Database* database)
-{
-	if (database == nullptr)
-	{
+bool DatabaseTasks::SetDatabaseInterface(Database* database) {
+	if (database == nullptr) {
 		return false;
 	}
 
@@ -40,94 +37,76 @@ bool DatabaseTasks::SetDatabaseInterface(Database* database)
 	return true;
 }
 
-void DatabaseTasks::start()
-{
-	if (db_ == nullptr)
-	{
+void DatabaseTasks::start() {
+	if (db_ == nullptr) {
 		return;
 	}
 	db_->connect();
 	ThreadHolder::start();
 }
 
-void DatabaseTasks::startThread()
-{
+void DatabaseTasks::startThread() {
 	ThreadHolder::start();
 }
 
-void DatabaseTasks::threadMain()
-{
+void DatabaseTasks::threadMain() {
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
-	while (getState() != THREAD_STATE_TERMINATED)
-	{
+	while (getState() != THREAD_STATE_TERMINATED) {
 		taskLockUnique.lock();
-		if (tasks.empty())
-		{
+		if (tasks.empty()) {
 			taskSignal.wait(taskLockUnique);
 		}
 
-		if (!tasks.empty())
-		{
+		if (!tasks.empty()) {
 			DatabaseTask task = std::move(tasks.front());
 			tasks.pop_front();
 			taskLockUnique.unlock();
 			runTask(task);
 		}
-		else
-		{
+		else {
 			taskLockUnique.unlock();
 		}
 	}
 }
 
 void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback/* = nullptr*/,
-                            bool store/* = false*/)
-{
+                            bool store/* = false*/) {
 	bool signal = false;
 	taskLock.lock();
-	if (getState() == THREAD_STATE_RUNNING)
-	{
+	if (getState() == THREAD_STATE_RUNNING) {
 		signal = tasks.empty();
 		tasks.emplace_back(std::move(query), std::move(callback), store);
 	}
 	taskLock.unlock();
 
-	if (signal)
-	{
+	if (signal) {
 		taskSignal.notify_one();
 	}
 }
 
-void DatabaseTasks::runTask(const DatabaseTask& task)
-{
-	if (db_ == nullptr)
-	{
+void DatabaseTasks::runTask(const DatabaseTask& task) {
+	if (db_ == nullptr) {
 		return;
 	}
 	bool success;
 	DBResult_ptr result;
-	if (task.store)
-	{
+	if (task.store) {
 		result = db_->storeQuery(task.query);
 		success = true;
 	}
-	else
-	{
+	else {
 		result = nullptr;
 		success = db_->executeQuery(task.query);
 	}
 
-	if (task.callback)
-	{
+	if (task.callback) {
 		g_dispatcher.addTask(createTask(std::bind(task.callback, result, success)));
 	}
 }
 
-void DatabaseTasks::flush()
-{
+void DatabaseTasks::flush() {
 	std::unique_lock<std::mutex> guard{taskLock};
-	while (!tasks.empty())
-	{
+	while (!tasks.empty()) {
 		auto task = std::move(tasks.front());
 		tasks.pop_front();
 		guard.unlock();
@@ -136,8 +115,7 @@ void DatabaseTasks::flush()
 	}
 }
 
-void DatabaseTasks::shutdown()
-{
+void DatabaseTasks::shutdown() {
 	taskLock.lock();
 	setState(THREAD_STATE_TERMINATED);
 	taskLock.unlock();

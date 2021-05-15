@@ -27,11 +27,9 @@
 #include "lua/functions/core/game/lua_enums.hpp"
 #include "lua/functions/core/game/modal_window_functions.hpp"
 
-class CoreGameFunctions final : LuaScriptInterface
-{
+class CoreGameFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		ConfigFunctions::init(L);
 		GameFunctions::init(L);
 		GlobalFunctions::init(L);

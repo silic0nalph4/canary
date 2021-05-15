@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class GlobalEventFunctions final : LuaScriptInterface
-{
+class GlobalEventFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "GlobalEvent", "", luaCreateGlobalEvent);
 		registerMethod(L, "GlobalEvent", "type", luaGlobalEventType);
 		registerMethod(L, "GlobalEvent", "register", luaGlobalEventRegister);

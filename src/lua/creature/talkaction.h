@@ -30,38 +30,31 @@
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;
 
-class TalkAction : public Event
-{
+class TalkAction : public Event {
 public:
-	explicit TalkAction(LuaScriptInterface* interface) : Event(interface)
-	{
+	explicit TalkAction(LuaScriptInterface* interface) : Event(interface) {
 	}
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	const std::string& getWords() const
-	{
+	const std::string& getWords() const {
 		return words;
 	}
 
-	const std::vector<std::string>& getWordsMap() const
-	{
+	const std::vector<std::string>& getWordsMap() const {
 		return wordsMap;
 	}
 
-	void setWords(const std::string& word)
-	{
+	void setWords(const std::string& word) {
 		words = word;
 		wordsMap.push_back(word);
 	}
 
-	std::string getSeparator() const
-	{
+	std::string getSeparator() const {
 		return separator;
 	}
 
-	void setSeparator(std::string sep)
-	{
+	void setSeparator(std::string sep) {
 		separator = std::move(sep);
 	}
 
@@ -77,8 +70,7 @@ private:
 	std::string separator = "\"";
 };
 
-class TalkActions final : public BaseEvents
-{
+class TalkActions final : public BaseEvents {
 public:
 	TalkActions();
 	~TalkActions() override;

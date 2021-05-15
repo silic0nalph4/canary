@@ -21,8 +21,7 @@
 #define SRC_DATABASE_DATABASEMANAGER_H_
 #include "database/database.h"
 
-class DatabaseManager
-{
+class DatabaseManager {
 public:
 	static bool tableExists(const std::string& table);
 

@@ -22,13 +22,11 @@
 
 #include "items/containers/container.h"
 
-class Inbox final : public Container
-{
+class Inbox final : public Container {
 public:
 	explicit Inbox(uint16_t type);
 
-	void setMaxInboxItems(uint32_t maxitems)
-	{
+	void setMaxInboxItems(uint32_t maxitems) {
 		maxInboxItems = maxitems;
 	}
 
@@ -42,15 +40,13 @@ public:
 	                            CylinderLink_t link = LINK_OWNER) override;
 
 	//overrides
-	bool canRemove() const override
-	{
+	bool canRemove() const override {
 		return false;
 	}
 
 	Cylinder* getParent() const override;
 
-	Cylinder* getRealParent() const override
-	{
+	Cylinder* getRealParent() const override {
 		return parent;
 	}
 

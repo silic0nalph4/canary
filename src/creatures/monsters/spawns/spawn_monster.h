@@ -26,8 +26,7 @@
 class Monster;
 class MonsterType;
 
-struct spawnBlock_t
-{
+struct spawnBlock_t {
 	Position pos;
 	MonsterType* monsterType;
 	int64_t lastSpawn;
@@ -35,11 +34,9 @@ struct spawnBlock_t
 	Direction direction;
 };
 
-class SpawnMonster
-{
+class SpawnMonster {
 public:
-	SpawnMonster(Position initPos, int32_t initRadius) : centerPos(initPos), radius(initRadius)
-	{
+	SpawnMonster(Position initPos, int32_t initRadius) : centerPos(initPos), radius(initRadius) {
 	}
 
 	~SpawnMonster();
@@ -51,8 +48,7 @@ public:
 	bool addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
 	void removeMonster(Monster* monster);
 
-	uint32_t getInterval() const
-	{
+	uint32_t getInterval() const {
 		return interval;
 	}
 
@@ -86,8 +82,7 @@ private:
 	void scheduleSpawn(uint32_t spawnMonsterId, spawnBlock_t sb, uint16_t interval);
 };
 
-class SpawnsMonster
-{
+class SpawnsMonster {
 public:
 	static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
@@ -95,18 +90,15 @@ public:
 	void startup();
 	void clear();
 
-	bool isStarted() const
-	{
+	bool isStarted() const {
 		return started;
 	}
 
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 
-	std::forward_list<SpawnMonster>& getspawnMonsterList()
-	{
+	std::forward_list<SpawnMonster>& getspawnMonsterList() {
 		return spawnMonsterList;
 	}
 

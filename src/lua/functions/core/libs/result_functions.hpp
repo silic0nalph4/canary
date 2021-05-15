@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class ResultFunctions final : LuaScriptInterface
-{
+class ResultFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerTable(L, "result");
 		registerMethod(L, "result", "getNumber", luaResultGetNumber);
 		registerMethod(L, "result", "getString", luaResultGetString);

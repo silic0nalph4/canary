@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class WebhookFunctions final : LuaScriptInterface
-{
+class WebhookFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerTable(L, "Webhook");
 		registerMethod(L, "Webhook", "send", webhookSend);
 	}

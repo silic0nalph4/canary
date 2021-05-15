@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class TeleportFunctions final : LuaScriptInterface
-{
+class TeleportFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Teleport", "Item", luaTeleportCreate);
 		registerMetaMethod(L, "Teleport", "__eq", luaUserdataCompare);
 

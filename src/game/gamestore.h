@@ -22,18 +22,15 @@
 
 #include "declarations.hpp"
 
-class GameStore
-{
+class GameStore {
 public:
 	static uint16_t HISTORY_ENTRIES_PER_PAGE;
 
-	static void startup()
-	{
+	static void startup() {
 		HISTORY_ENTRIES_PER_PAGE = 16;
 	}
 
-	bool isLoaded()
-	{
+	bool isLoaded() {
 		return loaded;
 	}
 
@@ -41,13 +38,11 @@ public:
 	bool loadFromXml();
 	uint16_t getOffersCount();
 
-	uint16_t getCategoryCount()
-	{
+	uint16_t getCategoryCount() {
 		return static_cast<uint16_t>(storeCategoryOffers.size());
 	}
 
-	std::vector<StoreCategory*> getCategoryOffers()
-	{
+	std::vector<StoreCategory*> getCategoryOffers() {
 		return storeCategoryOffers;
 	};
 
@@ -61,8 +56,7 @@ private:
 	std::vector<StoreCategory*> storeCategoryOffers;
 };
 
-class IOGameStore
-{
+class IOGameStore {
 public:
 	static HistoryStoreOfferList getHistoryEntries(uint32_t account_id, uint32_t page);
 };

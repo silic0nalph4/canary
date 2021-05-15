@@ -24,8 +24,7 @@
 
 struct WaitListInfo;
 
-class WaitingList
-{
+class WaitingList {
 public:
 	static WaitingList& getInstance();
 

@@ -24,52 +24,42 @@
 
 extern Actions* g_actions;
 
-int ActionFunctions::luaCreateAction(lua_State* L)
-{
+int ActionFunctions::luaCreateAction(lua_State* L) {
 	// Action()
 	auto action = new Action(getScriptEnv()->getScriptInterface());
-	if (action)
-	{
+	if (action) {
 		action->fromLua = true;
 		pushUserdata<Action>(L, action);
 		setMetatable(L, -1, "Action");
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionOnUse(lua_State* L)
-{
+int ActionFunctions::luaActionOnUse(lua_State* L) {
 	// action:onUse(callback)
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
-		if (!action->loadCallback())
-		{
+	if (action) {
+		if (!action->loadCallback()) {
 			pushBoolean(L, false);
 			return 1;
 		}
 		action->scripted = true;
 		pushBoolean(L, true);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionRegister(lua_State* L)
-{
+int ActionFunctions::luaActionRegister(lua_State* L) {
 	// action:register()
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
-		if (!action->isScripted())
-		{
+	if (action) {
+		if (!action->isScripted()) {
 			pushBoolean(L, false);
 			return 1;
 		}
@@ -78,137 +68,109 @@ int ActionFunctions::luaActionRegister(lua_State* L)
 		action->getItemIdRange().clear();
 		action->getUniqueIdRange().clear();
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionItemId(lua_State* L)
-{
+int ActionFunctions::luaActionItemId(lua_State* L) {
 	// action:id(ids)
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
+	if (action) {
 		const int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
-		if (parameters > 1)
-		{
-			for (int i = 0; i < parameters; ++i)
-			{
+		if (parameters > 1) {
+			for (int i = 0; i < parameters; ++i) {
 				action->addItemId(getNumber<uint32_t>(L, 2 + i));
 			}
 		}
-		else
-		{
+		else {
 			action->addItemId(getNumber<uint32_t>(L, 2));
 		}
 		pushBoolean(L, true);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionActionId(lua_State* L)
-{
+int ActionFunctions::luaActionActionId(lua_State* L) {
 	// action:aid(aids)
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
+	if (action) {
 		const int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
-		if (parameters > 1)
-		{
-			for (int i = 0; i < parameters; ++i)
-			{
+		if (parameters > 1) {
+			for (int i = 0; i < parameters; ++i) {
 				action->addActionId(getNumber<uint32_t>(L, 2 + i));
 			}
 		}
-		else
-		{
+		else {
 			action->addActionId(getNumber<uint32_t>(L, 2));
 		}
 		pushBoolean(L, true);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionUniqueId(lua_State* L)
-{
+int ActionFunctions::luaActionUniqueId(lua_State* L) {
 	// action:uid(uids)
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
+	if (action) {
 		const int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
-		if (parameters > 1)
-		{
-			for (int i = 0; i < parameters; ++i)
-			{
+		if (parameters > 1) {
+			for (int i = 0; i < parameters; ++i) {
 				action->addUniqueId(getNumber<uint32_t>(L, 2 + i));
 			}
 		}
-		else
-		{
+		else {
 			action->addUniqueId(getNumber<uint32_t>(L, 2));
 		}
 		pushBoolean(L, true);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionAllowFarUse(lua_State* L)
-{
+int ActionFunctions::luaActionAllowFarUse(lua_State* L) {
 	// action:allowFarUse(bool)
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
+	if (action) {
 		action->setAllowFarUse(getBoolean(L, 2));
 		pushBoolean(L, true);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionBlockWalls(lua_State* L)
-{
+int ActionFunctions::luaActionBlockWalls(lua_State* L) {
 	// action:blockWalls(bool)
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
+	if (action) {
 		action->setCheckLineOfSight(getBoolean(L, 2));
 		pushBoolean(L, true);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int ActionFunctions::luaActionCheckFloor(lua_State* L)
-{
+int ActionFunctions::luaActionCheckFloor(lua_State* L) {
 	// action:checkFloor(bool)
 	Action* action = getUserdata<Action>(L, 1);
-	if (action)
-	{
+	if (action) {
 		action->setCheckFloor(getBoolean(L, 2));
 		pushBoolean(L, true);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;

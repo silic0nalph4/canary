@@ -29,11 +29,9 @@
 #include "game/game.h"
 #include "lua/scripts/luascript.h"
 
-class LuaEnums final : LuaScriptInterface
-{
+class LuaEnums final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 #define registerEnum(L, value) { \
 				std::string enumName = #value; \
 				registerGlobalVariable(L, enumName.substr(enumName.find_last_of(':') + 1), value); \

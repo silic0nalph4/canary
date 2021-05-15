@@ -23,11 +23,9 @@
 #include "creatures/monsters/monsters.h"
 #include "lua/scripts/luascript.h"
 
-class MonsterSpellFunctions final : LuaScriptInterface
-{
+class MonsterSpellFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "MonsterSpell", "", luaCreateMonsterSpell);
 		registerMetaMethod(L, "MonsterSpell", "__gc", luaDeleteMonsterSpell);
 		registerMethod(L, "MonsterSpell", "delete", luaDeleteMonsterSpell);

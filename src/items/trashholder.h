@@ -24,20 +24,16 @@
 #include "items/cylinder.h"
 #include "utils/utils_definitions.hpp"
 
-class TrashHolder final : public Item, public Cylinder
-{
+class TrashHolder final : public Item, public Cylinder {
 public:
-	explicit TrashHolder(uint16_t itemId) : Item(itemId)
-	{
+	explicit TrashHolder(uint16_t itemId) : Item(itemId) {
 	}
 
-	TrashHolder* getTrashHolder() override
-	{
+	TrashHolder* getTrashHolder() override {
 		return this;
 	}
 
-	const TrashHolder* getTrashHolder() const override
-	{
+	const TrashHolder* getTrashHolder() const override {
 		return this;
 	}
 

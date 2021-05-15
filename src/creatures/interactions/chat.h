@@ -31,15 +31,13 @@ class Player;
 using UsersMap = std::map<uint32_t, Player*>;
 using InvitedMap = std::map<uint32_t, const Player*>;
 
-class ChatChannel
-{
+class ChatChannel {
 public:
 	ChatChannel() = default;
 
 	ChatChannel(uint16_t channelId, std::string channelName):
 		name(std::move(channelName)),
-		id(channelId)
-	{
+		id(channelId) {
 	}
 
 	virtual ~ChatChannel() = default;
@@ -51,28 +49,23 @@ public:
 	bool talk(const Player& fromPlayer, SpeakClasses type, const std::string& text);
 	void sendToAll(const std::string& message, SpeakClasses type) const;
 
-	const std::string& getName() const
-	{
+	const std::string& getName() const {
 		return name;
 	}
 
-	uint16_t getId() const
-	{
+	uint16_t getId() const {
 		return id;
 	}
 
-	const UsersMap& getUsers() const
-	{
+	const UsersMap& getUsers() const {
 		return users;
 	}
 
-	virtual const InvitedMap* getInvitedUsers() const
-	{
+	virtual const InvitedMap* getInvitedUsers() const {
 		return nullptr;
 	}
 
-	virtual uint32_t getOwner() const
-	{
+	virtual uint32_t getOwner() const {
 		return 0;
 	}
 
@@ -99,20 +92,16 @@ protected:
 	friend class Chat;
 };
 
-class PrivateChatChannel final : public ChatChannel
-{
+class PrivateChatChannel final : public ChatChannel {
 public:
-	PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, std::move(channelName))
-	{
+	PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, std::move(channelName)) {
 	}
 
-	uint32_t getOwner() const override
-	{
+	uint32_t getOwner() const override {
 		return owner;
 	}
 
-	void setOwner(uint32_t newOwner)
-	{
+	void setOwner(uint32_t newOwner) {
 		this->owner = newOwner;
 	}
 
@@ -125,8 +114,7 @@ public:
 
 	void closeChannel() const;
 
-	const InvitedMap* getInvitedUsers() const override
-	{
+	const InvitedMap* getInvitedUsers() const override {
 		return &invites;
 	}
 
@@ -137,8 +125,7 @@ private:
 
 using ChannelList = std::list<ChatChannel*>;
 
-class Chat
-{
+class Chat {
 public:
 	Chat();
 
@@ -164,8 +151,7 @@ public:
 	ChatChannel* getGuildChannelById(uint32_t guildId);
 	PrivateChatChannel* getPrivateChannel(const Player& player);
 
-	LuaScriptInterface* getScriptInterface()
-	{
+	LuaScriptInterface* getScriptInterface() {
 		return &scriptInterface;
 	}
 

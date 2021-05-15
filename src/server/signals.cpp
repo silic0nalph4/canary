@@ -55,8 +55,7 @@ extern LuaEnvironment g_luaEnvironment;
 using ErrorCode = boost::system::error_code;
 
 Signals::Signals(boost::asio::io_service& service) :
-	set(service)
-{
+	set(service) {
 	set.add(SIGINT);
 	set.add(SIGTERM);
 #ifndef _WIN32
@@ -72,12 +71,9 @@ Signals::Signals(boost::asio::io_service& service) :
 	asyncWait();
 }
 
-void Signals::asyncWait()
-{
-	set.async_wait([this](ErrorCode err, int signal)
-	{
-		if (err)
-		{
+void Signals::asyncWait() {
+	set.async_wait([this](ErrorCode err, int signal) {
+		if (err) {
 			SPDLOG_ERROR("[Signals::asyncWait] - "
 			             "Signal handling error: {}", err.message());
 			return;
@@ -90,10 +86,8 @@ void Signals::asyncWait()
 // On Windows this function does not need to be signal-safe,
 // as it is called in a new thread.
 // https://github.com/otland/forgottenserver/pull/2473
-void Signals::dispatchSignalHandler(int signal)
-{
-	switch (signal)
-	{
+void Signals::dispatchSignalHandler(int signal) {
+	switch (signal) {
 	case SIGINT: //Shuts the server down
 		g_dispatcher.addTask(createTask(sigintHandler));
 		break;
@@ -121,29 +115,25 @@ void Signals::dispatchSignalHandler(int signal)
 	}
 }
 
-void Signals::sigbreakHandler()
-{
+void Signals::sigbreakHandler() {
 	//Dispatcher thread
 	SPDLOG_INFO("SIGBREAK received, shutting game server down...");
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
 
-void Signals::sigtermHandler()
-{
+void Signals::sigtermHandler() {
 	//Dispatcher thread
 	SPDLOG_INFO("SIGTERM received, shutting game server down...");
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
 
-void Signals::sigusr1Handler()
-{
+void Signals::sigusr1Handler() {
 	//Dispatcher thread
 	SPDLOG_INFO("SIGUSR1 received, saving the game state...");
 	g_game.saveGameState();
 }
 
-void Signals::sighupHandler()
-{
+void Signals::sighupHandler() {
 	//Dispatcher thread
 	SPDLOG_INFO("SIGHUP received, reloading config files...");
 
@@ -178,8 +168,7 @@ void Signals::sighupHandler()
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 }
 
-void Signals::sigintHandler()
-{
+void Signals::sigintHandler() {
 	//Dispatcher thread
 	SPDLOG_INFO("SIGINT received, shutting game server down...");
 	g_game.setGameState(GAME_STATE_SHUTDOWN);

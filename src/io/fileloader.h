@@ -28,14 +28,12 @@
 
 class PropStream;
 
-namespace OTB
-{
+namespace OTB {
 	using MappedFile = boost::iostreams::mapped_file_source;
 	using ContentIt = MappedFile::iterator;
 	using Identifier = std::array<char, 4>;
 
-	struct Node
-	{
+	struct Node {
 		Node() = default;
 		Node(Node&&) = default;
 		Node& operator =(Node&&) = default;
@@ -49,29 +47,24 @@ namespace OTB
 		ContentIt propsEnd;
 		uint8_t type;
 
-		enum NodeChar: uint8_t
-		{
+		enum NodeChar: uint8_t {
 			ESCAPE = 0xFD,
 			START = 0xFE,
 			END = 0xFF,
 		};
 	};
 
-	struct LoadError : std::exception
-	{
+	struct LoadError : std::exception {
 		const char* what() const noexcept override = 0;
 	};
 
-	struct InvalidOTBFormat final : LoadError
-	{
-		const char* what() const noexcept override
-		{
+	struct InvalidOTBFormat final : LoadError {
+		const char* what() const noexcept override {
 			return "Invalid OTBM file format";
 		}
 	};
 
-	class Loader
-	{
+	class Loader {
 		MappedFile fileContents;
 		Node root;
 		std::vector<char> propBuffer;
@@ -83,25 +76,20 @@ namespace OTB
 	};
 } //namespace OTB
 
-class PropStream
-{
+class PropStream {
 public:
-	void init(const char* a, size_t size)
-	{
+	void init(const char* a, size_t size) {
 		p = a;
 		end = a + size;
 	}
 
-	size_t size() const
-	{
+	size_t size() const {
 		return end - p;
 	}
 
 	template <typename T>
-	bool read(T& ret)
-	{
-		if (size() < sizeof(T))
-		{
+	bool read(T& ret) {
+		if (size() < sizeof(T)) {
 			return false;
 		}
 
@@ -110,16 +98,13 @@ public:
 		return true;
 	}
 
-	bool readString(std::string& ret)
-	{
+	bool readString(std::string& ret) {
 		uint16_t strLen;
-		if (!read<uint16_t>(strLen))
-		{
+		if (!read<uint16_t>(strLen)) {
 			return false;
 		}
 
-		if (size() < strLen)
-		{
+		if (size() < strLen) {
 			return false;
 		}
 
@@ -132,10 +117,8 @@ public:
 		return true;
 	}
 
-	bool skip(size_t n)
-	{
-		if (size() < n)
-		{
+	bool skip(size_t n) {
+		if (size() < n) {
 			return false;
 		}
 
@@ -148,8 +131,7 @@ private:
 	const char* end = nullptr;
 };
 
-class PropWriteStream
-{
+class PropWriteStream {
 public:
 	PropWriteStream() = default;
 
@@ -157,29 +139,24 @@ public:
 	PropWriteStream(const PropWriteStream&) = delete;
 	PropWriteStream& operator=(const PropWriteStream&) = delete;
 
-	const char* getStream(size_t& size) const
-	{
+	const char* getStream(size_t& size) const {
 		size = buffer.size();
 		return buffer.data();
 	}
 
-	void clear()
-	{
+	void clear() {
 		buffer.clear();
 	}
 
 	template <typename T>
-	void write(T add)
-	{
+	void write(T add) {
 		auto addr = reinterpret_cast<char*>(&add);
 		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
 	}
 
-	void writeString(const std::string& str)
-	{
+	void writeString(const std::string& str) {
 		const size_t strLength = str.size();
-		if (strLength > std::numeric_limits<uint16_t>::max())
-		{
+		if (strLength > std::numeric_limits<uint16_t>::max()) {
 			write<uint16_t>(0);
 			return;
 		}

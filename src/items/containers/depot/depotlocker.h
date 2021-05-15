@@ -23,18 +23,15 @@
 #include "items/containers/container.h"
 #include "items/containers/inbox/inbox.h"
 
-class DepotLocker final : public Container
-{
+class DepotLocker final : public Container {
 public:
 	explicit DepotLocker(uint16_t type);
 
-	DepotLocker* getDepotLocker() override
-	{
+	DepotLocker* getDepotLocker() override {
 		return this;
 	}
 
-	const DepotLocker* getDepotLocker() const override
-	{
+	const DepotLocker* getDepotLocker() const override {
 		return this;
 	}
 
@@ -43,13 +40,11 @@ public:
 	//serialization
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 
-	uint16_t getDepotId() const
-	{
+	uint16_t getDepotId() const {
 		return depotId;
 	}
 
-	void setDepotId(uint16_t newDepotId)
-	{
+	void setDepotId(uint16_t newDepotId) {
 		this->depotId = newDepotId;
 	}
 
@@ -62,8 +57,7 @@ public:
 	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
 	                            CylinderLink_t link = LINK_OWNER) override;
 
-	bool canRemove() const override
-	{
+	bool canRemove() const override {
 		return false;
 	}
 

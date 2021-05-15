@@ -26,8 +26,7 @@
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
-class IOLoginData
-{
+class IOLoginData {
 public:
 	static bool authenticateAccountPassword(const std::string& email,
 	                                        const std::string& password,

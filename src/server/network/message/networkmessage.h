@@ -29,8 +29,7 @@ class Player;
 struct Position;
 class RSA;
 
-class NetworkMessage
-{
+class NetworkMessage {
 public:
 	using MsgSize_t = uint16_t;
 	// Headers:
@@ -41,32 +40,26 @@ public:
 
 	NetworkMessage() = default;
 
-	void reset()
-	{
+	void reset() {
 		info = {};
 	}
 
 	// simply read functions for incoming message
-	uint8_t getByte()
-	{
-		if (!canRead(1))
-		{
+	uint8_t getByte() {
+		if (!canRead(1)) {
 			return 0;
 		}
 
 		return buffer[info.position++];
 	}
 
-	uint8_t getPreviousByte()
-	{
+	uint8_t getPreviousByte() {
 		return buffer[--info.position];
 	}
 
 	template <typename T>
-	T get()
-	{
-		if (!canRead(sizeof(T)))
-		{
+	T get() {
+		if (!canRead(sizeof(T))) {
 			return 0;
 		}
 
@@ -80,16 +73,13 @@ public:
 	Position getPosition();
 
 	// skips count unknown/unused bytes in an incoming message
-	void skipBytes(int16_t count)
-	{
+	void skipBytes(int16_t count) {
 		info.position += count;
 	}
 
 	// simply write functions for outgoing message
-	void addByte(uint8_t value)
-	{
-		if (!canAdd(1))
-		{
+	void addByte(uint8_t value) {
+		if (!canAdd(1)) {
 			return;
 		}
 
@@ -98,10 +88,8 @@ public:
 	}
 
 	template <typename T>
-	void add(T value)
-	{
-		if (!canAdd(sizeof(T)))
-		{
+	void add(T value) {
+		if (!canAdd(sizeof(T))) {
 			return;
 		}
 
@@ -121,72 +109,59 @@ public:
 	void addPosition(const Position& pos);
 	void addItemId(uint16_t itemId);
 
-	MsgSize_t getLength() const
-	{
+	MsgSize_t getLength() const {
 		return info.length;
 	}
 
-	void setLength(MsgSize_t newLength)
-	{
+	void setLength(MsgSize_t newLength) {
 		info.length = newLength;
 	}
 
-	MsgSize_t getBufferPosition() const
-	{
+	MsgSize_t getBufferPosition() const {
 		return info.position;
 	}
 
-	void setBufferPosition(MsgSize_t newPosition)
-	{
+	void setBufferPosition(MsgSize_t newPosition) {
 		info.position = newPosition;
 	}
 
-	uint16_t getLengthHeader() const
-	{
+	uint16_t getLengthHeader() const {
 		return static_cast<uint16_t>(buffer[0] | buffer[1] << 8);
 	}
 
 	int32_t decodeHeader();
 
-	bool isOverrun() const
-	{
+	bool isOverrun() const {
 		return info.overrun;
 	}
 
-	uint8_t* getBuffer()
-	{
+	uint8_t* getBuffer() {
 		return buffer;
 	}
 
-	const uint8_t* getBuffer() const
-	{
+	const uint8_t* getBuffer() const {
 		return buffer;
 	}
 
-	uint8_t* getBodyBuffer()
-	{
+	uint8_t* getBodyBuffer() {
 		info.position = 2;
 		return buffer + HEADER_LENGTH;
 	}
 
 protected:
-	bool canAdd(size_t size) const
-	{
+	bool canAdd(size_t size) const {
 		return (size + info.position) < MAX_BODY_LENGTH;
 	}
 
-	bool canRead(int32_t size)
-	{
-		if ((info.position + size) > (info.length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - info.position))
-		{
+	bool canRead(int32_t size) {
+		if ((info.position + size) > (info.length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - info.position)) {
 			info.overrun = true;
 			return false;
 		}
 		return true;
 	}
 
-	struct NetworkMessageInfo
-	{
+	struct NetworkMessageInfo {
 		MsgSize_t length = 0;
 		MsgSize_t position = INITIAL_BUFFER_POSITION;
 		bool overrun = false;

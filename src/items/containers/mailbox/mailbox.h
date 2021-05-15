@@ -24,20 +24,16 @@
 #include "items/cylinder.h"
 #include "utils/utils_definitions.hpp"
 
-class Mailbox final : public Item, public Cylinder
-{
+class Mailbox final : public Item, public Cylinder {
 public:
-	explicit Mailbox(uint16_t itemId) : Item(itemId)
-	{
+	explicit Mailbox(uint16_t itemId) : Item(itemId) {
 	}
 
-	Mailbox* getMailbox() override
-	{
+	Mailbox* getMailbox() override {
 		return this;
 	}
 
-	const Mailbox* getMailbox() const override
-	{
+	const Mailbox* getMailbox() const override {
 		return this;
 	}
 

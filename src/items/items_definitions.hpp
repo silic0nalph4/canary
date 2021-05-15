@@ -23,8 +23,7 @@
 #define IMBUEMENT_SLOT 500
 
 // Enums
-enum ItemProperty
-{
+enum ItemProperty {
 	CONST_PROP_BLOCKSOLID = 0,
 	CONST_PROP_HASHEIGHT,
 	CONST_PROP_BLOCKPROJECTILE,
@@ -39,15 +38,13 @@ enum ItemProperty
 	CONST_PROP_SUPPORTHANGABLE,
 };
 
-enum Attr_ReadValue
-{
+enum Attr_ReadValue {
 	ATTR_READ_CONTINUE,
 	ATTR_READ_ERROR,
 	ATTR_READ_END,
 };
 
-enum ReturnValue
-{
+enum ReturnValue {
 	RETURNVALUE_NOERROR,
 	RETURNVALUE_NOTPOSSIBLE,
 	RETURNVALUE_NOTENOUGHROOM,
@@ -132,8 +129,7 @@ enum ReturnValue
 	RETURNVALUE_REWARDCHESTISEMPTY,
 };
 
-enum ItemGroup_t
-{
+enum ItemGroup_t {
 	ITEM_GROUP_NONE,
 
 	ITEM_GROUP_GROUND,
@@ -162,8 +158,7 @@ enum ItemGroup_t
 	ITEM_GROUP_LAST
 };
 
-enum ClientVersion_t
-{
+enum ClientVersion_t {
 	CLIENT_VERSION_750 = 1,
 	CLIENT_VERSION_755 = 2,
 	CLIENT_VERSION_760 = 3,
@@ -232,13 +227,11 @@ enum ClientVersion_t
 	CLIENT_VERSION_1140 = 62,
 };
 
-enum RootAttrib_
-{
+enum RootAttrib_ {
 	ROOT_ATTR_VERSION = 0x01,
 };
 
-enum ItemAttrib_t
-{
+enum ItemAttrib_t {
 	ITEM_ATTR_FIRST = 0x10,
 	ITEM_ATTR_SERVERID = ITEM_ATTR_FIRST,
 	ITEM_ATTR_CLIENTID,
@@ -283,8 +276,7 @@ enum ItemAttrib_t
 	ITEM_ATTR_LAST
 };
 
-enum ItemFlags_t
-{
+enum ItemFlags_t {
 	FLAG_BLOCK_SOLID = 1 << 0,
 	FLAG_BLOCK_PROJECTILE = 1 << 1,
 	FLAG_BLOCK_PATHFIND = 1 << 2,
@@ -324,8 +316,7 @@ enum ItemFlags_t
 	FLAG_WRAPCONTAINER = 1 << 27,
 };
 
-enum ItemTypes_t
-{
+enum ItemTypes_t {
 	ITEM_TYPE_NONE,
 	ITEM_TYPE_DEPOT,
 	ITEM_TYPE_MAILBOX,
@@ -369,21 +360,18 @@ enum ItemTypes_t
 	ITEM_TYPE_LAST,
 };
 
-enum TradeEvents_t
-{
+enum TradeEvents_t {
 	ON_TRADE_TRANSFER,
 	ON_TRADE_CANCEL,
 };
 
-enum ItemDecayState_t : uint8_t
-{
+enum ItemDecayState_t : uint8_t {
 	DECAYING_FALSE = 0,
 	DECAYING_TRUE,
 	DECAYING_PENDING,
 };
 
-enum AttrTypes_t
-{
+enum AttrTypes_t {
 	//ATTR_DESCRIPTION = 1,
 	//ATTR_EXT_FILE = 2,
 	ATTR_TILE_FLAGS = 3,
@@ -425,8 +413,7 @@ enum AttrTypes_t
 	ATTR_QUICKLOOTCONTAINER = 38
 };
 
-enum SlotPositionBits : uint32_t
-{
+enum SlotPositionBits : uint32_t {
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
 	SLOTP_HEAD = 1 << 0,
 	SLOTP_NECKLACE = 1 << 1,
@@ -443,8 +430,7 @@ enum SlotPositionBits : uint32_t
 	SLOTP_HAND = (SLOTP_LEFT | SLOTP_RIGHT)
 };
 
-enum ItemAttrTypes : uint32_t
-{
+enum ItemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_NONE,
 
 	ITEM_ATTRIBUTE_ACTIONID = 1 << 0,
@@ -477,8 +463,7 @@ enum ItemAttrTypes : uint32_t
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
 
-enum TileFlags_t : uint32_t
-{
+enum TileFlags_t : uint32_t {
 	TILESTATE_NONE = 0,
 
 	TILESTATE_FLOORCHANGE_DOWN = 1 << 0,
@@ -515,8 +500,7 @@ enum TileFlags_t : uint32_t
 	TILESTATE_FLOORCHANGE_EAST_ALT,
 };
 
-enum ZoneType_t
-{
+enum ZoneType_t {
 	ZONE_PROTECTION,
 	ZONE_NOPVP,
 	ZONE_PVP,
@@ -524,8 +508,7 @@ enum ZoneType_t
 	ZONE_NORMAL,
 };
 
-enum CylinderFlags_t
-{
+enum CylinderFlags_t {
 	FLAG_NOLIMIT = 1 << 0,
 	//Bypass limits like capacity/container limits, blocking items/creatures etc.
 	FLAG_IGNOREBLOCKITEM = 1 << 1,
@@ -544,8 +527,7 @@ enum CylinderFlags_t
 	//queryDestination will not try to stack items together
 };
 
-enum CylinderLink_t
-{
+enum CylinderLink_t {
 	LINK_OWNER,
 	LINK_PARENT,
 	LINK_TOPPARENT,

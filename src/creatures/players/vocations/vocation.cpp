@@ -24,21 +24,17 @@
 #include "utils/pugicast.h"
 #include "utils/tools.h"
 
-bool Vocations::loadFromXml()
-{
+bool Vocations::loadFromXml() {
 	pugi::xml_document doc;
 	const pugi::xml_parse_result result = doc.load_file("data/XML/vocations.xml");
-	if (!result)
-	{
+	if (!result) {
 		printXMLError("[Vocations::loadFromXml]", "data/XML/vocations.xml", result);
 		return false;
 	}
 
-	for (auto vocationNode : doc.child("vocations").children())
-	{
+	for (auto vocationNode : doc.child("vocations").children()) {
 		pugi::xml_attribute attr;
-		if (!(attr = vocationNode.attribute("id")))
-		{
+		if (!(attr = vocationNode.attribute("id"))) {
 			SPDLOG_WARN("[Vocations::loadFromXml] - Missing vocation id");
 			continue;
 		}
@@ -49,139 +45,111 @@ bool Vocations::loadFromXml()
 		                                std::forward_as_tuple(id), std::forward_as_tuple(id));
 		Vocation& voc = res.first->second;
 
-		if ((attr = vocationNode.attribute("name")))
-		{
+		if ((attr = vocationNode.attribute("name"))) {
 			voc.name = attr.as_string();
 		}
 
-		if ((attr = vocationNode.attribute("clientid")))
-		{
+		if ((attr = vocationNode.attribute("clientid"))) {
 			voc.clientId = pugi::cast<uint16_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("description")))
-		{
+		if ((attr = vocationNode.attribute("description"))) {
 			voc.description = attr.as_string();
 		}
 
-		if ((attr = vocationNode.attribute("magicshield")))
-		{
+		if ((attr = vocationNode.attribute("magicshield"))) {
 			voc.magicShield = attr.as_bool();
 		}
 
-		if ((attr = vocationNode.attribute("gaincap")))
-		{
+		if ((attr = vocationNode.attribute("gaincap"))) {
 			voc.gainCap = pugi::cast<uint32_t>(attr.value()) * 100;
 		}
 
-		if ((attr = vocationNode.attribute("gainhp")))
-		{
+		if ((attr = vocationNode.attribute("gainhp"))) {
 			voc.gainHP = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainmana")))
-		{
+		if ((attr = vocationNode.attribute("gainmana"))) {
 			voc.gainMana = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainhpticks")))
-		{
+		if ((attr = vocationNode.attribute("gainhpticks"))) {
 			voc.gainHealthTicks = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainhpamount")))
-		{
+		if ((attr = vocationNode.attribute("gainhpamount"))) {
 			voc.gainHealthAmount = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainmanaticks")))
-		{
+		if ((attr = vocationNode.attribute("gainmanaticks"))) {
 			voc.gainManaTicks = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainmanaamount")))
-		{
+		if ((attr = vocationNode.attribute("gainmanaamount"))) {
 			voc.gainManaAmount = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("manamultiplier")))
-		{
+		if ((attr = vocationNode.attribute("manamultiplier"))) {
 			voc.manaMultiplier = pugi::cast<float>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("attackspeed")))
-		{
+		if ((attr = vocationNode.attribute("attackspeed"))) {
 			voc.attackSpeed = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("basespeed")))
-		{
+		if ((attr = vocationNode.attribute("basespeed"))) {
 			voc.baseSpeed = pugi::cast<uint32_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("soulmax")))
-		{
+		if ((attr = vocationNode.attribute("soulmax"))) {
 			voc.soulMax = pugi::cast<uint16_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("gainsoulticks")))
-		{
+		if ((attr = vocationNode.attribute("gainsoulticks"))) {
 			voc.gainSoulTicks = pugi::cast<uint16_t>(attr.value());
 		}
 
-		if ((attr = vocationNode.attribute("fromvoc")))
-		{
+		if ((attr = vocationNode.attribute("fromvoc"))) {
 			voc.fromVocation = pugi::cast<uint32_t>(attr.value());
 		}
 
-		for (auto childNode : vocationNode.children())
-		{
-			if (strcasecmp(childNode.name(), "skill") == 0)
-			{
+		for (auto childNode : vocationNode.children()) {
+			if (strcasecmp(childNode.name(), "skill") == 0) {
 				pugi::xml_attribute skillIdAttribute = childNode.attribute("id");
-				if (skillIdAttribute)
-				{
+				if (skillIdAttribute) {
 					uint16_t skill_id = pugi::cast<uint16_t>(skillIdAttribute.value());
-					if (skill_id <= SKILL_LAST)
-					{
+					if (skill_id <= SKILL_LAST) {
 						voc.skillMultipliers[skill_id] = pugi::cast<float>(childNode.attribute("multiplier").value());
 					}
-					else
-					{
+					else {
 						SPDLOG_WARN("[Vocations::loadFromXml] - "
 						            "No valid skill id: {} for vocation: {}",
 						            skill_id, voc.id);
 					}
 				}
-				else
-				{
+				else {
 					SPDLOG_WARN("[Vocations::loadFromXml] - "
 					            "Missing skill id for vocation: {}", voc.id);
 				}
 			}
-			else if (strcasecmp(childNode.name(), "formula") == 0)
-			{
+			else if (strcasecmp(childNode.name(), "formula") == 0) {
 				pugi::xml_attribute meleeDamageAttribute = childNode.attribute("meleeDamage");
-				if (meleeDamageAttribute)
-				{
+				if (meleeDamageAttribute) {
 					voc.meleeDamageMultiplier = pugi::cast<float>(meleeDamageAttribute.value());
 				}
 
 				pugi::xml_attribute distDamageAttribute = childNode.attribute("distDamage");
-				if (distDamageAttribute)
-				{
+				if (distDamageAttribute) {
 					voc.distDamageMultiplier = pugi::cast<float>(distDamageAttribute.value());
 				}
 
 				pugi::xml_attribute defenseAttribute = childNode.attribute("defense");
-				if (defenseAttribute)
-				{
+				if (defenseAttribute) {
 					voc.defenseMultiplier = pugi::cast<float>(defenseAttribute.value());
 				}
 
 				pugi::xml_attribute armorAttribute = childNode.attribute("armor");
-				if (armorAttribute)
-				{
+				if (armorAttribute) {
 					voc.armorMultiplier = pugi::cast<float>(armorAttribute.value());
 				}
 			}
@@ -190,11 +158,9 @@ bool Vocations::loadFromXml()
 	return true;
 }
 
-Vocation* Vocations::getVocation(uint16_t id)
-{
+Vocation* Vocations::getVocation(uint16_t id) {
 	auto it = vocationsMap.find(id);
-	if (it == vocationsMap.end())
-	{
+	if (it == vocationsMap.end()) {
 		SPDLOG_WARN("[Vocations::getVocation] - "
 		            "Vocation {} not found", id);
 		return nullptr;
@@ -202,24 +168,18 @@ Vocation* Vocations::getVocation(uint16_t id)
 	return &it->second;
 }
 
-int32_t Vocations::getVocationId(const std::string& name) const
-{
-	for (const auto& it : vocationsMap)
-	{
-		if (strcasecmp(it.second.name.c_str(), name.c_str()) == 0)
-		{
+int32_t Vocations::getVocationId(const std::string& name) const {
+	for (const auto& it : vocationsMap) {
+		if (strcasecmp(it.second.name.c_str(), name.c_str()) == 0) {
 			return it.first;
 		}
 	}
 	return -1;
 }
 
-uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
-{
-	for (const auto& it : vocationsMap)
-	{
-		if (it.second.fromVocation == vocationId && it.first != vocationId)
-		{
+uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const {
+	for (const auto& it : vocationsMap) {
+		if (it.second.fromVocation == vocationId && it.first != vocationId) {
 			return it.first;
 		}
 	}
@@ -228,16 +188,13 @@ uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
 
 uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
-uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
-{
-	if (skill > SKILL_LAST || level <= 10)
-	{
+uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level) {
+	if (skill > SKILL_LAST || level <= 10) {
 		return 0;
 	}
 
 	const auto it = cacheSkill[skill].find(level);
-	if (it != cacheSkill[skill].end())
-	{
+	if (it != cacheSkill[skill].end()) {
 		return it->second;
 	}
 
@@ -247,15 +204,12 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 	return tries;
 }
 
-uint64_t Vocation::getReqMana(uint32_t magLevel)
-{
-	if (magLevel == 0)
-	{
+uint64_t Vocation::getReqMana(uint32_t magLevel) {
+	if (magLevel == 0) {
 		return 0;
 	}
 	const auto it = cacheMana.find(magLevel);
-	if (it != cacheMana.end())
-	{
+	if (it != cacheMana.end()) {
 		return it->second;
 	}
 

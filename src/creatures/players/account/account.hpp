@@ -28,10 +28,8 @@
 #include "database/databasetasks.h"
 #include "utils/definitions.h"
 
-namespace account
-{
-	enum Errors : uint8_t
-	{
+namespace account {
+	enum Errors : uint8_t {
 		ERROR_NO = 0,
 		ERROR_DB,
 		ERROR_INVALID_ACCOUNT_EMAIL,
@@ -47,8 +45,7 @@ namespace account
 		ERROR_PLAYER_NOT_FOUND
 	};
 
-	enum AccountType : uint8_t
-	{
+	enum AccountType : uint8_t {
 		ACCOUNT_TYPE_NORMAL = 1,
 		ACCOUNT_TYPE_TUTOR = 2,
 		ACCOUNT_TYPE_SENIORTUTOR = 3,
@@ -56,8 +53,7 @@ namespace account
 		ACCOUNT_TYPE_GOD = 5
 	};
 
-	enum GroupType : uint8_t
-	{
+	enum GroupType : uint8_t {
 		GROUP_TYPE_NORMAL = 1,
 		GROUP_TYPE_TUTOR = 2,
 		GROUP_TYPE_SENIORTUTOR = 3,
@@ -66,14 +62,12 @@ namespace account
 		GROUP_TYPE_GOD = 6
 	};
 
-	enum CoinTransactionType : uint8_t
-	{
+	enum CoinTransactionType : uint8_t {
 		COIN_ADD = 1,
 		COIN_REMOVE = 2
 	};
 
-	using Player = struct
-	{
+	using Player = struct {
 		std::string name;
 		uint64_t deletion;
 	};
@@ -82,8 +76,7 @@ namespace account
 	 * @brief Account class to handle account information
 	 *
 	 */
-	class Account
-	{
+	class Account {
 	public:
 		/**
 		 * @brief Construct a new Account object

@@ -22,8 +22,7 @@
 
 #include <boost/asio.hpp>
 
-class Signals
-{
+class Signals {
 	boost::asio::signal_set set;
 public:
 	explicit Signals(boost::asio::io_service& service);

@@ -29,11 +29,9 @@
 #include "lua/functions/creatures/player/party_functions.hpp"
 #include "lua/functions/creatures/player/vocation_functions.hpp"
 
-class PlayerFunctions final : LuaScriptInterface
-{
+class PlayerFunctions final : LuaScriptInterface {
 private:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Player", "Creature", luaPlayerCreate);
 		registerMetaMethod(L, "Player", "__eq", luaUserdataCompare);
 

@@ -27,11 +27,9 @@
 #include "lua/functions/map/tile_functions.hpp"
 #include "lua/functions/map/town_functions.hpp"
 
-class MapFunctions final : LuaScriptInterface
-{
+class MapFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		HouseFunctions::init(L);
 		PositionFunctions::init(L);
 		TeleportFunctions::init(L);

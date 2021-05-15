@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class ImbuementFunctions final : LuaScriptInterface
-{
+class ImbuementFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Imbuement", "", luaCreateImbuement);
 		registerMetaMethod(L, "Imbuement", "__eq", luaUserdataCompare);
 

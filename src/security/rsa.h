@@ -24,8 +24,7 @@
 
 #include <string>
 
-class RSA2
-{
+class RSA2 {
 public:
 	RSA2() = default;
 

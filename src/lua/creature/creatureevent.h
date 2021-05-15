@@ -27,40 +27,33 @@
 class CreatureEvent;
 using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;
 
-class CreatureEvent final : public Event
-{
+class CreatureEvent final : public Event {
 public:
 	explicit CreatureEvent(LuaScriptInterface* interface);
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	CreatureEventType_t getEventType() const
-	{
+	CreatureEventType_t getEventType() const {
 		return type;
 	}
 
-	void setEventType(CreatureEventType_t eventType)
-	{
+	void setEventType(CreatureEventType_t eventType) {
 		type = eventType;
 	}
 
-	const std::string& getName() const
-	{
+	const std::string& getName() const {
 		return eventName;
 	}
 
-	void setName(const std::string& name)
-	{
+	void setName(const std::string& name) {
 		eventName = name;
 	}
 
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 
-	void setLoaded(bool b)
-	{
+	void setLoaded(bool b) {
 		loaded = b;
 	}
 
@@ -91,8 +84,7 @@ private:
 	bool loaded;
 };
 
-class CreatureEvents final : public BaseEvents
-{
+class CreatureEvents final : public BaseEvents {
 public:
 	CreatureEvents();
 

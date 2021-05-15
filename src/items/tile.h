@@ -40,8 +40,7 @@ using CreatureVector = std::vector<Creature*>;
 using ItemVector = std::vector<Item*>;
 using SpectatorHashSet = std::unordered_set<Creature*>;
 
-class TileItemVector : private ItemVector
-{
+class TileItemVector : private ItemVector {
 public:
 	using ItemVector::begin;
 	using ItemVector::end;
@@ -60,81 +59,65 @@ public:
 	using ItemVector::const_reverse_iterator;
 	using ItemVector::empty;
 
-	iterator getBeginDownItem()
-	{
+	iterator getBeginDownItem() {
 		return begin();
 	}
 
-	const_iterator getBeginDownItem() const
-	{
+	const_iterator getBeginDownItem() const {
 		return begin();
 	}
 
-	iterator getEndDownItem()
-	{
+	iterator getEndDownItem() {
 		return begin() + downItemCount;
 	}
 
-	const_iterator getEndDownItem() const
-	{
+	const_iterator getEndDownItem() const {
 		return begin() + downItemCount;
 	}
 
-	iterator getBeginTopItem()
-	{
+	iterator getBeginTopItem() {
 		return getEndDownItem();
 	}
 
-	const_iterator getBeginTopItem() const
-	{
+	const_iterator getBeginTopItem() const {
 		return getEndDownItem();
 	}
 
-	iterator getEndTopItem()
-	{
+	iterator getEndTopItem() {
 		return end();
 	}
 
-	const_iterator getEndTopItem() const
-	{
+	const_iterator getEndTopItem() const {
 		return end();
 	}
 
-	uint32_t getTopItemCount() const
-	{
+	uint32_t getTopItemCount() const {
 		return size() - downItemCount;
 	}
 
-	uint32_t getDownItemCount() const
-	{
+	uint32_t getDownItemCount() const {
 		return downItemCount;
 	}
 
-	Item* getTopTopItem() const
-	{
-		if (getTopItemCount() == 0)
-		{
+	Item* getTopTopItem() const {
+		if (getTopItemCount() == 0) {
 			return nullptr;
 		}
 		return *(getEndTopItem() - 1);
 	}
 
-	Item* getTopDownItem() const
-	{
-		if (downItemCount == 0)
-		{
+	Item* getTopDownItem() const {
+		if (downItemCount == 0) {
 			return nullptr;
 		}
 		return *getBeginDownItem();
 	}
 
-	void increaseDownItemCount()
-	{
+	void increaseDownItemCount() {
 		downItemCount += 1;
 	}
 
-	void decreaseDownItemCount()
-	{
+	void decreaseDownItemCount() {
 		downItemCount -= 1;
 	}
 
@@ -142,17 +125,14 @@ private:
 	uint32_t downItemCount = 0;
 };
 
-class Tile : public Cylinder
-{
+class Tile : public Cylinder {
 public:
 	static Tile& nullptr_tile;
 
-	Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos(x, y, z)
-	{
+	Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos(x, y, z) {
 	}
 
-	~Tile() override
-	{
+	~Tile() override {
 		delete ground;
 	};
 
@@ -168,13 +148,11 @@ public:
 	virtual const CreatureVector* getCreatures() const = 0;
 	virtual CreatureVector* makeCreatures() = 0;
 
-	int32_t getThrowRange() const final
-	{
+	int32_t getThrowRange() const final {
 		return 0;
 	}
 
-	bool isPushable() const final
-	{
+	bool isPushable() const final {
 		return false;
 	}
 
@@ -194,11 +172,9 @@ public:
 	Thing* getTopVisibleThing(const Creature* creature);
 	Item* getItemByTopOrder(int32_t topOrder);
 
-	size_t getThingCount() const
-	{
+	size_t getThingCount() const {
 		size_t thingCount = getCreatureCount() + getItemCount();
-		if (ground)
-		{
+		if (ground) {
 			thingCount++;
 		}
 		return thingCount;
@@ -213,37 +189,29 @@ public:
 	bool hasProperty(ItemProperty prop) const;
 	bool hasProperty(const Item* exclude, ItemProperty prop) const;
 
-	bool hasFlag(uint32_t flag) const
-	{
+	bool hasFlag(uint32_t flag) const {
 		return hasBitSet(flag, this->flags);
 	}
 
-	void setFlag(uint32_t flag)
-	{
+	void setFlag(uint32_t flag) {
 		this->flags |= flag;
 	}
 
-	void resetFlag(uint32_t flag)
-	{
+	void resetFlag(uint32_t flag) {
 		this->flags &= ~flag;
 	}
 
-	ZoneType_t getZone() const
-	{
-		if (hasFlag(TILESTATE_PROTECTIONZONE))
-		{
+	ZoneType_t getZone() const {
+		if (hasFlag(TILESTATE_PROTECTIONZONE)) {
 			return ZONE_PROTECTION;
 		}
-		else if (hasFlag(TILESTATE_NOPVPZONE))
-		{
+		else if (hasFlag(TILESTATE_NOPVPZONE)) {
 			return ZONE_NOPVP;
 		}
-		else if (hasFlag(TILESTATE_PVPZONE))
-		{
+		else if (hasFlag(TILESTATE_PVPZONE)) {
 			return ZONE_PVP;
 		}
-		else
-		{
+		else {
 			return ZONE_NORMAL;
 		}
 	}
@@ -289,26 +257,22 @@ public:
 	void internalAddThing(Thing* thing) override;
 	void internalAddThing(uint32_t index, Thing* thing) override;
 
-	const Position& getPosition() const final
-	{
+	const Position& getPosition() const final {
 		return tilePos;
 	}
 
-	bool isRemoved() const final
-	{
+	bool isRemoved() const final {
 		return false;
 	}
 
 	Item* getUseItem(int32_t index) const;
 	Item* getDoorItem() const;
 
-	Item* getGround() const
-	{
+	Item* getGround() const {
 		return ground;
 	}
 
-	void setGround(Item* item)
-	{
+	void setGround(Item* item) {
 		ground = item;
 	}
 
@@ -329,21 +293,17 @@ protected:
 
 // Used for walkable tiles, where there is high likeliness of
 // items being added/removed
-class DynamicTile : public Tile
-{
+class DynamicTile : public Tile {
 	// By allocating the vectors in-house, we avoid some memory fragmentation
 	TileItemVector items;
 	CreatureVector creatures;
 
 public:
-	DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z)
-	{
+	DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {
 	}
 
-	~DynamicTile() override
-	{
-		for (Item* item : items)
-		{
+	~DynamicTile() override {
+		for (Item* item : items) {
 			item->decrementReferenceCounter();
 		}
 	}
@@ -352,55 +312,44 @@ public:
 	DynamicTile(const DynamicTile&) = delete;
 	DynamicTile& operator=(const DynamicTile&) = delete;
 
-	TileItemVector* getItemList() override
-	{
+	TileItemVector* getItemList() override {
 		return &items;
 	}
 
-	const TileItemVector* getItemList() const override
-	{
+	const TileItemVector* getItemList() const override {
 		return &items;
 	}
 
-	TileItemVector* makeItemList() override
-	{
+	TileItemVector* makeItemList() override {
 		return &items;
 	}
 
-	CreatureVector* getCreatures() override
-	{
+	CreatureVector* getCreatures() override {
 		return &creatures;
 	}
 
-	const CreatureVector* getCreatures() const override
-	{
+	const CreatureVector* getCreatures() const override {
 		return &creatures;
 	}
 
-	CreatureVector* makeCreatures() override
-	{
+	CreatureVector* makeCreatures() override {
 		return &creatures;
 	}
 };
 
 // For blocking tiles, where we very rarely actually have items
-class StaticTile final : public Tile
-{
+class StaticTile final : public Tile {
 	// We very rarely even need the vectors, so don't keep them in memory
 	std::unique_ptr<TileItemVector> items;
 	std::unique_ptr<CreatureVector> creatures;
 
 public:
-	StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z)
-	{
+	StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {
 	}
 
-	~StaticTile() override
-	{
-		if (items)
-		{
-			for (Item* item : *items)
-			{
+	~StaticTile() override {
+		if (items) {
+			for (Item* item : *items) {
 				item->decrementReferenceCounter();
 			}
 		}
@@ -410,39 +359,31 @@ public:
 	StaticTile(const StaticTile&) = delete;
 	StaticTile& operator=(const StaticTile&) = delete;
 
-	TileItemVector* getItemList() override
-	{
+	TileItemVector* getItemList() override {
 		return items.get();
 	}
 
-	const TileItemVector* getItemList() const override
-	{
+	const TileItemVector* getItemList() const override {
 		return items.get();
 	}
 
-	TileItemVector* makeItemList() override
-	{
-		if (!items)
-		{
+	TileItemVector* makeItemList() override {
+		if (!items) {
 			items = std::make_unique<TileItemVector>();
 		}
 		return items.get();
 	}
 
-	CreatureVector* getCreatures() override
-	{
+	CreatureVector* getCreatures() override {
 		return creatures.get();
 	}
 
-	const CreatureVector* getCreatures() const override
-	{
+	const CreatureVector* getCreatures() const override {
 		return creatures.get();
 	}
 
-	CreatureVector* makeCreatures() override
-	{
-		if (!creatures)
-		{
+	CreatureVector* makeCreatures() override {
+		if (!creatures) {
 			creatures = std::make_unique<CreatureVector>();
 		}
 		return creatures.get();

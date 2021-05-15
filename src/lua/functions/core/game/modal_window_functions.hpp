@@ -24,11 +24,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class ModalWindowFunctions final : LuaScriptInterface
-{
+class ModalWindowFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "ModalWindow", "", luaModalWindowCreate);
 		registerMetaMethod(L, "ModalWindow", "__eq", luaUserdataCompare);
 		registerMetaMethod(L, "ModalWindow", "__gc", luaModalWindowDelete);

@@ -27,11 +27,9 @@
 
 extern LuaEnvironment g_luaEnvironment;
 
-class PositionFunctions final : LuaScriptInterface
-{
+class PositionFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Position", "", luaPositionCreate);
 		registerMetaMethod(L, "Position", "__add", luaPositionAdd);
 		registerMetaMethod(L, "Position", "__sub", luaPositionSub);

@@ -25,36 +25,30 @@
 class House;
 class Player;
 
-class BedItem final : public Item
-{
+class BedItem final : public Item {
 public:
 	explicit BedItem(uint16_t id);
 
-	BedItem* getBed() override
-	{
+	BedItem* getBed() override {
 		return this;
 	}
 
-	const BedItem* getBed() const override
-	{
+	const BedItem* getBed() const override {
 		return this;
 	}
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
-	bool canRemove() const override
-	{
+	bool canRemove() const override {
 		return house == nullptr;
 	}
 
-	uint32_t getSleeper() const
-	{
+	uint32_t getSleeper() const {
 		return sleeperGUID;
 	}
 
-	void setHouse(House* h)
-	{
+	void setHouse(House* h) {
 		house = h;
 	}
 

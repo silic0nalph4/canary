@@ -24,11 +24,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class VariantFunctions final : LuaScriptInterface
-{
+class VariantFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Variant", "", luaVariantCreate);
 
 		registerMethod(L, "Variant", "getNumber", luaVariantGetNumber);

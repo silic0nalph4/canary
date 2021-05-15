@@ -50,8 +50,7 @@ using IntegerVector = std::vector<int32_t>;
 StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit = -1);
 IntegerVector vectorAtoi(const StringVector& stringVector);
 
-constexpr bool hasBitSet(uint32_t flag, uint32_t flags)
-{
+constexpr bool hasBitSet(uint32_t flag, uint32_t flags) {
 	return (flags & flag) != 0;
 }
 
@@ -116,10 +115,8 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
-static inline Cipbia_Elementals_t getCipbiaElement(CombatType_t combatType)
-{
-	switch (combatType)
-	{
+static inline Cipbia_Elementals_t getCipbiaElement(CombatType_t combatType) {
+	switch (combatType) {
 	case COMBAT_PHYSICALDAMAGE: return CIPBIA_ELEMENTAL_PHYSICAL;
 	case COMBAT_ENERGYDAMAGE: return CIPBIA_ELEMENTAL_ENERGY;
 	case COMBAT_EARTHDAMAGE: return CIPBIA_ELEMENTAL_EARTH;

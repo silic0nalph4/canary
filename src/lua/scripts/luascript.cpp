@@ -31,21 +31,17 @@ LuaEnvironment g_luaEnvironment;
 ScriptEnvironment LuaFunctionsLoader::scriptEnv[16];
 int32_t LuaFunctionsLoader::scriptEnvIndex = -1;
 
-LuaScriptInterface::LuaScriptInterface(std::string initInterfaceName) : interfaceName(std::move(initInterfaceName))
-{
-	if (!g_luaEnvironment.getLuaState())
-	{
+LuaScriptInterface::LuaScriptInterface(std::string initInterfaceName) : interfaceName(std::move(initInterfaceName)) {
+	if (!g_luaEnvironment.getLuaState()) {
 		g_luaEnvironment.initState();
 	}
 }
 
-LuaScriptInterface::~LuaScriptInterface()
-{
+LuaScriptInterface::~LuaScriptInterface() {
 	closeState();
 }
 
-bool LuaScriptInterface::reInitState()
-{
+bool LuaScriptInterface::reInitState() {
 	g_luaEnvironment.clearCombatObjects(this);
 	g_luaEnvironment.clearAreaObjects(this);
 
@@ -55,26 +51,22 @@ bool LuaScriptInterface::reInitState()
 
 /// Same as lua_pcall, but adds stack trace to error strings in called function.
 
-int32_t LuaScriptInterface::loadFile(const std::string& file)
-{
+int32_t LuaScriptInterface::loadFile(const std::string& file) {
 	//loads file as a chunk at stack top
 	int ret = luaL_loadfile(luaState, file.c_str());
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		lastLuaError = popString(luaState);
 		return -1;
 	}
 
 	//check that it is loaded as a function
-	if (!isFunction(luaState, -1))
-	{
+	if (!isFunction(luaState, -1)) {
 		return -1;
 	}
 
 	loadingFile = file;
 
-	if (!reserveScriptEnv())
-	{
+	if (!reserveScriptEnv()) {
 		return -1;
 	}
 
@@ -84,8 +76,7 @@ int32_t LuaScriptInterface::loadFile(const std::string& file)
 
 	//execute it
 	ret = protectedCall(luaState, 0, 0);
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		reportError(nullptr, popString(luaState));
 		resetScriptEnv();
 		return -1;
@@ -95,20 +86,17 @@ int32_t LuaScriptInterface::loadFile(const std::string& file)
 	return 0;
 }
 
-int32_t LuaScriptInterface::getEvent(const std::string& eventName)
-{
+int32_t LuaScriptInterface::getEvent(const std::string& eventName) {
 	//get our events table
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
-	if (!isTable(luaState, -1))
-	{
+	if (!isTable(luaState, -1)) {
 		lua_pop(luaState, 1);
 		return -1;
 	}
 
 	//get current event function pointer
 	lua_getglobal(luaState, eventName.c_str());
-	if (!isFunction(luaState, -1))
-	{
+	if (!isFunction(luaState, -1)) {
 		lua_pop(luaState, 2);
 		return -1;
 	}
@@ -126,18 +114,15 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 	return runningEventId++;
 }
 
-int32_t LuaScriptInterface::getEvent()
-{
+int32_t LuaScriptInterface::getEvent() {
 	//check if function is on the stack
-	if (!isFunction(luaState, -1))
-	{
+	if (!isFunction(luaState, -1)) {
 		return -1;
 	}
 
 	//get our events table
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
-	if (!isTable(luaState, -1))
-	{
+	if (!isTable(luaState, -1)) {
 		lua_pop(luaState, 1);
 		return -1;
 	}
@@ -151,12 +136,10 @@ int32_t LuaScriptInterface::getEvent()
 	return runningEventId++;
 }
 
-int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const std::string& eventName)
-{
+int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const std::string& eventName) {
 	//get our events table
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
-	if (!isTable(luaState, -1))
-	{
+	if (!isTable(luaState, -1)) {
 		lua_pop(luaState, 1);
 		return -1;
 	}
@@ -164,8 +147,7 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 	//get current event function pointer
 	lua_getglobal(luaState, globalName.c_str());
 	lua_getfield(luaState, -1, eventName.c_str());
-	if (!isFunction(luaState, -1))
-	{
+	if (!isFunction(luaState, -1)) {
 		lua_pop(luaState, 3);
 		return -1;
 	}
@@ -184,34 +166,28 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 	return runningEventId++;
 }
 
-const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
-{
-	if (scriptId == EVENT_ID_LOADING)
-	{
+const std::string& LuaScriptInterface::getFileById(int32_t scriptId) {
+	if (scriptId == EVENT_ID_LOADING) {
 		return loadingFile;
 	}
 
 	const auto it = cacheFiles.find(scriptId);
-	if (it == cacheFiles.end())
-	{
+	if (it == cacheFiles.end()) {
 		static const std::string& unk = "(Unknown scriptfile)";
 		return unk;
 	}
 	return it->second;
 }
 
-std::string LuaScriptInterface::getStackTrace(const std::string& error_desc)
-{
+std::string LuaScriptInterface::getStackTrace(const std::string& error_desc) {
 	lua_getglobal(luaState, "debug");
-	if (!isTable(luaState, -1))
-	{
+	if (!isTable(luaState, -1)) {
 		lua_pop(luaState, 1);
 		return error_desc;
 	}
 
 	lua_getfield(luaState, -1, "traceback");
-	if (!isFunction(luaState, -1))
-	{
+	if (!isFunction(luaState, -1)) {
 		lua_pop(luaState, 2);
 		return error_desc;
 	}
@@ -222,11 +198,9 @@ std::string LuaScriptInterface::getStackTrace(const std::string& error_desc)
 	return popString(luaState);
 }
 
-bool LuaScriptInterface::pushFunction(int32_t functionId)
-{
+bool LuaScriptInterface::pushFunction(int32_t functionId) {
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
-	if (!isTable(luaState, -1))
-	{
+	if (!isTable(luaState, -1)) {
 		return false;
 	}
 
@@ -235,11 +209,9 @@ bool LuaScriptInterface::pushFunction(int32_t functionId)
 	return isFunction(luaState, -1);
 }
 
-bool LuaScriptInterface::initState()
-{
+bool LuaScriptInterface::initState() {
 	luaState = g_luaEnvironment.getLuaState();
-	if (!luaState)
-	{
+	if (!luaState) {
 		return false;
 	}
 
@@ -249,16 +221,13 @@ bool LuaScriptInterface::initState()
 	return true;
 }
 
-bool LuaScriptInterface::closeState()
-{
-	if (!g_luaEnvironment.getLuaState() || !luaState)
-	{
+bool LuaScriptInterface::closeState() {
+	if (!g_luaEnvironment.getLuaState() || !luaState) {
 		return false;
 	}
 
 	cacheFiles.clear();
-	if (eventTableRef != -1)
-	{
+	if (eventTableRef != -1) {
 		luaL_unref(luaState, LUA_REGISTRYINDEX, eventTableRef);
 		eventTableRef = -1;
 	}
@@ -267,22 +236,18 @@ bool LuaScriptInterface::closeState()
 	return true;
 }
 
-bool LuaScriptInterface::callFunction(int params)
-{
+bool LuaScriptInterface::callFunction(int params) {
 	bool result = false;
 	const int size = lua_gettop(luaState);
-	if (protectedCall(luaState, params, 1) != 0)
-	{
+	if (protectedCall(luaState, params, 1) != 0) {
 		reportError(nullptr, getString(luaState, -1));
 	}
-	else
-	{
+	else {
 		result = getBoolean(luaState, -1);
 	}
 
 	lua_pop(luaState, 1);
-	if ((lua_gettop(luaState) + params + 1) != size)
-	{
+	if ((lua_gettop(luaState) + params + 1) != size) {
 		reportError(nullptr, "Stack size changed!");
 	}
 
@@ -290,16 +255,13 @@ bool LuaScriptInterface::callFunction(int params)
 	return result;
 }
 
-void LuaScriptInterface::callVoidFunction(int params)
-{
+void LuaScriptInterface::callVoidFunction(int params) {
 	const int size = lua_gettop(luaState);
-	if (protectedCall(luaState, params, 0) != 0)
-	{
+	if (protectedCall(luaState, params, 0) != 0) {
 		reportError(nullptr, popString(luaState));
 	}
 
-	if ((lua_gettop(luaState) + params + 1) != size)
-	{
+	if ((lua_gettop(luaState) + params + 1) != size) {
 		reportError(nullptr, "Stack size changed!");
 	}
 

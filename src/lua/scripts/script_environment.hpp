@@ -33,8 +33,7 @@ class LuaScriptInterface;
 class Cylinder;
 class Game;
 
-class ScriptEnvironment
-{
+class ScriptEnvironment {
 public:
 	ScriptEnvironment();
 	virtual ~ScriptEnvironment();
@@ -45,26 +44,22 @@ public:
 
 	void resetEnv();
 
-	void setScriptId(int32_t newScriptId, LuaScriptInterface* newScriptInterface)
-	{
+	void setScriptId(int32_t newScriptId, LuaScriptInterface* newScriptInterface) {
 		this->scriptId = newScriptId;
 		this->interface = newScriptInterface;
 	}
 
 	bool setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface);
 
-	int32_t getScriptId() const
-	{
+	int32_t getScriptId() const {
 		return scriptId;
 	}
 
-	LuaScriptInterface* getScriptInterface()
-	{
+	LuaScriptInterface* getScriptInterface() {
 		return interface;
 	}
 
-	void setTimerEvent()
-	{
+	void setTimerEvent() {
 		timerEvent = true;
 	}
 
@@ -80,13 +75,11 @@ public:
 	static uint32_t addResult(DBResult_ptr res);
 	static bool removeResult(uint32_t id);
 
-	void setNpc(Npc* npc)
-	{
+	void setNpc(Npc* npc) {
 		curNpc = npc;
 	}
 
-	Npc* getNpc() const
-	{
+	Npc* getNpc() const {
 		return curNpc;
 	}
 

@@ -36,14 +36,12 @@ extern Spells* g_spells;
 extern Npcs g_npcs;
 extern ConfigManager g_config;
 
-bool NpcType::canSpawn(const Position& pos)
-{
+bool NpcType::canSpawn(const Position& pos) {
 	bool canSpawn = true;
 	const bool isDay = g_game.gameIsDay();
 
 	if ((isDay && info.respawnType.period == RESPAWNPERIOD_NIGHT) ||
-		(!isDay && info.respawnType.period == RESPAWNPERIOD_DAY))
-	{
+		(!isDay && info.respawnType.period == RESPAWNPERIOD_DAY)) {
 		// It will ignore day and night if underground
 		canSpawn = (pos.z > 7 && info.respawnType.underground);
 	}
@@ -51,18 +49,15 @@ bool NpcType::canSpawn(const Position& pos)
 	return canSpawn;
 }
 
-bool NpcType::loadCallback(LuaScriptInterface* scriptInterface)
-{
+bool NpcType::loadCallback(LuaScriptInterface* scriptInterface) {
 	const int32_t id = scriptInterface->getEvent();
-	if (id == -1)
-	{
+	if (id == -1) {
 		SPDLOG_WARN("[NpcType::loadCallback] - Event not found");
 		return false;
 	}
 
 	info.scriptInterface = scriptInterface;
-	switch (info.eventType)
-	{
+	switch (info.eventType) {
 	case NPCS_EVENT_THINK:
 		info.thinkEvent = id;
 		break;
@@ -94,18 +89,15 @@ bool NpcType::loadCallback(LuaScriptInterface* scriptInterface)
 	return true;
 }
 
-NpcType* Npcs::getNpcType(const std::string& name, bool create /* = false*/)
-{
+NpcType* Npcs::getNpcType(const std::string& name, bool create /* = false*/) {
 	const std::string key = asLowerCaseString(name);
 	const auto it = npcs.find(key);
 
-	if (it != npcs.end())
-	{
+	if (it != npcs.end()) {
 		return it->second;
 	}
 
-	if (!create)
-	{
+	if (!create) {
 		return nullptr;
 	}
 

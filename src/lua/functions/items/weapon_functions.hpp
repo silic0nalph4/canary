@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class WeaponFunctions final : LuaScriptInterface
-{
+class WeaponFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Weapon", "", luaCreateWeapon);
 		registerMethod(L, "Weapon", "action", luaWeaponAction);
 		registerMethod(L, "Weapon", "register", luaWeaponRegister);

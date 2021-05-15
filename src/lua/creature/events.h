@@ -29,10 +29,8 @@ class ItemType;
 class Tile;
 class Imbuements;
 
-class Events
-{
-	struct EventsInfo
-	{
+class Events {
+	struct EventsInfo {
 		// Creature
 		int32_t creatureOnChangeOutfit = -1;
 		int32_t creatureOnAreaCombat = -1;

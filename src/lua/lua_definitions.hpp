@@ -23,14 +23,12 @@
 #include "game/movement/position.h"
 
 // Enums
-enum
-{
+enum {
 	EVENT_ID_LOADING = 1,
 	EVENT_ID_USER = 1000,
 };
 
-enum LuaDataType
-{
+enum LuaDataType {
 	LuaData_Unknown,
 
 	LuaData_Item,
@@ -42,8 +40,7 @@ enum LuaDataType
 	LuaData_Tile,
 };
 
-enum CreatureEventType_t
-{
+enum CreatureEventType_t {
 	CREATURE_EVENT_NONE,
 	CREATURE_EVENT_LOGIN,
 	CREATURE_EVENT_LOGOUT,
@@ -60,8 +57,7 @@ enum CreatureEventType_t
 	CREATURE_EVENT_EXTENDED_OPCODE,
 };
 
-enum MoveEvent_t
-{
+enum MoveEvent_t {
 	MOVE_EVENT_STEP_IN,
 	MOVE_EVENT_STEP_OUT,
 	MOVE_EVENT_EQUIP,
@@ -75,21 +71,18 @@ enum MoveEvent_t
 	MOVE_EVENT_NONE
 };
 
-enum RaidState_t
-{
+enum RaidState_t {
 	RAIDSTATE_IDLE,
 	RAIDSTATE_EXECUTING,
 };
 
-enum TalkActionResult_t
-{
+enum TalkActionResult_t {
 	TALKACTION_CONTINUE,
 	TALKACTION_BREAK,
 	TALKACTION_FAILED,
 };
 
-enum GlobalEvent_t
-{
+enum GlobalEvent_t {
 	GLOBALEVENT_NONE,
 	GLOBALEVENT_TIMER,
 
@@ -99,14 +92,12 @@ enum GlobalEvent_t
 	GLOBALEVENT_PERIODCHANGE
 };
 
-enum ModuleType_t
-{
+enum ModuleType_t {
 	MODULE_TYPE_RECVBYTE,
 	MODULE_TYPE_NONE,
 };
 
-enum LuaVariantType_t
-{
+enum LuaVariantType_t {
 	VARIANT_NONE,
 
 	VARIANT_NUMBER,
@@ -115,8 +106,7 @@ enum LuaVariantType_t
 	VARIANT_STRING,
 };
 
-enum ErrorCode_t
-{
+enum ErrorCode_t {
 	LUA_ERROR_PLAYER_NOT_FOUND,
 	LUA_ERROR_CREATURE_NOT_FOUND,
 	LUA_ERROR_NPC_NOT_FOUND,
@@ -133,8 +123,7 @@ enum ErrorCode_t
 	LUA_ERROR_SPELL_NOT_FOUND
 };
 
-enum TargetSearchType_t
-{
+enum TargetSearchType_t {
 	TARGETSEARCH_DEFAULT,
 	TARGETSEARCH_NEAREST,
 	TARGETSEARCH_HP,
@@ -142,8 +131,7 @@ enum TargetSearchType_t
 	TARGETSEARCH_RANDOM
 };
 
-enum MapMark_t
-{
+enum MapMark_t {
 	MAPMARK_TICK = 0,
 	MAPMARK_QUESTION = 1,
 	MAPMARK_EXCLAMATION = 2,
@@ -166,15 +154,13 @@ enum MapMark_t
 	MAPMARK_GREENSOUTH = 19,
 };
 
-enum RuleViolationType_t : uint8_t
-{
+enum RuleViolationType_t : uint8_t {
 	REPORT_TYPE_NAME = 0,
 	REPORT_TYPE_STATEMENT = 1,
 	REPORT_TYPE_BOT = 2
 };
 
-enum RuleViolationReasons_t : uint8_t
-{
+enum RuleViolationReasons_t : uint8_t {
 	REPORT_REASON_NAMEINAPPROPRIATE = 0,
 	REPORT_REASON_NAMEPOORFORMATTED = 1,
 	REPORT_REASON_NAMEADVERTISING = 2,
@@ -198,8 +184,7 @@ enum RuleViolationReasons_t : uint8_t
 	REPORT_REASON_SERVICEAGREEMENT = 20
 };
 
-enum BugReportType_t : uint8_t
-{
+enum BugReportType_t : uint8_t {
 	BUG_CATEGORY_MAP = 0,
 	BUG_CATEGORY_TYPO = 1,
 	BUG_CATEGORY_TECHNICAL = 2,
@@ -207,16 +192,14 @@ enum BugReportType_t : uint8_t
 };
 
 // Struct
-struct LuaVariant
-{
+struct LuaVariant {
 	LuaVariantType_t type = VARIANT_NONE;
 	std::string text;
 	Position pos;
 	uint32_t number = 0;
 };
 
-struct LuaTimerEventDesc
-{
+struct LuaTimerEventDesc {
 	int32_t scriptId = -1;
 	int32_t function = -1;
 	std::list<int32_t> parameters;

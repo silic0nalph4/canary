@@ -33,8 +33,7 @@ class Cylinder;
 class Game;
 class GlobalFunctions;
 
-class LuaEnvironment : public LuaScriptInterface
-{
+class LuaEnvironment : public LuaScriptInterface {
 public:
 	LuaEnvironment();
 	~LuaEnvironment() override;

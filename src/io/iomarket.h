@@ -23,11 +23,9 @@
 #include "database/database.h"
 #include "declarations.hpp"
 
-class IOMarket
-{
+class IOMarket {
 public:
-	static IOMarket& getInstance()
-	{
+	static IOMarket& getInstance() {
 		static IOMarket instance;
 		return instance;
 	}

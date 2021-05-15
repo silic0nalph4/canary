@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class BitFunctions final : LuaScriptInterface
-{
+class BitFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 #ifndef LUAJIT_VERSION
 			registerTable(L, "bit");
 			registerMethod(L, "bit", "bnot", BitFunctions::luaBitNot);

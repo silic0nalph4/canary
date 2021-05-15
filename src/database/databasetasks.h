@@ -25,11 +25,9 @@
 #include "database/database.h"
 #include "declarations.hpp"
 
-struct DatabaseTask
-{
+struct DatabaseTask {
 	DatabaseTask(std::string&& initQuery, std::function<void(DBResult_ptr, bool)>&& initCallback, bool initStore) :
-		query(std::move(initQuery)), callback(std::move(initCallback)), store(initStore)
-	{
+		query(std::move(initQuery)), callback(std::move(initCallback)), store(initStore) {
 	}
 
 	std::string query;
@@ -37,8 +35,7 @@ struct DatabaseTask
 	bool store;
 };
 
-class DatabaseTasks : public ThreadHolder<DatabaseTasks>
-{
+class DatabaseTasks : public ThreadHolder<DatabaseTasks> {
 public:
 	DatabaseTasks();
 	bool SetDatabaseInterface(Database* database);

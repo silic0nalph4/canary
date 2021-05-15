@@ -23,156 +23,126 @@
 #include "game/game.h"
 #include "lua/functions/creatures/player/group_functions.hpp"
 
-int GroupFunctions::luaGroupCreate(lua_State* L)
-{
+int GroupFunctions::luaGroupCreate(lua_State* L) {
 	// Group(id)
 	const uint32_t id = getNumber<uint32_t>(L, 2);
 
 	Group* group = g_game.groups.getGroup(id);
-	if (group)
-	{
+	if (group) {
 		pushUserdata<Group>(L, group);
 		setMetatable(L, -1, "Group");
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupGetId(lua_State* L)
-{
+int GroupFunctions::luaGroupGetId(lua_State* L) {
 	// group:getId()
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		lua_pushnumber(L, group->id);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupGetName(lua_State* L)
-{
+int GroupFunctions::luaGroupGetName(lua_State* L) {
 	// group:getName()
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		pushString(L, group->name);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupGetFlags(lua_State* L)
-{
+int GroupFunctions::luaGroupGetFlags(lua_State* L) {
 	// group:getFlags()
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		lua_pushnumber(L, group->flags);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupGetCustomFlags(lua_State* L)
-{
+int GroupFunctions::luaGroupGetCustomFlags(lua_State* L) {
 	// group:getCustomFlags()
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		lua_pushnumber(L, group->customflags);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupGetAccess(lua_State* L)
-{
+int GroupFunctions::luaGroupGetAccess(lua_State* L) {
 	// group:getAccess()
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		pushBoolean(L, group->access);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupGetMaxDepotItems(lua_State* L)
-{
+int GroupFunctions::luaGroupGetMaxDepotItems(lua_State* L) {
 	// group:getMaxDepotItems()
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		lua_pushnumber(L, group->maxDepotItems);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupGetMaxVipEntries(lua_State* L)
-{
+int GroupFunctions::luaGroupGetMaxVipEntries(lua_State* L) {
 	// group:getMaxVipEntries()
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		lua_pushnumber(L, group->maxVipEntries);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupHasFlag(lua_State* L)
-{
+int GroupFunctions::luaGroupHasFlag(lua_State* L) {
 	// group:hasFlag(flag)
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		const auto flag = getNumber<PlayerFlags>(L, 2);
 		pushBoolean(L, (group->flags & flag) != 0);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int GroupFunctions::luaGroupHasCustomFlag(lua_State* L)
-{
+int GroupFunctions::luaGroupHasCustomFlag(lua_State* L) {
 	// group:hasCustomFlag(flag)
 	Group* group = getUserdata<Group>(L, 1);
-	if (group)
-	{
+	if (group) {
 		const auto customflag = getNumber<PlayerCustomFlags>(L, 2);
 		pushBoolean(L, (group->customflags & customflag) != 0);
 	}
-	else
-	{
+	else {
 		lua_pushnil(L);
 	}
 	return 1;

@@ -24,12 +24,10 @@
 
 #include "lua/scripts/luascript.h"
 
-class ContainerFunctions final : LuaScriptInterface
-{
+class ContainerFunctions final : LuaScriptInterface {
 public:
 private:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Container", "Item", luaContainerCreate);
 		registerMetaMethod(L, "Container", "__eq", luaUserdataCompare);
 

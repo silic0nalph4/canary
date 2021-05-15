@@ -23,20 +23,17 @@
 
 extern ConfigManager g_config;
 
-int ConfigFunctions::luaConfigManagerGetString(lua_State* L)
-{
+int ConfigFunctions::luaConfigManagerGetString(lua_State* L) {
 	pushString(L, g_config.getString(getNumber<stringConfig_t>(L, -1)));
 	return 1;
 }
 
-int ConfigFunctions::luaConfigManagerGetNumber(lua_State* L)
-{
+int ConfigFunctions::luaConfigManagerGetNumber(lua_State* L) {
 	lua_pushnumber(L, g_config.getNumber(getNumber<integerConfig_t>(L, -1)));
 	return 1;
 }
 
-int ConfigFunctions::luaConfigManagerGetBoolean(lua_State* L)
-{
+int ConfigFunctions::luaConfigManagerGetBoolean(lua_State* L) {
 	pushBoolean(L, g_config.getBoolean(getNumber<booleanConfig_t>(L, -1)));
 	return 1;
 }

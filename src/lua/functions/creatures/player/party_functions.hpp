@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class PartyFunctions final : LuaScriptInterface
-{
+class PartyFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Party", "", luaPartyCreate);
 		registerMetaMethod(L, "Party", "__eq", luaUserdataCompare);
 		registerMethod(L, "Party", "disband", luaPartyDisband);

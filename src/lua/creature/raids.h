@@ -27,11 +27,9 @@
 #include "game/movement/position.h"
 #include "lua/global/baseevents.h"
 
-struct MonsterSpawn
-{
+struct MonsterSpawn {
 	MonsterSpawn(std::string initName, uint32_t initMinAmount, uint32_t initMaxAmount) :
-		name(std::move(initName)), minAmount(initMinAmount), maxAmount(initMaxAmount)
-	{
+		name(std::move(initName)), minAmount(initMinAmount), maxAmount(initMaxAmount) {
 	}
 
 	std::string name;
@@ -47,8 +45,7 @@ static constexpr int32_t RAID_MINTICKS = 1000;
 class Raid;
 class RaidEvent;
 
-class Raids
-{
+class Raids {
 public:
 	Raids();
 	~Raids();
@@ -63,42 +60,35 @@ public:
 	void clear();
 	bool reload();
 
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 
-	bool isStarted() const
-	{
+	bool isStarted() const {
 		return started;
 	}
 
-	Raid* getRunning()
-	{
+	Raid* getRunning() {
 		return running;
 	}
 
-	void setRunning(Raid* newRunning)
-	{
+	void setRunning(Raid* newRunning) {
 		running = newRunning;
 	}
 
 	Raid* getRaidByName(const std::string& name);
 
-	uint64_t getLastRaidEnd() const
-	{
+	uint64_t getLastRaidEnd() const {
 		return lastRaidEnd;
 	}
 
-	void setLastRaidEnd(uint64_t newLastRaidEnd)
-	{
+	void setLastRaidEnd(uint64_t newLastRaidEnd) {
 		lastRaidEnd = newLastRaidEnd;
 	}
 
 	void checkRaids();
 
-	LuaScriptInterface& getScriptInterface()
-	{
+	LuaScriptInterface& getScriptInterface() {
 		return scriptInterface;
 	}
 
@@ -113,12 +103,10 @@ private:
 	bool started = false;
 };
 
-class Raid
-{
+class Raid {
 public:
 	Raid(std::string initName, uint32_t initInterval, uint32_t initMarginTime, bool initRepeat) :
-		name(std::move(initName)), interval(initInterval), margin(initMarginTime), repeat(initRepeat)
-	{
+		name(std::move(initName)), interval(initInterval), margin(initMarginTime), repeat(initRepeat) {
 	}
 
 	~Raid();
@@ -136,33 +124,27 @@ public:
 
 	RaidEvent* getNextRaidEvent();
 
-	void setState(RaidState_t newState)
-	{
+	void setState(RaidState_t newState) {
 		state = newState;
 	}
 
-	const std::string& getName() const
-	{
+	const std::string& getName() const {
 		return name;
 	}
 
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 
-	uint64_t getMargin() const
-	{
+	uint64_t getMargin() const {
 		return margin;
 	}
 
-	uint32_t getInterval() const
-	{
+	uint32_t getInterval() const {
 		return interval;
 	}
 
-	bool canBeRepeated() const
-	{
+	bool canBeRepeated() const {
 		return repeat;
 	}
 
@@ -180,8 +162,7 @@ private:
 	bool repeat;
 };
 
-class RaidEvent
-{
+class RaidEvent {
 public:
 	virtual ~RaidEvent() = default;
 
@@ -189,8 +170,7 @@ public:
 
 	virtual bool executeEvent() = 0;
 
-	uint32_t getDelay() const
-	{
+	uint32_t getDelay() const {
 		return delay;
 	}
 
@@ -198,8 +178,7 @@ private:
 	uint32_t delay;
 };
 
-class AnnounceEvent final : public RaidEvent
-{
+class AnnounceEvent final : public RaidEvent {
 public:
 	AnnounceEvent() = default;
 
@@ -212,8 +191,7 @@ private:
 	MessageClasses messageType = MESSAGE_EVENT_ADVANCE;
 };
 
-class SingleSpawnEvent final : public RaidEvent
-{
+class SingleSpawnEvent final : public RaidEvent {
 public:
 	bool configureRaidEvent(const pugi::xml_node& eventNode) override;
 
@@ -224,8 +202,7 @@ private:
 	Position position;
 };
 
-class AreaSpawnEvent final : public RaidEvent
-{
+class AreaSpawnEvent final : public RaidEvent {
 public:
 	bool configureRaidEvent(const pugi::xml_node& eventNode) override;
 
@@ -236,27 +213,22 @@ private:
 	Position fromPos, toPos;
 };
 
-class ScriptEvent final : public RaidEvent, public Event
-{
+class ScriptEvent final : public RaidEvent, public Event {
 public:
-	explicit ScriptEvent(LuaScriptInterface* interface) : Event(interface)
-	{
+	explicit ScriptEvent(LuaScriptInterface* interface) : Event(interface) {
 	}
 
 	bool configureRaidEvent(const pugi::xml_node& eventNode) override;
 
-	bool configureEvent(const pugi::xml_node&) override
-	{
+	bool configureEvent(const pugi::xml_node&) override {
 		return false;
 	}
 
-	std::string& getScriptName()
-	{
+	std::string& getScriptName() {
 		return scriptName;
 	}
 
-	void setScriptName(std::string name)
-	{
+	void setScriptName(std::string name) {
 		scriptName = std::move(name);
 	}
 

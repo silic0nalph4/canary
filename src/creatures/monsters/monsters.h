@@ -23,8 +23,7 @@
 #include "creatures/creature.h"
 #include "declarations.hpp"
 
-class Loot
-{
+class Loot {
 public:
 	Loot() = default;
 
@@ -37,8 +36,7 @@ public:
 
 class BaseSpell;
 
-struct spellBlock_t
-{
+struct spellBlock_t {
 	constexpr spellBlock_t() = default;
 	~spellBlock_t();
 	spellBlock_t(const spellBlock_t& other) = delete;
@@ -52,8 +50,7 @@ struct spellBlock_t
 		minCombatValue(other.minCombatValue),
 		maxCombatValue(other.maxCombatValue),
 		combatSpell(other.combatSpell),
-		isMelee(other.isMelee)
-	{
+		isMelee(other.isMelee) {
 		other.spell = nullptr;
 	}
 
@@ -67,10 +64,8 @@ struct spellBlock_t
 	bool isMelee = false;
 };
 
-class MonsterType
-{
-	struct MonsterInfo
-	{
+class MonsterType {
+	struct MonsterInfo {
 		LuaScriptInterface* scriptInterface;
 
 		std::map<CombatType_t, int32_t> elementMap;
@@ -172,8 +167,7 @@ public:
 	bool canSpawn(const Position& pos);
 };
 
-class MonsterSpell
-{
+class MonsterSpell {
 public:
 	MonsterSpell() = default;
 
@@ -218,8 +212,7 @@ public:
 	CombatType_t combatType = COMBAT_UNDEFINEDDAMAGE;
 };
 
-class Monsters
-{
+class Monsters {
 public:
 	Monsters() = default;
 	// non-copyable
@@ -228,8 +221,7 @@ public:
 
 	bool loadFromXml(bool reloading = false);
 
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 

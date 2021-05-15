@@ -24,11 +24,9 @@
 #include "declarations.hpp"
 #include "lua/scripts/luascript.h"
 
-class ConfigFunctions final : LuaScriptInterface
-{
+class ConfigFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerTable(L, "configManager");
 		registerMethod(L, "configManager", "getString", luaConfigManagerGetString);
 		registerMethod(L, "configManager", "getNumber", luaConfigManagerGetNumber);

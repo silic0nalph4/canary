@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class MoveEventFunctions final : LuaScriptInterface
-{
+class MoveEventFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "MoveEvent", "", luaCreateMoveEvent);
 		registerMethod(L, "MoveEvent", "type", luaMoveEventType);
 		registerMethod(L, "MoveEvent", "register", luaMoveEventRegister);

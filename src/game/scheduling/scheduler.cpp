@@ -21,34 +21,28 @@
 
 #include "game/scheduling/scheduler.h"
 
-void Scheduler::threadMain()
-{
+void Scheduler::threadMain() {
 	std::unique_lock<std::mutex> eventLockUnique(eventLock, std::defer_lock);
-	while (getState() != THREAD_STATE_TERMINATED)
-	{
+	while (getState() != THREAD_STATE_TERMINATED) {
 		auto ret = std::cv_status::no_timeout;
 
 		eventLockUnique.lock();
-		if (eventList.empty())
-		{
+		if (eventList.empty()) {
 			eventSignal.wait(eventLockUnique);
 		}
-		else
-		{
+		else {
 			ret = eventSignal.wait_until(eventLockUnique, eventList.top()->getCycle());
 		}
 
 		// the mutex is locked again now...
-		if (ret == std::cv_status::timeout && !eventList.empty())
-		{
+		if (ret == std::cv_status::timeout && !eventList.empty()) {
 			// ok we had a timeout, so there has to be an event we have to execute...
 			SchedulerTask* task = eventList.top();
 			eventList.pop();
 
 			// check if the event was stopped
 			auto it = eventIds.find(task->getEventId());
-			if (it == eventIds.end())
-			{
+			if (it == eventIds.end()) {
 				eventLockUnique.unlock();
 				delete task;
 				continue;
@@ -59,26 +53,21 @@ void Scheduler::threadMain()
 			task->setDontExpire();
 			g_dispatcher.addTask(task, true);
 		}
-		else
-		{
+		else {
 			eventLockUnique.unlock();
 		}
 	}
 }
 
-uint32_t Scheduler::addEvent(SchedulerTask* task)
-{
+uint32_t Scheduler::addEvent(SchedulerTask* task) {
 	bool do_signal;
 	eventLock.lock();
 
-	if (getState() == THREAD_STATE_RUNNING)
-	{
+	if (getState() == THREAD_STATE_RUNNING) {
 		// check if the event has a valid id
-		if (task->getEventId() == 0)
-		{
+		if (task->getEventId() == 0) {
 			// if not generate one
-			if (++lastEventId == 0)
-			{
+			if (++lastEventId == 0) {
 				lastEventId = 1;
 			}
 
@@ -95,8 +84,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 		// we have to signal it
 		do_signal = (task == eventList.top());
 	}
-	else
-	{
+	else {
 		eventLock.unlock();
 		delete task;
 		return 0;
@@ -104,18 +92,15 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 
 	eventLock.unlock();
 
-	if (do_signal)
-	{
+	if (do_signal) {
 		eventSignal.notify_one();
 	}
 
 	return task->getEventId();
 }
 
-bool Scheduler::stopEvent(uint32_t eventid)
-{
-	if (eventid == 0)
-	{
+bool Scheduler::stopEvent(uint32_t eventid) {
+	if (eventid == 0) {
 		return false;
 	}
 
@@ -123,8 +108,7 @@ bool Scheduler::stopEvent(uint32_t eventid)
 
 	// search the event id..
 	const auto it = eventIds.find(eventid);
-	if (it == eventIds.end())
-	{
+	if (it == eventIds.end()) {
 		return false;
 	}
 
@@ -132,14 +116,12 @@ bool Scheduler::stopEvent(uint32_t eventid)
 	return true;
 }
 
-void Scheduler::shutdown()
-{
+void Scheduler::shutdown() {
 	setState(THREAD_STATE_TERMINATED);
 	eventLock.lock();
 
 	//this list should already be empty
-	while (!eventList.empty())
-	{
+	while (!eventList.empty()) {
 		delete eventList.top();
 		eventList.pop();
 	}
@@ -149,7 +131,6 @@ void Scheduler::shutdown()
 	eventSignal.notify_one();
 }
 
-SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f)
-{
+SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f) {
 	return new SchedulerTask(delay, std::move(f));
 }

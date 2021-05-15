@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class VocationFunctions final : LuaScriptInterface
-{
+class VocationFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Vocation", "", luaVocationCreate);
 		registerMetaMethod(L, "Vocation", "__eq", luaUserdataCompare);
 

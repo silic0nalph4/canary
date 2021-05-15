@@ -23,8 +23,7 @@
 #include "database/database.h"
 #include "map/map.h"
 
-class IOMapSerialize
-{
+class IOMapSerialize {
 public:
 	static void loadHouseItems(Map* map);
 	static bool saveHouseItems();

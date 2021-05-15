@@ -27,8 +27,7 @@
 #include "items/itemloader.h"
 #include "game/movement/position.h"
 
-struct Abilities
-{
+struct Abilities {
 	uint32_t healthGain = 0;
 	uint32_t healthTicks = 0;
 	uint32_t manaGain = 0;
@@ -66,8 +65,7 @@ struct Abilities
 
 class ConditionDamage;
 
-class ItemType
-{
+class ItemType {
 public:
 	ItemType() = default;
 
@@ -78,114 +76,91 @@ public:
 	ItemType(ItemType&& other) = default;
 	ItemType& operator=(ItemType&& other) = default;
 
-	bool isGroundTile() const
-	{
+	bool isGroundTile() const {
 		return group == ITEM_GROUP_GROUND;
 	}
 
-	bool isContainer() const
-	{
+	bool isContainer() const {
 		return group == ITEM_GROUP_CONTAINER;
 	}
 
-	bool isSplash() const
-	{
+	bool isSplash() const {
 		return group == ITEM_GROUP_SPLASH;
 	}
 
-	bool isFluidContainer() const
-	{
+	bool isFluidContainer() const {
 		return group == ITEM_GROUP_FLUID;
 	}
 
-	bool isDoor() const
-	{
+	bool isDoor() const {
 		return (type == ITEM_TYPE_DOOR);
 	}
 
-	bool isMagicField() const
-	{
+	bool isMagicField() const {
 		return (type == ITEM_TYPE_MAGICFIELD);
 	}
 
-	bool isTeleport() const
-	{
+	bool isTeleport() const {
 		return (type == ITEM_TYPE_TELEPORT);
 	}
 
-	bool isKey() const
-	{
+	bool isKey() const {
 		return (type == ITEM_TYPE_KEY);
 	}
 
-	bool isDepot() const
-	{
+	bool isDepot() const {
 		return (type == ITEM_TYPE_DEPOT);
 	}
 
-	bool isRewardChest() const
-	{
+	bool isRewardChest() const {
 		return (type == ITEM_TYPE_REWARDCHEST);
 	}
 
-	bool isCarpet() const
-	{
+	bool isCarpet() const {
 		return (type == ITEM_TYPE_CARPET);
 	}
 
-	bool isMailbox() const
-	{
+	bool isMailbox() const {
 		return (type == ITEM_TYPE_MAILBOX);
 	}
 
-	bool isTrashHolder() const
-	{
+	bool isTrashHolder() const {
 		return (type == ITEM_TYPE_TRASHHOLDER);
 	}
 
-	bool isBed() const
-	{
+	bool isBed() const {
 		return (type == ITEM_TYPE_BED);
 	}
 
-	bool isRune() const
-	{
+	bool isRune() const {
 		return (type == ITEM_TYPE_RUNE);
 	}
 
-	bool isPickupable() const
-	{
+	bool isPickupable() const {
 		return (allowPickupable || pickupable);
 	}
 
-	bool isUseable() const
-	{
+	bool isUseable() const {
 		return (useable);
 	}
 
-	bool hasSubType() const
-	{
+	bool hasSubType() const {
 		return (isFluidContainer() || isSplash() || stackable || charges != 0);
 	}
 
-	Abilities& getAbilities()
-	{
-		if (!abilities)
-		{
+	Abilities& getAbilities() {
+		if (!abilities) {
 			abilities = std::make_unique<Abilities>();
 		}
 		return *abilities;
 	}
 
-	std::string getPluralName() const
-	{
-		if (!pluralName.empty())
-		{
+	std::string getPluralName() const {
+		if (!pluralName.empty()) {
 			return pluralName;
 		}
 
-		if (showCount == 0)
-		{
+		if (showCount == 0) {
 			return name;
 		}
 
@@ -292,8 +267,7 @@ public:
 	bool showCount = true;
 };
 
-class Items
-{
+class Items {
 public:
 	using NameMap = std::unordered_multimap<std::string, uint16_t>;
 	using InventoryVector = std::vector<uint16_t>;
@@ -309,8 +283,7 @@ public:
 
 	FILELOADER_ERRORS loadFromOtb(const std::string& file);
 
-	const ItemType& operator[](size_t id) const
-	{
+	const ItemType& operator[](size_t id) const {
 		return getItemType(id);
 	}
 
@@ -329,13 +302,11 @@ public:
 
 	void buildInventoryList();
 
-	const InventoryVector& getInventory() const
-	{
+	const InventoryVector& getInventory() const {
 		return inventory;
 	}
 
-	size_t size() const
-	{
+	size_t size() const {
 		return items.size();
 	}
 

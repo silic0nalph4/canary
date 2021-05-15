@@ -26,40 +26,32 @@
 #include "declarations.hpp"
 
 template <typename Derived>
-class ThreadHolder
-{
+class ThreadHolder {
 public:
-	ThreadHolder()
-	{
+	ThreadHolder() {
 	}
 
-	void start()
-	{
+	void start() {
 		setState(THREAD_STATE_RUNNING);
 		thread = std::thread(&Derived::threadMain, static_cast<Derived*>(this));
 	}
 
-	void stop()
-	{
+	void stop() {
 		setState(THREAD_STATE_CLOSING);
 	}
 
-	void join()
-	{
-		if (thread.joinable())
-		{
+	void join() {
+		if (thread.joinable()) {
 			thread.join();
 		}
 	}
 
 protected:
-	void setState(ThreadState newState)
-	{
+	void setState(ThreadState newState) {
 		threadState.store(newState, std::memory_order_relaxed);
 	}
 
-	ThreadState getState() const
-	{
+	ThreadState getState() const {
 		return threadState.load(std::memory_order_relaxed);
 	}
 

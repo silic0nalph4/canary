@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class GroupFunctions final : LuaScriptInterface
-{
+class GroupFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Group", "", luaGroupCreate);
 		registerMetaMethod(L, "Group", "__eq", luaUserdataCompare);
 

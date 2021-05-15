@@ -26,8 +26,7 @@
 class Npc;
 class NpcType;
 
-struct spawnBlockNpc_t
-{
+struct spawnBlockNpc_t {
 	Position pos;
 	NpcType* npcType;
 	int64_t lastSpawnNpc;
@@ -35,11 +34,9 @@ struct spawnBlockNpc_t
 	Direction direction;
 };
 
-class SpawnNpc
-{
+class SpawnNpc {
 public:
-	SpawnNpc(Position initPos, int32_t initRadius) : centerPos(initPos), radius(initRadius)
-	{
+	SpawnNpc(Position initPos, int32_t initRadius) : centerPos(initPos), radius(initRadius) {
 	}
 
 	~SpawnNpc();
@@ -51,8 +48,7 @@ public:
 	bool addNpc(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
 	void removeNpc(Npc* npc);
 
-	uint32_t getInterval() const
-	{
+	uint32_t getInterval() const {
 		return interval;
 	}
 
@@ -85,8 +81,7 @@ private:
 	void scheduleSpawnNpc(uint32_t spawnId, spawnBlockNpc_t sb, uint16_t interval);
 };
 
-class SpawnsNpc
-{
+class SpawnsNpc {
 public:
 	static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
@@ -94,18 +89,15 @@ public:
 	void startup();
 	void clear();
 
-	bool isStarted() const
-	{
+	bool isStarted() const {
 		return started;
 	}
 
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 
-	std::forward_list<SpawnNpc>& getSpawnNpcList()
-	{
+	std::forward_list<SpawnNpc>& getSpawnNpcList() {
 		return spawnNpcList;
 	}
 

@@ -28,33 +28,27 @@ class Party;
 
 using PlayerVector = std::vector<Player*>;
 
-class Party
-{
+class Party {
 public:
 	explicit Party(Player* leader);
 
-	Player* getLeader() const
-	{
+	Player* getLeader() const {
 		return leader;
 	}
 
-	PlayerVector& getMembers()
-	{
+	PlayerVector& getMembers() {
 		return memberList;
 	}
 
-	const PlayerVector& getInvitees() const
-	{
+	const PlayerVector& getInvitees() const {
 		return inviteList;
 	}
 
-	size_t getMemberCount() const
-	{
+	size_t getMemberCount() const {
 		return memberList.size();
 	}
 
-	size_t getInvitationCount() const
-	{
+	size_t getInvitationCount() const {
 		return inviteList.size();
 	}
 
@@ -71,8 +65,7 @@ public:
 	void updateAllPartyIcons();
 	void broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations = false);
 
-	bool empty() const
-	{
+	bool empty() const {
 		return memberList.empty() && inviteList.empty();
 	}
 
@@ -81,13 +74,11 @@ public:
 	void shareExperience(uint64_t experience, Creature* source = nullptr);
 	bool setSharedExperience(Player* player, bool sharedExpActive);
 
-	bool isSharedExperienceActive() const
-	{
+	bool isSharedExperienceActive() const {
 		return sharedExpActive;
 	}
 
-	bool isSharedExperienceEnabled() const
-	{
+	bool isSharedExperienceEnabled() const {
 		return sharedExpEnabled;
 	}
 

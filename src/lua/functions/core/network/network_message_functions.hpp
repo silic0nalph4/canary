@@ -27,11 +27,9 @@
 
 extern LuaEnvironment g_luaEnvironment;
 
-class NetworkMessageFunctions final : LuaScriptInterface
-{
+class NetworkMessageFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "NetworkMessage", "", luaNetworkMessageCreate);
 		registerMetaMethod(L, "NetworkMessage", "__eq", luaUserdataCompare);
 		registerMetaMethod(L, "NetworkMessage", "__gc", luaNetworkMessageDelete);

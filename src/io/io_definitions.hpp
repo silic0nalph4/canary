@@ -21,8 +21,7 @@
 #define SRC_IO_IO_DEFINITIONS_HPP_
 
 // Enums
-enum FILELOADER_ERRORS
-{
+enum FILELOADER_ERRORS {
 	ERROR_NONE = 0,
 	ERROR_INVALID_FILE_VERSION,
 	ERROR_CAN_NOT_OPEN,
@@ -34,8 +33,7 @@ enum FILELOADER_ERRORS
 	ERROR_INVALID_FORMAT,
 };
 
-enum OTBM_AttrTypes_t
-{
+enum OTBM_AttrTypes_t {
 	OTBM_ATTR_DESCRIPTION = 1,
 	OTBM_ATTR_EXT_FILE = 2,
 	OTBM_ATTR_TILE_FLAGS = 3,
@@ -61,8 +59,7 @@ enum OTBM_AttrTypes_t
 	OTBM_ATTR_EXT_SPAWN_NPC_FILE = 23
 };
 
-enum OTBM_NodeTypes_t
-{
+enum OTBM_NodeTypes_t {
 	OTBM_ROOTV1 = 1,
 	OTBM_MAP_DATA = 2,
 	OTBM_ITEM_DEF = 3,
@@ -81,8 +78,7 @@ enum OTBM_NodeTypes_t
 	OTBM_WAYPOINT = 16,
 };
 
-enum OTBM_TileFlag_t : uint32_t
-{
+enum OTBM_TileFlag_t : uint32_t {
 	OTBM_TILEFLAG_PROTECTIONZONE = 1 << 0,
 	OTBM_TILEFLAG_NOPVPZONE = 1 << 2,
 	OTBM_TILEFLAG_NOLOGOUT = 1 << 3,
@@ -90,10 +86,8 @@ enum OTBM_TileFlag_t : uint32_t
 };
 
 // Structs
-struct MarketStatistics
-{
-	MarketStatistics()
-	{
+struct MarketStatistics {
+	MarketStatistics() {
 		numTransactions = 0;
 		highestPrice = 0;
 		totalPrice = 0;

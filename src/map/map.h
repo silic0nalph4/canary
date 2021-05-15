@@ -41,8 +41,7 @@ static constexpr int32_t MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
 
-struct AStarNode
-{
+struct AStarNode {
 	AStarNode* parent;
 	int_fast32_t f;
 	uint16_t x, y;
@@ -54,8 +53,7 @@ static constexpr int32_t MAP_NORMALWALKCOST = 10;
 static constexpr int32_t MAP_PREFERDIAGONALWALKCOST = 14;
 static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
 
-class AStarNodes
-{
+class AStarNodes {
 public:
 	AStarNodes(uint32_t x, uint32_t y);
 
@@ -83,8 +81,7 @@ static constexpr int32_t FLOOR_BITS = 3;
 static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
 static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
 
-struct Floor
-{
+struct Floor {
 	constexpr Floor() = default;
 	~Floor();
 
@@ -98,8 +95,7 @@ struct Floor
 class FrozenPathingConditionCall;
 class QTreeLeafNode;
 
-class QTreeNode
-{
+class QTreeNode {
 public:
 	constexpr QTreeNode() = default;
 	virtual ~QTreeNode();
@@ -108,21 +104,17 @@ public:
 	QTreeNode(const QTreeNode&) = delete;
 	QTreeNode& operator=(const QTreeNode&) = delete;
 
-	bool isLeaf() const
-	{
+	bool isLeaf() const {
 		return leaf;
 	}
 
 	QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
 
 	template <typename Leaf, typename Node>
-	static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y)
-	{
-		do
-		{
+	static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y) {
+		do {
 			node = node->child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
-			if (!node)
-			{
+			if (!node) {
 				return nullptr;
 			}
 
@@ -143,11 +135,9 @@ protected:
 	friend class Map;
 };
 
-class QTreeLeafNode final : public QTreeNode
-{
+class QTreeLeafNode final : public QTreeNode {
 public:
-	QTreeLeafNode()
-	{
+	QTreeLeafNode() {
 		leaf = true;
 		newLeaf = true;
 	}
@@ -160,8 +150,7 @@ public:
 
 	Floor* createFloor(uint32_t z);
 
-	Floor* getFloor(uint8_t z) const
-	{
+	Floor* getFloor(uint8_t z) const {
 		return array[z];
 	}
 
@@ -185,8 +174,7 @@ private:
   * Holds all the actual map-data
   */
 
-class Map
-{
+class Map {
 public:
 	static constexpr int32_t maxViewportX = 11; //min value: maxClientViewportX + 1
 	static constexpr int32_t maxViewportY = 11; //min value: maxClientViewportY + 1
@@ -213,8 +201,7 @@ public:
        */
 	Tile* getTile(uint16_t x, uint16_t y, uint8_t z) const;
 
-	Tile* getTile(const Position& pos) const
-	{
+	Tile* getTile(const Position& pos) const {
 		return getTile(pos.x, pos.y, pos.z);
 	}
 
@@ -223,8 +210,7 @@ public:
        */
 	void setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile);
 
-	void setTile(const Position& pos, Tile* newTile)
-	{
+	void setTile(const Position& pos, Tile* newTile) {
 		setTile(pos.x, pos.y, pos.z, newTile);
 	}
 
@@ -279,8 +265,7 @@ public:
 
 	std::map<std::string, Position> waypoints;
 
-	QTreeLeafNode* getQTNode(uint16_t x, uint16_t y)
-	{
+	QTreeLeafNode* getQTNode(uint16_t x, uint16_t y) {
 		return QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, x, y);
 	}
 

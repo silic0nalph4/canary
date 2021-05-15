@@ -29,13 +29,11 @@ class Item;
 
 class Imbuement;
 
-struct BaseImbue
-{
+struct BaseImbue {
 	BaseImbue(uint16_t initId, std::string initName, uint32_t initProtection, uint32_t initPrice, uint32_t initRemovecust,
 	          int32_t initDuration, uint16_t initPercent) :
 		id(initId), name(std::move(initName)), protection(initProtection), price(initPrice), removecust(initRemovecust),
-		duration(initDuration), percent(initPercent)
-	{
+		duration(initDuration), percent(initPercent) {
 	}
 
 	uint16_t id;
@@ -47,19 +45,16 @@ struct BaseImbue
 	uint16_t percent;
 };
 
-struct Category
-{
+struct Category {
 	Category(uint16_t initId, std::string initName) :
-		id(initId), name(std::move(initName))
-	{
+		id(initId), name(std::move(initName)) {
 	}
 
 	uint16_t id;
 	std::string name;
 };
 
-class Imbuements
-{
+class Imbuements {
 public:
 	bool loadFromXml(bool reloading = false);
 	bool reload();
@@ -83,56 +78,45 @@ private:
 	uint32_t runningid = 0;
 };
 
-class Imbuement
-{
+class Imbuement {
 public:
 	Imbuement(uint16_t initId, uint16_t initBaseId) :
-		id(initId), baseid(initBaseId)
-	{
+		id(initId), baseid(initBaseId) {
 	}
 
-	uint16_t getId() const
-	{
+	uint16_t getId() const {
 		return id;
 	}
 
-	uint16_t getBaseID() const
-	{
+	uint16_t getBaseID() const {
 		return baseid;
 	}
 
-	bool isPremium()
-	{
+	bool isPremium() {
 		return premium;
 	}
 
-	std::string getName() const
-	{
+	std::string getName() const {
 		return name;
 	}
 
-	std::string getDescription() const
-	{
+	std::string getDescription() const {
 		return description;
 	}
 
-	std::string getSubGroup() const
-	{
+	std::string getSubGroup() const {
 		return subgroup;
 	}
 
-	uint16_t getCategory() const
-	{
+	uint16_t getCategory() const {
 		return category;
 	}
 
-	const std::vector<std::pair<uint16_t, uint16_t>>& getItems() const
-	{
+	const std::vector<std::pair<uint16_t, uint16_t>>& getItems() const {
 		return items;
 	}
 
-	uint16_t getIconID()
-	{
+	uint16_t getIconID() {
 		return icon + (baseid - 1);
 	}
 

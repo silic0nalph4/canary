@@ -24,49 +24,41 @@
 #include "database/databasetasks.h"
 #include "utils/tools.h"
 
-bool Ban::acceptConnection(uint32_t clientIP)
-{
+bool Ban::acceptConnection(uint32_t clientIP) {
 	std::lock_guard<std::recursive_mutex> lockClass(lock);
 
 	const uint64_t currentTime = OTSYS_TIME();
 
 	auto it = ipConnectMap.find(clientIP);
-	if (it == ipConnectMap.end())
-	{
+	if (it == ipConnectMap.end()) {
 		ipConnectMap.emplace(clientIP, ConnectBlock(currentTime, 0, 1));
 		return true;
 	}
 
 	ConnectBlock& connectBlock = it->second;
-	if (connectBlock.blockTime > currentTime)
-	{
+	if (connectBlock.blockTime > currentTime) {
 		connectBlock.blockTime += 250;
 		return false;
 	}
 
 	const int64_t timeDiff = currentTime - connectBlock.lastAttempt;
 	connectBlock.lastAttempt = currentTime;
-	if (timeDiff <= 5000)
-	{
-		if (++connectBlock.count > 5)
-		{
+	if (timeDiff <= 5000) {
+		if (++connectBlock.count > 5) {
 			connectBlock.count = 0;
-			if (timeDiff <= 500)
-			{
+			if (timeDiff <= 500) {
 				connectBlock.blockTime = currentTime + 3000;
 				return false;
 			}
 		}
 	}
-	else
-	{
+	else {
 		connectBlock.count = 1;
 	}
 	return true;
 }
 
-bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
-{
+bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo) {
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
@@ -75,14 +67,12 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 		<< accountId;
 
 	const DBResult_ptr result = db.storeQuery(query.str());
-	if (!result)
-	{
+	if (!result) {
 		return false;
 	}
 
 	const int64_t expiresAt = result->getNumber<int64_t>("expires_at");
-	if (expiresAt != 0 && time(nullptr) > expiresAt)
-	{
+	if (expiresAt != 0 && time(nullptr) > expiresAt) {
 		// Move the ban to history if it has expired
 		query.str(std::string());
 		query <<
@@ -103,10 +93,8 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 	return true;
 }
 
-bool IOBan::isIpBanned(uint32_t clientIP, BanInfo& banInfo)
-{
-	if (clientIP == 0)
-	{
+bool IOBan::isIpBanned(uint32_t clientIP, BanInfo& banInfo) {
+	if (clientIP == 0) {
 		return false;
 	}
 
@@ -118,14 +106,12 @@ bool IOBan::isIpBanned(uint32_t clientIP, BanInfo& banInfo)
 		<< clientIP;
 
 	const DBResult_ptr result = db.storeQuery(query.str());
-	if (!result)
-	{
+	if (!result) {
 		return false;
 	}
 
 	const int64_t expiresAt = result->getNumber<int64_t>("expires_at");
-	if (expiresAt != 0 && time(nullptr) > expiresAt)
-	{
+	if (expiresAt != 0 && time(nullptr) > expiresAt) {
 		query.str(std::string());
 		query << "DELETE FROM `ip_bans` WHERE `ip` = " << clientIP;
 		g_databaseTasks.addTask(query.str());
@@ -138,8 +124,7 @@ bool IOBan::isIpBanned(uint32_t clientIP, BanInfo& banInfo)
 	return true;
 }
 
-bool IOBan::isPlayerNamelocked(uint32_t playerId)
-{
+bool IOBan::isPlayerNamelocked(uint32_t playerId) {
 	std::ostringstream query;
 	query << "SELECT 1 FROM `player_namelocks` WHERE `player_id` = " << playerId;
 	return Database::getInstance().storeQuery(query.str()).get() != nullptr;

@@ -29,16 +29,14 @@ class Creature;
 class Player;
 class PropStream;
 
-class Condition
-{
+class Condition {
 public:
 	Condition() = default;
 
 	Condition(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff = false,
 	          uint32_t initSubId = 0) :
 		endTime(initTicks == -1 ? std::numeric_limits<int64_t>::max() : 0),
-		subId(initSubId), ticks(initTicks), conditionType(initType), id(initId), isBuff(initBuff)
-	{
+		subId(initSubId), ticks(initTicks), conditionType(initType), id(initId), isBuff(initBuff) {
 	}
 
 	virtual ~Condition() = default;
@@ -49,30 +47,25 @@ public:
 	virtual void addCondition(Creature* creature, const Condition* condition) = 0;
 	virtual uint32_t getIcons() const;
 
-	ConditionId_t getId() const
-	{
+	ConditionId_t getId() const {
 		return id;
 	}
 
-	uint32_t getSubId() const
-	{
+	uint32_t getSubId() const {
 		return subId;
 	}
 
 	virtual Condition* clone() const = 0;
 
-	ConditionType_t getType() const
-	{
+	ConditionType_t getType() const {
 		return conditionType;
 	}
 
-	int64_t getEndTime() const
-	{
+	int64_t getEndTime() const {
 		return endTime;
 	}
 
-	int32_t getTicks() const
-	{
+	int32_t getTicks() const {
 		return ticks;
 	}
 
@@ -102,13 +95,11 @@ protected:
 	virtual bool updateCondition(const Condition* addCondition);
 };
 
-class ConditionGeneric : public Condition
-{
+class ConditionGeneric : public Condition {
 public:
 	ConditionGeneric(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff = false,
 	                 uint32_t initSubId = 0):
-		Condition(initId, initType, initTicks, initBuff, initSubId)
-	{
+		Condition(initId, initType, initTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature) override;
@@ -117,19 +108,16 @@ public:
 	void addCondition(Creature* creature, const Condition* condition) override;
 	uint32_t getIcons() const override;
 
-	ConditionGeneric* clone() const override
-	{
+	ConditionGeneric* clone() const override {
 		return new ConditionGeneric(*this);
 	}
 };
 
-class ConditionAttributes final : public ConditionGeneric
-{
+class ConditionAttributes final : public ConditionGeneric {
 public:
 	ConditionAttributes(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff = false,
 	                    uint32_t initSubId = 0) :
-		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId)
-	{
+		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature);
@@ -139,8 +127,7 @@ public:
 
 	bool setParam(ConditionParam_t param, int32_t value);
 
-	ConditionAttributes* clone() const
-	{
+	ConditionAttributes* clone() const {
 		return new ConditionAttributes(*this);
 	}
 
@@ -169,13 +156,11 @@ private:
 	void updateBuffs(Creature* creature);
 };
 
-class ConditionRegeneration final : public ConditionGeneric
-{
+class ConditionRegeneration final : public ConditionGeneric {
 public:
 	ConditionRegeneration(ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false,
 	                      uint32_t initSubId = 0):
-		ConditionGeneric(initId, initType, iniTicks, initBuff, initSubId)
-	{
+		ConditionGeneric(initId, initType, iniTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature) override;
@@ -185,8 +170,7 @@ public:
 
 	bool setParam(ConditionParam_t param, int32_t value) override;
 
-	ConditionRegeneration* clone() const override
-	{
+	ConditionRegeneration* clone() const override {
 		return new ConditionRegeneration(*this);
 	}
 
@@ -204,13 +188,11 @@ private:
 	uint32_t manaGain = 0;
 };
 
-class ConditionManaShield final : public Condition
-{
+class ConditionManaShield final : public Condition {
 public:
 	ConditionManaShield(ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false,
 	                    uint32_t initSubId = 0) :
-		Condition(initId, initType, iniTicks, initBuff, initSubId)
-	{
+		Condition(initId, initType, iniTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature) override;
@@ -220,8 +202,7 @@ public:
 
 	bool setParam(ConditionParam_t param, int32_t value) override;
 
-	ConditionManaShield* clone() const override
-	{
+	ConditionManaShield* clone() const override {
 		return new ConditionManaShield(*this);
 	}
 
@@ -233,13 +214,11 @@ private:
 	uint16_t manaShield = 0;
 };
 
-class ConditionSoul final : public ConditionGeneric
-{
+class ConditionSoul final : public ConditionGeneric {
 public:
 	ConditionSoul(ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false,
 	              uint32_t initSubId = 0) :
-		ConditionGeneric(initId, initType, iniTicks, initBuff, initSubId)
-	{
+		ConditionGeneric(initId, initType, iniTicks, initBuff, initSubId) {
 	}
 
 	void addCondition(Creature* creature, const Condition* addCondition) override;
@@ -247,8 +226,7 @@ public:
 
 	bool setParam(ConditionParam_t param, int32_t value) override;
 
-	ConditionSoul* clone() const override
-	{
+	ConditionSoul* clone() const override {
 		return new ConditionSoul(*this);
 	}
 
@@ -262,32 +240,27 @@ private:
 	uint32_t soulGain = 0;
 };
 
-class ConditionInvisible final : public ConditionGeneric
-{
+class ConditionInvisible final : public ConditionGeneric {
 public:
 	ConditionInvisible(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff = false,
 	                   uint32_t initSubId = 0) :
-		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId)
-	{
+		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature) override;
 	void endCondition(Creature* creature) override;
 
-	ConditionInvisible* clone() const override
-	{
+	ConditionInvisible* clone() const override {
 		return new ConditionInvisible(*this);
 	}
 };
 
-class ConditionDamage final : public Condition
-{
+class ConditionDamage final : public Condition {
 public:
 	ConditionDamage() = default;
 
 	ConditionDamage(ConditionId_t intiId, ConditionType_t initType, bool initBuff = false, uint32_t initSubId = 0) :
-		Condition(intiId, initType, 0, initBuff, initSubId)
-	{
+		Condition(intiId, initType, 0, initBuff, initSubId) {
 	}
 
 	static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list);
@@ -298,8 +271,7 @@ public:
 	void addCondition(Creature* creature, const Condition* condition) override;
 	uint32_t getIcons() const override;
 
-	ConditionDamage* clone() const override
-	{
+	ConditionDamage* clone() const override {
 		return new ConditionDamage(*this);
 	}
 
@@ -307,8 +279,7 @@ public:
 
 	bool addDamage(int32_t rounds, int32_t time, int32_t value);
 
-	bool doForceUpdate() const
-	{
+	bool doForceUpdate() const {
 		return forceUpdate;
 	}
 
@@ -341,13 +312,11 @@ private:
 	bool updateCondition(const Condition* addCondition) override;
 };
 
-class ConditionSpeed final : public Condition
-{
+class ConditionSpeed final : public Condition {
 public:
 	ConditionSpeed(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff, uint32_t initSubId,
 	               int32_t initChangeSpeed) :
-		Condition(initId, initType, initTicks, initBuff, initSubId), speedDelta(initChangeSpeed)
-	{
+		Condition(initId, initType, initTicks, initBuff, initSubId), speedDelta(initChangeSpeed) {
 	}
 
 	bool startCondition(Creature* creature) override;
@@ -356,8 +325,7 @@ public:
 	void addCondition(Creature* creature, const Condition* condition) override;
 	uint32_t getIcons() const override;
 
-	ConditionSpeed* clone() const override
-	{
+	ConditionSpeed* clone() const override {
 		return new ConditionSpeed(*this);
 	}
 
@@ -381,13 +349,11 @@ private:
 	float maxb = 0.0f;
 };
 
-class ConditionOutfit final : public Condition
-{
+class ConditionOutfit final : public Condition {
 public:
 	ConditionOutfit(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff = false,
 	                uint32_t initSubId = 0) :
-		Condition(initId, initType, initTicks, initBuff, initSubId)
-	{
+		Condition(initId, initType, initTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature) override;
@@ -395,8 +361,7 @@ public:
 	void endCondition(Creature* creature) override;
 	void addCondition(Creature* creature, const Condition* condition) override;
 
-	ConditionOutfit* clone() const override
-	{
+	ConditionOutfit* clone() const override {
 		return new ConditionOutfit(*this);
 	}
 
@@ -412,13 +377,11 @@ private:
 	std::string monsterName;
 };
 
-class ConditionLight final : public Condition
-{
+class ConditionLight final : public Condition {
 public:
 	ConditionLight(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff, uint32_t initSubId,
 	               uint8_t initLightlevel, uint8_t initLightcolor) :
-		Condition(initId, initType, initTicks, initBuff, initSubId), lightInfo(initLightlevel, initLightcolor)
-	{
+		Condition(initId, initType, initTicks, initBuff, initSubId), lightInfo(initLightlevel, initLightcolor) {
 	}
 
 	bool startCondition(Creature* creature) override;
@@ -426,8 +389,7 @@ public:
 	void endCondition(Creature* creature) override;
 	void addCondition(Creature* creature, const Condition* addCondition) override;
 
-	ConditionLight* clone() const override
-	{
+	ConditionLight* clone() const override {
 		return new ConditionLight(*this);
 	}
 
@@ -443,38 +405,32 @@ private:
 	uint32_t lightChangeInterval = 0;
 };
 
-class ConditionSpellCooldown final : public ConditionGeneric
-{
+class ConditionSpellCooldown final : public ConditionGeneric {
 public:
 	ConditionSpellCooldown(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff = false,
 	                       uint32_t initSubId = 0) :
-		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId)
-	{
+		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature) override;
 	void addCondition(Creature* creature, const Condition* condition) override;
 
-	ConditionSpellCooldown* clone() const override
-	{
+	ConditionSpellCooldown* clone() const override {
 		return new ConditionSpellCooldown(*this);
 	}
 };
 
-class ConditionSpellGroupCooldown final : public ConditionGeneric
-{
+class ConditionSpellGroupCooldown final : public ConditionGeneric {
 public:
 	ConditionSpellGroupCooldown(ConditionId_t initId, ConditionType_t initType, int32_t initTicks, bool initBuff = false,
 	                            uint32_t initSubId = 0) :
-		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId)
-	{
+		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId) {
 	}
 
 	bool startCondition(Creature* creature) override;
 	void addCondition(Creature* creature, const Condition* condition) override;
 
-	ConditionSpellGroupCooldown* clone() const override
-	{
+	ConditionSpellGroupCooldown* clone() const override {
 		return new ConditionSpellGroupCooldown(*this);
 	}
 };

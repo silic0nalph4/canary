@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class GlobalFunctions final : LuaScriptInterface
-{
+class GlobalFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		lua_register(L, "addEvent", GlobalFunctions::luaAddEvent);
 		lua_register(L, "cleanMap", GlobalFunctions::luaCleanMap);
 		lua_register(L, "createCombatArea", GlobalFunctions::luaCreateCombatArea);

@@ -22,10 +22,8 @@
 
 #include "creatures/creature.h"
 
-class NpcType
-{
-	struct NpcInfo
-	{
+class NpcType {
+	struct NpcInfo {
 		LuaScriptInterface* scriptInterface;
 
 		Outfit_t outfit = {};
@@ -71,8 +69,7 @@ class NpcType
 public:
 	NpcType() = default;
 
-	NpcType(const std::string& name) : name(name), nameDescription(name)
-	{
+	NpcType(const std::string& name) : name(name), nameDescription(name) {
 	};
 
 	// non-copyable
@@ -83,8 +80,7 @@ public:
 	std::string nameDescription;
 	NpcInfo info;
 
-	void addShopItem(uint16_t serverId, ShopInfo& item)
-	{
+	void addShopItem(uint16_t serverId, ShopInfo& item) {
 		info.shopItems[serverId] = item;
 	}
 
@@ -92,8 +88,7 @@ public:
 	bool canSpawn(const Position& pos);
 };
 
-class Npcs
-{
+class Npcs {
 public:
 	Npcs() = default;
 	// non-copyable
@@ -102,8 +97,7 @@ public:
 
 	NpcType* getNpcType(const std::string& name, bool create = false);
 
-	void reset()
-	{
+	void reset() {
 		npcs.clear();
 		scriptInterface.reset();
 	};

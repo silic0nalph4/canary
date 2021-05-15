@@ -25,11 +25,9 @@
 #include "lua/functions/creatures/combat/spell_functions.hpp"
 #include "lua/functions/creatures/combat/variant_functions.hpp"
 
-class CombatFunctions final : LuaScriptInterface
-{
+class CombatFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Combat", "", luaCombatCreate);
 		registerMetaMethod(L, "Combat", "__eq", luaUserdataCompare);
 

@@ -27,11 +27,9 @@
 
 extern LuaEnvironment g_luaEnvironment;
 
-class GameFunctions final : LuaScriptInterface
-{
+class GameFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerTable(L, "Game");
 
 		registerMethod(L, "Game", "createNpcType", luaGameCreateNpcType);

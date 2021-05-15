@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class ConditionFunctions final : LuaScriptInterface
-{
+class ConditionFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Condition", "", luaConditionCreate);
 		registerMetaMethod(L, "Condition", "__eq", luaUserdataCompare);
 		registerMetaMethod(L, "Condition", "__gc", luaConditionDelete);

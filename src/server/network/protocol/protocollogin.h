@@ -25,8 +25,7 @@
 class NetworkMessage;
 class OutputMessage;
 
-class ProtocolLogin : public Protocol
-{
+class ProtocolLogin : public Protocol {
 public:
 	// static protocol information
 	enum { SERVER_SENDS_FIRST = false };
@@ -35,13 +34,11 @@ public:
 
 	enum { USE_CHECKSUM = true };
 
-	static const char* protocol_name()
-	{
+	static const char* protocol_name() {
 		return "login protocol";
 	}
 
-	explicit ProtocolLogin(const Connection_ptr& loginConnection) : Protocol(loginConnection)
-	{
+	explicit ProtocolLogin(const Connection_ptr& loginConnection) : Protocol(loginConnection) {
 	}
 
 	void onRecvFirstMessage(NetworkMessage& msg) override;

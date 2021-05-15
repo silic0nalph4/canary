@@ -28,8 +28,7 @@ class Item;
 class Creature;
 class Container;
 
-class Thing
-{
+class Thing {
 public:
 	constexpr Thing() = default;
 	virtual ~Thing() = default;
@@ -40,18 +39,15 @@ public:
 
 	virtual std::string getDescription(int32_t lookDistance) const = 0;
 
-	virtual Cylinder* getParent() const
-	{
+	virtual Cylinder* getParent() const {
 		return nullptr;
 	}
 
-	virtual Cylinder* getRealParent() const
-	{
+	virtual Cylinder* getRealParent() const {
 		return getParent();
 	}
 
-	virtual void setParent(Cylinder*)
-	{
+	virtual void setParent(Cylinder*) {
 		//
 	}
 
@@ -62,38 +58,31 @@ public:
 	virtual int32_t getThrowRange() const = 0;
 	virtual bool isPushable() const = 0;
 
-	virtual Container* getContainer()
-	{
+	virtual Container* getContainer() {
 		return nullptr;
 	}
 
-	virtual const Container* getContainer() const
-	{
+	virtual const Container* getContainer() const {
 		return nullptr;
 	}
 
-	virtual Item* getItem()
-	{
+	virtual Item* getItem() {
 		return nullptr;
 	}
 
-	virtual const Item* getItem() const
-	{
+	virtual const Item* getItem() const {
 		return nullptr;
 	}
 
-	virtual Creature* getCreature()
-	{
+	virtual Creature* getCreature() {
 		return nullptr;
 	}
 
-	virtual const Creature* getCreature() const
-	{
+	virtual const Creature* getCreature() const {
 		return nullptr;
 	}
 
-	virtual bool isRemoved() const
-	{
+	virtual bool isRemoved() const {
 		return true;
 	}
 };

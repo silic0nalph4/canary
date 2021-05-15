@@ -24,12 +24,10 @@
 #include "creatures/creature.h"
 class Creature;
 
-class CreatureCallback
-{
+class CreatureCallback {
 public:
 	CreatureCallback(LuaScriptInterface* scriptInterface, Creature* targetCreature)
-		: scriptInterface(scriptInterface), targetCreature(targetCreature)
-	{
+		: scriptInterface(scriptInterface), targetCreature(targetCreature) {
 	};
 	~CreatureCallback() = default;
 
@@ -37,38 +35,32 @@ public:
 
 	void pushSpecificCreature(Creature* creature);
 
-	bool persistLuaState()
-	{
+	bool persistLuaState() {
 		return params > 0 && scriptInterface->callFunction(params);
 	}
 
-	void pushCreature(Creature* creature)
-	{
+	void pushCreature(Creature* creature) {
 		params++;
 		LuaScriptInterface::pushUserdata<Creature>(L, creature);
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	}
 
-	void pushPosition(const Position& position, int32_t stackpos = 0)
-	{
+	void pushPosition(const Position& position, int32_t stackpos = 0) {
 		params++;
 		LuaScriptInterface::pushPosition(L, position, stackpos);
 	}
 
-	void pushNumber(int32_t number)
-	{
+	void pushNumber(int32_t number) {
 		params++;
 		lua_pushnumber(L, number);
 	}
 
-	void pushString(const std::string& str)
-	{
+	void pushString(const std::string& str) {
 		params++;
 		LuaScriptInterface::pushString(L, str);
 	}
 
-	void pushBoolean(const bool str)
-	{
+	void pushBoolean(const bool str) {
 		params++;
 		LuaScriptInterface::pushBoolean(L, str);
 	}

@@ -25,11 +25,9 @@
 #include "lua/functions/creatures/npc/npc_type_functions.hpp"
 #include "lua/scripts/luascript.h"
 
-class NpcFunctions final : LuaScriptInterface
-{
+class NpcFunctions final : LuaScriptInterface {
 private:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Npc", "Creature", luaNpcCreate);
 		registerMetaMethod(L, "Npc", "__eq", luaUserdataCompare);
 		registerMethod(L, "Npc", "isNpc", luaNpcIsNpc);

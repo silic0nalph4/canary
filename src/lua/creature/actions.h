@@ -33,8 +33,7 @@ std::function<bool(Player* player, Item* item,
                    const Position& toPosition, bool isHotkey
 )>;
 
-class Action : public Event
-{
+class Action : public Event {
 public:
 	explicit Action(LuaScriptInterface* interface);
 
@@ -45,71 +44,58 @@ public:
 	                        const Position& fromPosition, Thing* target,
 	                        const Position& toPosition, bool isHotkey);
 
-	bool getAllowFarUse() const
-	{
+	bool getAllowFarUse() const {
 		return allowFarUse;
 	}
 
-	void setAllowFarUse(bool allow)
-	{
+	void setAllowFarUse(bool allow) {
 		allowFarUse = allow;
 	}
 
-	bool getCheckLineOfSight() const
-	{
+	bool getCheckLineOfSight() const {
 		return checkLineOfSight;
 	}
 
-	void setCheckLineOfSight(bool state)
-	{
+	void setCheckLineOfSight(bool state) {
 		checkLineOfSight = state;
 	}
 
-	bool getCheckFloor() const
-	{
+	bool getCheckFloor() const {
 		return checkFloor;
 	}
 
-	void setCheckFloor(bool state)
-	{
+	void setCheckFloor(bool state) {
 		checkFloor = state;
 	}
 
-	std::vector<uint16_t> getItemIdRange()
-	{
+	std::vector<uint16_t> getItemIdRange() {
 		return ids;
 	}
 
-	void addItemId(uint16_t id)
-	{
+	void addItemId(uint16_t id) {
 		ids.emplace_back(id);
 	}
 
-	std::vector<uint16_t> getUniqueIdRange()
-	{
+	std::vector<uint16_t> getUniqueIdRange() {
 		return uids;
 	}
 
-	void addUniqueId(uint16_t id)
-	{
+	void addUniqueId(uint16_t id) {
 		uids.emplace_back(id);
 	}
 
-	std::vector<uint16_t> getActionIdRange()
-	{
+	std::vector<uint16_t> getActionIdRange() {
 		return aids;
 	}
 
-	void addActionId(uint16_t id)
-	{
+	void addActionId(uint16_t id) {
 		aids.emplace_back(id);
 	}
 
 	virtual ReturnValue canExecuteAction(const Player* player,
 	                                     const Position& toPos);
 
-	virtual bool hasOwnErrorHandler()
-	{
+	virtual bool hasOwnErrorHandler() {
 		return false;
 	}
 
@@ -136,8 +122,7 @@ private:
 	std::vector<uint16_t> aids;
 };
 
-class Actions final : public BaseEvents
-{
+class Actions final : public BaseEvents {
 public:
 	Actions();
 	~Actions() override;

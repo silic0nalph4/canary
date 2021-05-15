@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class GuildFunctions final : LuaScriptInterface
-{
+class GuildFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Guild", "", luaGuildCreate);
 		registerMetaMethod(L, "Guild", "__eq", luaUserdataCompare);
 

@@ -23,98 +23,79 @@
 #include "declarations.hpp"
 #include "items/item.h"
 
-class Vocation
-{
+class Vocation {
 public:
-	explicit Vocation(uint16_t initId) : id(initId)
-	{
+	explicit Vocation(uint16_t initId) : id(initId) {
 	}
 
-	const std::string& getVocName() const
-	{
+	const std::string& getVocName() const {
 		return name;
 	}
 
-	const std::string& getVocDescription() const
-	{
+	const std::string& getVocDescription() const {
 		return description;
 	}
 
 	uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
 	uint64_t getReqMana(uint32_t magLevel);
 
-	uint16_t getId() const
-	{
+	uint16_t getId() const {
 		return id;
 	}
 
-	uint8_t getClientId() const
-	{
+	uint8_t getClientId() const {
 		return clientId;
 	}
 
-	uint32_t getHPGain() const
-	{
+	uint32_t getHPGain() const {
 		return gainHP;
 	}
 
-	uint32_t getManaGain() const
-	{
+	uint32_t getManaGain() const {
 		return gainMana;
 	}
 
-	uint32_t getCapGain() const
-	{
+	uint32_t getCapGain() const {
 		return gainCap;
 	}
 
-	uint32_t getManaGainTicks() const
-	{
+	uint32_t getManaGainTicks() const {
 		return gainManaTicks;
 	}
 
-	uint32_t getManaGainAmount() const
-	{
+	uint32_t getManaGainAmount() const {
 		return gainManaAmount;
 	}
 
-	uint32_t getHealthGainTicks() const
-	{
+	uint32_t getHealthGainTicks() const {
 		return gainHealthTicks;
 	}
 
-	uint32_t getHealthGainAmount() const
-	{
+	uint32_t getHealthGainAmount() const {
 		return gainHealthAmount;
 	}
 
-	uint8_t getSoulMax() const
-	{
+	uint8_t getSoulMax() const {
 		return soulMax;
 	}
 
-	uint16_t getSoulGainTicks() const
-	{
+	uint16_t getSoulGainTicks() const {
 		return gainSoulTicks;
 	}
 
-	uint32_t getAttackSpeed() const
-	{
+	uint32_t getAttackSpeed() const {
 		return attackSpeed;
 	}
 
-	uint32_t getBaseSpeed() const
-	{
+	uint32_t getBaseSpeed() const {
 		return baseSpeed;
 	}
 
-	uint32_t getFromVocation() const
-	{
+	uint32_t getFromVocation() const {
 		return fromVocation;
 	}
 
-	bool getMagicShield() const
-	{
+	bool getMagicShield() const {
 		return magicShield;
 	}
 
@@ -157,8 +138,7 @@ private:
 	static uint32_t skillBase[SKILL_LAST + 1];
 };
 
-class Vocations
-{
+class Vocations {
 public:
 	bool loadFromXml();
 

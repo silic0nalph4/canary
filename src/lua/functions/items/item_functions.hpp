@@ -28,11 +28,9 @@
 #include "lua/functions/items/weapon_functions.hpp"
 #include "lua/scripts/luascript.h"
 
-class ItemFunctions final : LuaScriptInterface
-{
+class ItemFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Item", "", luaItemCreate);
 		registerMetaMethod(L, "Item", "__eq", luaUserdataCompare);
 

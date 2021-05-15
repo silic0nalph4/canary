@@ -37,8 +37,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
-{
+void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version) {
 	auto output = OutputMessagePool::getOutputMessage();
 
 	output->addByte(version >= 1076 ? 0x0B : 0x0A);
@@ -48,11 +47,9 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 	disconnect();
 }
 
-void ProtocolLogin::getCharacterList(const std::string& email, const std::string& password, uint16_t version)
-{
+void ProtocolLogin::getCharacterList(const std::string& email, const std::string& password, uint16_t version) {
 	account::Account account;
-	if (!IOLoginData::authenticateAccountPassword(email, password, &account))
-	{
+	if (!IOLoginData::authenticateAccountPassword(email, password, &account)) {
 		disconnectClient("Email or password is not correct", version);
 		return;
 	}
@@ -62,8 +59,7 @@ void ProtocolLogin::getCharacterList(const std::string& email, const std::string
 
 	auto output = OutputMessagePool::getOutputMessage();
 	const std::string& motd = g_config.getString(MOTD);
-	if (!motd.empty())
-	{
+	if (!motd.empty()) {
 		// Add MOTD
 		output->addByte(0x14);
 
@@ -94,21 +90,18 @@ void ProtocolLogin::getCharacterList(const std::string& email, const std::string
 	const uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(),
 	                                      players.size());
 	output->addByte(size);
-	for (uint8_t i = 0; i < size; i++)
-	{
+	for (uint8_t i = 0; i < size; i++) {
 		output->addByte(0);
 		output->addString(players[i].name);
 	}
 
 	// Add premium days
 	output->addByte(0);
-	if (g_config.getBoolean(FREE_PREMIUM))
-	{
+	if (g_config.getBoolean(FREE_PREMIUM)) {
 		output->addByte(1);
 		output->add<uint32_t>(0);
 	}
-	else
-	{
+	else {
 		uint32_t days;
 		account.GetPremiumRemaningDays(&days);
 		output->addByte(0);
@@ -120,10 +113,8 @@ void ProtocolLogin::getCharacterList(const std::string& email, const std::string
 	disconnect();
 }
 
-void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
-{
-	if (g_game.getGameState() == GAME_STATE_SHUTDOWN)
-	{
+void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg) {
+	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
 		disconnect();
 		return;
 	}
@@ -143,8 +134,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
      * 1 byte: 0
      */
 
-	if (!RSA_decrypt(msg))
-	{
+	if (!RSA_decrypt(msg)) {
 		SPDLOG_WARN("[ProtocolLogin::onRecvFirstMessage] - RSA Decrypt Failed");
 		disconnect();
 		return;
@@ -158,29 +148,24 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
-	if (g_game.getGameState() == GAME_STATE_STARTUP)
-	{
+	if (g_game.getGameState() == GAME_STATE_STARTUP) {
 		disconnectClient("Gameworld is starting up. Please wait.", version);
 		return;
 	}
 
-	if (g_game.getGameState() == GAME_STATE_MAINTAIN)
-	{
+	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
 		disconnectClient("Gameworld is under maintenance.\nPlease re-connect in a while.", version);
 		return;
 	}
 
 	BanInfo banInfo;
 	auto curConnection = getConnection();
-	if (!curConnection)
-	{
+	if (!curConnection) {
 		return;
 	}
 
-	if (IOBan::isIpBanned(curConnection->getIP(), banInfo))
-	{
-		if (banInfo.reason.empty())
-		{
+	if (IOBan::isIpBanned(curConnection->getIP(), banInfo)) {
+		if (banInfo.reason.empty()) {
 			banInfo.reason = "(none)";
 		}
 
@@ -192,22 +177,19 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	std::string email = msg.getString();
-	if (email.empty())
-	{
+	if (email.empty()) {
 		disconnectClient("Invalid email.", version);
 		return;
 	}
 
 	std::string password = msg.getString();
-	if (password.empty())
-	{
+	if (password.empty()) {
 		disconnectClient("Invalid password.", version);
 		return;
 	}
 
 	auto thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this());
-	g_dispatcher.addTask(createTask([thisPtr, email, password, version]
-	{
+	g_dispatcher.addTask(createTask([thisPtr, email, password, version] {
 		thisPtr->getCharacterList(email, password, version);
 	}));
 }

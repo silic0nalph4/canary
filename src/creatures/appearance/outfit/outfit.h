@@ -24,13 +24,11 @@
 
 #include "declarations.hpp"
 
-struct Outfit
-{
+struct Outfit {
 	Outfit(std::string initName, uint16_t initLookType, bool initPremium, bool initUnlocked, std::string initFrom) :
 		name(std::move(std::move(initName))), lookType(initLookType), premium(initPremium), unlocked(initUnlocked), from(
 			std::move(
-				std::move(initFrom)))
-	{
+				std::move(initFrom))) {
 	}
 
 	std::string name;
@@ -40,11 +38,9 @@ struct Outfit
 	std::string from;
 };
 
-struct ProtocolOutfit
-{
+struct ProtocolOutfit {
 	ProtocolOutfit(const std::string& initName, uint16_t initLookType, uint8_t initAddons) :
-		name(initName), lookType(initLookType), addons(initAddons)
-	{
+		name(initName), lookType(initLookType), addons(initAddons) {
 	}
 
 	const std::string& name;
@@ -52,11 +48,9 @@ struct ProtocolOutfit
 	uint8_t addons;
 };
 
-class Outfits
-{
+class Outfits {
 public:
-	static Outfits& getInstance()
-	{
+	static Outfits& getInstance() {
 		static Outfits instance;
 		return instance;
 	}
@@ -67,8 +61,7 @@ public:
 
 	const Outfit* getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) const;
 
-	const std::vector<Outfit>& getOutfits(PlayerSex_t sex) const
-	{
+	const std::vector<Outfit>& getOutfits(PlayerSex_t sex) const {
 		return outfits[sex];
 	}
 

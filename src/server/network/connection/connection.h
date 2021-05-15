@@ -43,11 +43,9 @@ class ServicePort;
 using ServicePort_ptr = std::shared_ptr<ServicePort>;
 using ConstServicePort_ptr = std::shared_ptr<const ServicePort>;
 
-class ConnectionManager
-{
+class ConnectionManager {
 public:
-	static ConnectionManager& getInstance()
-	{
+	static ConnectionManager& getInstance() {
 		static ConnectionManager instance;
 		return instance;
 	}
@@ -63,8 +61,7 @@ protected:
 	std::mutex connectionManagerLock;
 };
 
-class Connection : public std::enable_shared_from_this<Connection>
-{
+class Connection : public std::enable_shared_from_this<Connection> {
 public:
 	// non-copyable
 	Connection(const Connection&) = delete;
@@ -75,8 +72,7 @@ public:
 		readTimer(init_io_service),
 		writeTimer(init_io_service),
 		service_port(std::move(init_service_port)),
-		socket(init_io_service)
-	{
+		socket(init_io_service) {
 		connectionState = CONNECTION_STATE_PENDING;
 		packetsSent = 0;
 		timeConnected = time(nullptr);
@@ -110,8 +106,7 @@ private:
 	void closeSocket();
 	void internalSend(const OutputMessage_ptr& msg);
 
-	boost::asio::ip::tcp::socket& getSocket()
-	{
+	boost::asio::ip::tcp::socket& getSocket() {
 		return socket;
 	}
 

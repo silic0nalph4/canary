@@ -23,8 +23,7 @@
 #include "lua/functions/lua_functions_loader.hpp"
 #include "lua/scripts/script_environment.hpp"
 
-class LuaScriptInterface : public LuaFunctionsLoader
-{
+class LuaScriptInterface : public LuaFunctionsLoader {
 public:
 	explicit LuaScriptInterface(std::string interfaceName);
 	virtual ~LuaScriptInterface();
@@ -43,23 +42,19 @@ public:
 	int32_t getEvent();
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
-	const std::string& getInterfaceName() const
-	{
+	const std::string& getInterfaceName() const {
 		return interfaceName;
 	}
 
-	const std::string& getLastLuaError() const
-	{
+	const std::string& getLastLuaError() const {
 		return lastLuaError;
 	}
 
-	const std::string& getLoadingFile() const
-	{
+	const std::string& getLoadingFile() const {
 		return loadingFile;
 	}
 
-	lua_State* getLuaState() const
-	{
+	lua_State* getLuaState() const {
 		return luaState;
 	}
 

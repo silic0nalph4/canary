@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class ItemTypeFunctions final : LuaScriptInterface
-{
+class ItemTypeFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "ItemType", "", luaItemTypeCreate);
 		registerMetaMethod(L, "ItemType", "__eq", luaUserdataCompare);
 

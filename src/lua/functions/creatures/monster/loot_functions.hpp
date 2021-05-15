@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class LootFunctions final : LuaScriptInterface
-{
+class LootFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Loot", "", luaCreateLoot);
 		registerMetaMethod(L, "Loot", "__gc", luaDeleteLoot);
 		registerMethod(L, "Loot", "delete", luaDeleteLoot);

@@ -22,14 +22,12 @@
 
 #include "items/containers/container.h"
 
-class DepotChest final : public Container
-{
+class DepotChest final : public Container {
 public:
 	explicit DepotChest(uint16_t type);
 
 	//serialization
-	void setMaxDepotItems(uint32_t maxitems)
-	{
+	void setMaxDepotItems(uint32_t maxitems) {
 		maxDepotItems = maxitems;
 	}
 
@@ -43,15 +41,13 @@ public:
 	                            CylinderLink_t link = LINK_OWNER) override;
 
 	//overrides
-	bool canRemove() const override
-	{
+	bool canRemove() const override {
 		return false;
 	}
 
 	Cylinder* getParent() const override;
 
-	Cylinder* getRealParent() const override
-	{
+	Cylinder* getRealParent() const override {
 		return parent;
 	}
 

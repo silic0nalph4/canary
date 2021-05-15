@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class SpdlogFunctions final : LuaScriptInterface
-{
+class SpdlogFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerTable(L, "Spdlog");
 		registerMethod(L, "Spdlog", "info", luaSpdlogInfo);
 		registerMethod(L, "Spdlog", "warn", luaSpdlogWarn);

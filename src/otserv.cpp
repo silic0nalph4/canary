@@ -63,8 +63,7 @@ std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
 std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
-void startupErrorMessage()
-{
+void startupErrorMessage() {
 	SPDLOG_ERROR("The program will close after pressing the enter key...");
 	g_loaderSignal.notify_all();
 	getchar();
@@ -73,8 +72,7 @@ void startupErrorMessage()
 
 void mainLoader(int argc, char* argv[], ServiceManager* servicer);
 
-void badAllocationHandler()
-{
+void badAllocationHandler() {
 	// Use functions that only use stack allocation
 	SPDLOG_ERROR("Allocation failed, server out of memory, "
 		"decrease the size of your map or compile in 64 bits mode");
@@ -82,26 +80,22 @@ void badAllocationHandler()
 	exit(-1);
 }
 
-void initGlobalScopes()
-{
+void initGlobalScopes() {
 	g_scripts = new Scripts();
 	g_modules = new Modules();
 	g_events = new Events();
 	g_imbuements = new Imbuements();
 }
 
-void modulesLoadHelper(bool loaded, const std::string& moduleName)
-{
+void modulesLoadHelper(bool loaded, const std::string& moduleName) {
 	SPDLOG_INFO("Loading {}", moduleName);
-	if (!loaded)
-	{
+	if (!loaded) {
 		SPDLOG_ERROR("Cannot load: {}", moduleName);
 		startupErrorMessage();
 	}
 }
 
-void loadModules()
-{
+void loadModules() {
 	modulesLoadHelper(g_config.load(),
 	                  "config.lua");
 
@@ -109,20 +103,17 @@ void loadModules()
 	            g_config.getString(CLIENT_VERSION_STR));
 
 	// set RSA key
-	try
-	{
+	try {
 		g_RSA.loadPEM("key.pem");
 	}
-	catch (const std::exception& e)
-	{
+	catch (const std::exception& e) {
 		SPDLOG_ERROR(e.what());
 		startupErrorMessage();
 	}
 
 	// Database
 	SPDLOG_INFO("Establishing database connection... ");
-	if (!Database::getInstance().connect())
-	{
+	if (!Database::getInstance().connect()) {
 		SPDLOG_ERROR("Failed to connect to database!");
 		startupErrorMessage();
 	}
@@ -130,8 +121,7 @@ void loadModules()
 
 	// Run database manager
 	SPDLOG_INFO("Running database manager...");
-	if (!DatabaseManager::isDatabaseSetup())
-	{
+	if (!DatabaseManager::isDatabaseSetup()) {
 		SPDLOG_ERROR("The database you have specified in config.lua is empty, "
 			"please import the schema.sql to your database.");
 		startupErrorMessage();
@@ -141,8 +131,7 @@ void loadModules()
 	DatabaseManager::updateDatabase();
 
 	if (g_config.getBoolean(OPTIMIZE_DATABASE)
-		&& !DatabaseManager::optimizeTables())
-	{
+		&& !DatabaseManager::optimizeTables()) {
 		SPDLOG_INFO("No tables were optimized");
 	}
 
@@ -188,8 +177,7 @@ void loadModules()
 }
 
 #ifndef UNIT_TESTING
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 #ifdef DEBUG_LOG
 	SPDLOG_DEBUG("[CANARY] SPDLOG LOG DEBUG ENABLED");
 	spdlog::set_pattern("[%Y-%d-%m %H:%M:%S.%e] [file %@] [func %!] [thread %t] [%^%l%$] %v ");
@@ -210,14 +198,12 @@ int main(int argc, char* argv[])
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
-	if (serviceManager.is_running())
-	{
+	if (serviceManager.is_running()) {
 		SPDLOG_INFO("{} {}", g_config.getString(SERVER_NAME),
 		            "server online!");
 		serviceManager.run();
 	}
-	else
-	{
+	else {
 		SPDLOG_ERROR("No services running. The server is NOT online!");
 		g_databaseTasks.shutdown();
 		g_dispatcher.shutdown();
@@ -230,8 +216,7 @@ int main(int argc, char* argv[])
 }
 #endif
 
-void mainLoader(int, char*[], ServiceManager* services)
-{
+void mainLoader(int, char*[], ServiceManager* services) {
 	// dispatcher thread
 	g_game.setGameState(GAME_STATE_STARTUP);
 
@@ -274,11 +259,9 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// check if config.lua or config.lua.dist exist
 	std::ifstream c_test("./config.lua");
-	if (!c_test.is_open())
-	{
+	if (!c_test.is_open()) {
 		std::ifstream config_lua_dist("./config.lua.dist");
-		if (config_lua_dist.is_open())
-		{
+		if (config_lua_dist.is_open()) {
 			SPDLOG_INFO("Copying config.lua.dist to config.lua");
 			std::ofstream config_lua("config.lua");
 			config_lua << config_lua_dist.rdbuf();
@@ -286,8 +269,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 			config_lua_dist.close();
 		}
 	}
-	else
-	{
+	else {
 		c_test.close();
 	}
 
@@ -297,31 +279,25 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 #ifdef _WIN32
 	const std::string& defaultPriority = g_config.getString(DEFAULT_PRIORITY);
-	if (strcasecmp(defaultPriority.c_str(), "high") == 0)
-	{
+	if (strcasecmp(defaultPriority.c_str(), "high") == 0) {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 	}
-	else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0)
-	{
+	else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
 #endif
 
 	std::string worldType = asLowerCaseString(g_config.getString(WORLD_TYPE));
-	if (worldType == "pvp")
-	{
+	if (worldType == "pvp") {
 		g_game.setWorldType(WORLD_TYPE_PVP);
 	}
-	else if (worldType == "no-pvp")
-	{
+	else if (worldType == "no-pvp") {
 		g_game.setWorldType(WORLD_TYPE_NO_PVP);
 	}
-	else if (worldType == "pvp-enforced")
-	{
+	else if (worldType == "pvp-enforced") {
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	}
-	else
-	{
+	else {
 		SPDLOG_ERROR("Unknown world type: {}, valid world types are: pvp, no-pvp "
 		             "and pvp-enforced", g_config.getString(WORLD_TYPE));
 		startupErrorMessage();
@@ -330,8 +306,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	SPDLOG_INFO("World type set as {}", asUpperCaseString(worldType));
 
 	SPDLOG_INFO("Loading map...");
-	if (!g_game.loadMainMap(g_config.getString(MAP_NAME)))
-	{
+	if (!g_game.loadMainMap(g_config.getString(MAP_NAME))) {
 		SPDLOG_ERROR("Failed to load map");
 		startupErrorMessage();
 	}
@@ -348,24 +323,19 @@ void mainLoader(int, char*[], ServiceManager* services)
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(HOUSE_RENT_PERIOD));
 
-	if (strRentPeriod == "yearly")
-	{
+	if (strRentPeriod == "yearly") {
 		rentPeriod = RENTPERIOD_YEARLY;
 	}
-	else if (strRentPeriod == "weekly")
-	{
+	else if (strRentPeriod == "weekly") {
 		rentPeriod = RENTPERIOD_WEEKLY;
 	}
-	else if (strRentPeriod == "monthly")
-	{
+	else if (strRentPeriod == "monthly") {
 		rentPeriod = RENTPERIOD_MONTHLY;
 	}
-	else if (strRentPeriod == "daily")
-	{
+	else if (strRentPeriod == "daily") {
 		rentPeriod = RENTPERIOD_DAILY;
 	}
-	else
-	{
+	else {
 		rentPeriod = RENTPERIOD_NEVER;
 	}
 

@@ -34,8 +34,7 @@
 
 class Game;
 
-class Charm
-{
+class Charm {
 public:
 	Charm() = default;
 
@@ -66,8 +65,7 @@ public:
 	int32_t binary = 0;
 };
 
-class IOBestiary
-{
+class IOBestiary {
 public:
 	Charm* getBestiaryCharm(charmRune_t activeCharm, bool force = false);
 	void addBestiaryKill(Player* player, MonsterType* mtype, uint32_t amount = 1);

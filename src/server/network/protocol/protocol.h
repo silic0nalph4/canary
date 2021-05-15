@@ -23,11 +23,9 @@
 #include "server/network/connection/connection.h"
 #include "security/xtea.h"
 
-class Protocol : public std::enable_shared_from_this<Protocol>
-{
+class Protocol : public std::enable_shared_from_this<Protocol> {
 public:
-	explicit Protocol(const Connection_ptr& initConnection) : connection(initConnection)
-	{
+	explicit Protocol(const Connection_ptr& initConnection) : connection(initConnection) {
 	}
 
 	virtual ~Protocol() = default;
@@ -36,25 +34,21 @@ public:
 	Protocol(const Protocol&) = delete;
 	Protocol& operator=(const Protocol&) = delete;
 
-	virtual void parsePacket(NetworkMessage)
-	{
+	virtual void parsePacket(NetworkMessage) {
 	}
 
 	virtual void onSendMessage(const OutputMessage_ptr& msg);
 	void onRecvMessage(NetworkMessage& msg);
 	virtual void onRecvFirstMessage(NetworkMessage& msg) = 0;
 
-	virtual void onConnect()
-	{
+	virtual void onConnect() {
 	}
 
-	bool isConnectionExpired() const
-	{
+	bool isConnectionExpired() const {
 		return connection.expired();
 	}
 
-	Connection_ptr getConnection() const
-	{
+	Connection_ptr getConnection() const {
 		return connection.lock();
 	}
 
@@ -63,62 +57,50 @@ public:
 	//Use this function for autosend messages only
 	OutputMessage_ptr getOutputBuffer(int32_t size);
 
-	OutputMessage_ptr& getCurrentBuffer()
-	{
+	OutputMessage_ptr& getCurrentBuffer() {
 		return outputBuffer;
 	}
 
-	void send(OutputMessage_ptr msg) const
-	{
-		if (auto conn = getConnection())
-		{
+	void send(OutputMessage_ptr msg) const {
+		if (auto conn = getConnection()) {
 			conn->send(msg);
 		}
 	}
 
 protected:
-	void disconnect() const
-	{
-		if (auto conn = getConnection())
-		{
+	void disconnect() const {
+		if (auto conn = getConnection()) {
 			conn->close();
 		}
 	}
 
-	void enableXTEAEncryption()
-	{
+	void enableXTEAEncryption() {
 		encryptionEnabled = true;
 	}
 
-	void setXTEAKey(xtea::key key)
-	{
+	void setXTEAKey(xtea::key key) {
 		this->key = key;
 	}
 
-	void disableChecksum()
-	{
+	void disableChecksum() {
 		checksumEnabled = false;
 	}
 
-	void enableCompact()
-	{
+	void enableCompact() {
 		compactCrypt = true;
 	}
 
-	bool isCompact()
-	{
+	bool isCompact() {
 		return compactCrypt;
 	}
 
 	static bool RSA_decrypt(NetworkMessage& msg);
 
-	void setRawMessages(bool value)
-	{
+	void setRawMessages(bool value) {
 		rawMessages = value;
 	}
 
-	virtual void release()
-	{
+	virtual void release() {
 	}
 
 private:

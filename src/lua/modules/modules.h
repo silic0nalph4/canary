@@ -30,20 +30,17 @@
 class Module;
 using Module_ptr = std::unique_ptr<Module>;
 
-class Module final : public Event
-{
+class Module final : public Event {
 public:
 	explicit Module(LuaScriptInterface* interface);
 
 	bool configureEvent(const pugi::xml_node& node);
 
-	ModuleType_t getEventType() const
-	{
+	ModuleType_t getEventType() const {
 		return type;
 	}
 
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 
@@ -54,13 +51,11 @@ public:
 	void executeOnRecvbyte(Player* player, NetworkMessage& msg);
 	//
 
-	uint8_t getRecvbyte()
-	{
+	uint8_t getRecvbyte() {
 		return recvbyte;
 	}
 
-	int16_t getDelay()
-	{
+	int16_t getDelay() {
 		return delay;
 	}
 
@@ -73,8 +68,7 @@ protected:
 	bool loaded;
 };
 
-class Modules final : public BaseEvents
-{
+class Modules final : public BaseEvents {
 public:
 	Modules();
 

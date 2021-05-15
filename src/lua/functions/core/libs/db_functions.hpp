@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class DBFunctions final : LuaScriptInterface
-{
+class DBFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerTable(L, "db");
 		registerMethod(L, "db", "query", luaDatabaseExecute);
 		registerMethod(L, "db", "asyncQuery", luaDatabaseAsyncExecute);

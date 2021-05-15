@@ -36,17 +36,14 @@ extern Events* g_events;
 static constexpr int32_t MONSTER_MINSPAWN_INTERVAL = 1000; // 1 second
 static constexpr int32_t MONSTER_MAXSPAWN_INTERVAL = 86400000; // 1 day
 
-bool SpawnsMonster::loadFromXML(const std::string& filemonstername)
-{
-	if (isLoaded())
-	{
+bool SpawnsMonster::loadFromXML(const std::string& filemonstername) {
+	if (isLoaded()) {
 		return true;
 	}
 
 	pugi::xml_document doc;
 	const pugi::xml_parse_result result = doc.load_file(filemonstername.c_str());
-	if (!result)
-	{
+	if (!result) {
 		printXMLError("Error - SpawnsMonster::loadFromXml", filemonstername, result);
 		return false;
 	}
@@ -57,8 +54,7 @@ bool SpawnsMonster::loadFromXML(const std::string& filemonstername)
 	const uint32_t eventschedule = g_game.getSpawnMonsterSchedule();
 	const std::string boostedNameGet = g_game.getBoostedMonsterName();
 
-	for (auto spawnMonsterNode : doc.child("monsters").children())
-	{
+	for (auto spawnMonsterNode : doc.child("monsters").children()) {
 		Position centerPos(
 			pugi::cast<uint16_t>(spawnMonsterNode.attribute("centerx").value()),
 			pugi::cast<uint16_t>(spawnMonsterNode.attribute("centery").value()),
@@ -67,17 +63,14 @@ bool SpawnsMonster::loadFromXML(const std::string& filemonstername)
 
 		int32_t radius;
 		pugi::xml_attribute radiusAttribute = spawnMonsterNode.attribute("radius");
-		if (radiusAttribute)
-		{
+		if (radiusAttribute) {
 			radius = pugi::cast<int32_t>(radiusAttribute.value());
 		}
-		else
-		{
+		else {
 			radius = -1;
 		}
 
-		if (!spawnMonsterNode.first_child())
-		{
+		if (!spawnMonsterNode.first_child()) {
 			SPDLOG_WARN("Empty spawn at position: {} with radius: {}", centerPos.toString(), radius);
 			continue;
 		}
@@ -85,25 +78,20 @@ bool SpawnsMonster::loadFromXML(const std::string& filemonstername)
 		spawnMonsterList.emplace_front(centerPos, radius);
 		SpawnMonster& spawnMonster = spawnMonsterList.front();
 
-		for (auto childMonsterNode : spawnMonsterNode.children())
-		{
-			if (strcasecmp(childMonsterNode.name(), "monster") == 0)
-			{
+		for (auto childMonsterNode : spawnMonsterNode.children()) {
+			if (strcasecmp(childMonsterNode.name(), "monster") == 0) {
 				pugi::xml_attribute nameAttribute = childMonsterNode.attribute("name");
-				if (!nameAttribute)
-				{
+				if (!nameAttribute) {
 					continue;
 				}
 
 				Direction dir;
 
 				pugi::xml_attribute directionAttribute = childMonsterNode.attribute("direction");
-				if (directionAttribute)
-				{
+				if (directionAttribute) {
 					dir = static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value()));
 				}
-				else
-				{
+				else {
 					dir = DIRECTION_NORTH;
 				}
 
@@ -115,30 +103,24 @@ bool SpawnsMonster::loadFromXML(const std::string& filemonstername)
 
 				int32_t boostedrate;
 
-				if (nameAttribute.value() == boostedNameGet)
-				{
+				if (nameAttribute.value() == boostedNameGet) {
 					boostedrate = 2;
 				}
-				else
-				{
+				else {
 					boostedrate = 1;
 				}
 
 				const uint32_t interval = pugi::cast<uint32_t>(childMonsterNode.attribute("spawntime").value()) * 100000 / (
 					g_config.getNumber(RATE_SPAWN) * boostedrate * eventschedule);
-				if (interval >= MONSTER_MINSPAWN_INTERVAL && interval <= MONSTER_MAXSPAWN_INTERVAL)
-				{
+				if (interval >= MONSTER_MINSPAWN_INTERVAL && interval <= MONSTER_MAXSPAWN_INTERVAL) {
 					spawnMonster.addMonster(nameAttribute.as_string(), pos, dir, interval);
 				}
-				else
-				{
-					if (interval <= MONSTER_MINSPAWN_INTERVAL)
-					{
+				else {
+					if (interval <= MONSTER_MINSPAWN_INTERVAL) {
 						SPDLOG_WARN("{} {} spawntime can not be less than {} seconds", nameAttribute.as_string(), pos.toString(),
 						            MONSTER_MINSPAWN_INTERVAL / 1000);
 					}
-					else
-					{
+					else {
 						SPDLOG_WARN("{} {} spawntime can not be more than {} seconds", nameAttribute.as_string(), pos.toString(),
 						            MONSTER_MAXSPAWN_INTERVAL / 1000);
 					}
@@ -149,25 +131,20 @@ bool SpawnsMonster::loadFromXML(const std::string& filemonstername)
 	return true;
 }
 
-void SpawnsMonster::startup()
-{
-	if (!isLoaded() || isStarted())
-	{
+void SpawnsMonster::startup() {
+	if (!isLoaded() || isStarted()) {
 		return;
 	}
 
-	for (SpawnMonster& spawnMonster : spawnMonsterList)
-	{
+	for (SpawnMonster& spawnMonster : spawnMonsterList) {
 		spawnMonster.startup();
 	}
 
 	started = true;
 }
 
-void SpawnsMonster::clear()
-{
-	for (SpawnMonster& spawnMonster : spawnMonsterList)
-	{
+void SpawnsMonster::clear() {
+	for (SpawnMonster& spawnMonster : spawnMonsterList) {
 		spawnMonster.stopEvent();
 	}
 	spawnMonsterList.clear();
@@ -177,10 +154,8 @@ void SpawnsMonster::clear()
 	filemonstername.clear();
 }
 
-bool SpawnsMonster::isInZone(const Position& centerPos, int32_t radius, const Position& pos)
-{
-	if (radius == -1)
-	{
+bool SpawnsMonster::isInZone(const Position& centerPos, int32_t radius, const Position& pos) {
+	if (radius == -1) {
 		return true;
 	}
 
@@ -188,59 +163,46 @@ bool SpawnsMonster::isInZone(const Position& centerPos, int32_t radius, const Po
 		(pos.getY() >= centerPos.getY() - radius) && (pos.getY() <= centerPos.getY() + radius));
 }
 
-void SpawnMonster::startSpawnMonsterCheck()
-{
-	if (checkSpawnMonsterEvent == 0)
-	{
+void SpawnMonster::startSpawnMonsterCheck() {
+	if (checkSpawnMonsterEvent == 0) {
 		checkSpawnMonsterEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this] { checkSpawnMonster(); }));
 	}
 }
 
-SpawnMonster::~SpawnMonster()
-{
-	for (const auto& it : spawnedMonsterMap)
-	{
+SpawnMonster::~SpawnMonster() {
+	for (const auto& it : spawnedMonsterMap) {
 		Monster* monster = it.second;
 		monster->setSpawnMonster(nullptr);
 		monster->decrementReferenceCounter();
 	}
 }
 
-bool SpawnMonster::findPlayer(const Position& pos)
-{
+bool SpawnMonster::findPlayer(const Position& pos) {
 	SpectatorHashSet spectators;
 	g_game.map.getSpectators(spectators, pos, false, true);
-	for (Creature* spectator : spectators)
-	{
-		if (!spectator->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters))
-		{
+	for (Creature* spectator : spectators) {
+		if (!spectator->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) {
 			return true;
 		}
 	}
 	return false;
 }
 
-bool SpawnMonster::isInSpawnMonsterZone(const Position& pos)
-{
+bool SpawnMonster::isInSpawnMonsterZone(const Position& pos) {
 	return SpawnsMonster::isInZone(centerPos, radius, pos);
 }
 
 bool SpawnMonster::spawnMonster(uint32_t spawnMonsterId, MonsterType* monsterType, const Position& pos, Direction dir,
-                                bool startup /*= false*/)
-{
+                                bool startup /*= false*/) {
 	std::unique_ptr<Monster> monster_ptr(new Monster(monsterType));
-	if (startup)
-	{
+	if (startup) {
 		//No need to send out events to the surrounding since there is no one out there to listen!
-		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true))
-		{
+		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
 			return false;
 		}
 	}
-	else
-	{
-		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true))
-		{
+	else {
+		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
 			return false;
 		}
 	}
@@ -257,77 +219,62 @@ bool SpawnMonster::spawnMonster(uint32_t spawnMonsterId, MonsterType* monsterTyp
 	return true;
 }
 
-void SpawnMonster::startup()
-{
-	for (const auto& it : spawnMonsterMap)
-	{
+void SpawnMonster::startup() {
+	for (const auto& it : spawnMonsterMap) {
 		const uint32_t spawnMonsterId = it.first;
 		const spawnBlock_t& sb = it.second;
 		spawnMonster(spawnMonsterId, sb.monsterType, sb.pos, sb.direction, true);
 	}
 }
 
-void SpawnMonster::checkSpawnMonster()
-{
+void SpawnMonster::checkSpawnMonster() {
 	checkSpawnMonsterEvent = 0;
 
 	cleanup();
 
 	uint32_t spawnMonsterCount = 0;
 
-	for (auto& it : spawnMonsterMap)
-	{
+	for (auto& it : spawnMonsterMap) {
 		uint32_t spawnMonsterId = it.first;
-		if (spawnedMonsterMap.find(spawnMonsterId) != spawnedMonsterMap.end())
-		{
+		if (spawnedMonsterMap.find(spawnMonsterId) != spawnedMonsterMap.end()) {
 			continue;
 		}
 
 		spawnBlock_t& sb = it.second;
-		if (!sb.monsterType->canSpawn(sb.pos))
-		{
+		if (!sb.monsterType->canSpawn(sb.pos)) {
 			sb.lastSpawn = OTSYS_TIME();
 			continue;
 		}
 
-		if (OTSYS_TIME() >= sb.lastSpawn + sb.interval)
-		{
-			if (sb.monsterType->info.isBlockable && findPlayer(sb.pos))
-			{
+		if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
+			if (sb.monsterType->info.isBlockable && findPlayer(sb.pos)) {
 				sb.lastSpawn = OTSYS_TIME();
 				continue;
 			}
 
-			if (sb.monsterType->info.isBlockable)
-			{
+			if (sb.monsterType->info.isBlockable) {
 				spawnMonster(spawnMonsterId, sb.monsterType, sb.pos, sb.direction);
 			}
-			else
-			{
+			else {
 				scheduleSpawn(spawnMonsterId, sb, 3 * NONBLOCKABLE_SPAWN_MONSTER_INTERVAL);
 			}
 
-			if (++spawnMonsterCount >= static_cast<uint32_t>(g_config.getNumber(RATE_SPAWN)))
-			{
+			if (++spawnMonsterCount >= static_cast<uint32_t>(g_config.getNumber(RATE_SPAWN))) {
 				break;
 			}
 		}
 	}
 
-	if (spawnedMonsterMap.size() < spawnMonsterMap.size())
-	{
+	if (spawnedMonsterMap.size() < spawnMonsterMap.size()) {
 		checkSpawnMonsterEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this] { checkSpawnMonster(); }));
 	}
 }
 
-void SpawnMonster::scheduleSpawn(uint32_t spawnMonsterId, spawnBlock_t sb, uint16_t interval)
-{
-	if (interval <= 0)
-	{
+void SpawnMonster::scheduleSpawn(uint32_t spawnMonsterId, spawnBlock_t sb, uint16_t interval) {
+	if (interval <= 0) {
 		spawnMonster(spawnMonsterId, sb.monsterType, sb.pos, sb.direction);
 	}
-	else
-	{
+	else {
 		g_game.addMagicEffect(sb.pos, CONST_ME_TELEPORT);
 		g_scheduler.addEvent(createSchedulerTask(1400, [this, spawnMonsterId, sb, capture0 = interval -
 			                                         NONBLOCKABLE_SPAWN_MONSTER_INTERVAL]
@@ -337,31 +284,25 @@ void SpawnMonster::scheduleSpawn(uint32_t spawnMonsterId, spawnBlock_t sb, uint1
 	}
 }
 
-void SpawnMonster::cleanup()
-{
+void SpawnMonster::cleanup() {
 	auto it = spawnedMonsterMap.begin();
-	while (it != spawnedMonsterMap.end())
-	{
+	while (it != spawnedMonsterMap.end()) {
 		uint32_t spawnMonsterId = it->first;
 		Monster* monster = it->second;
-		if (monster->isRemoved())
-		{
+		if (monster->isRemoved()) {
 			spawnMonsterMap[spawnMonsterId].lastSpawn = OTSYS_TIME();
 			monster->decrementReferenceCounter();
 			it = spawnedMonsterMap.erase(it);
 		}
-		else
-		{
+		else {
 			++it;
 		}
 	}
 }
 
-bool SpawnMonster::addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t scheduleInterval)
-{
+bool SpawnMonster::addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t scheduleInterval) {
 	MonsterType* monsterType = g_monsters.getMonsterType(name);
-	if (!monsterType)
-	{
+	if (!monsterType) {
 		SPDLOG_ERROR("Can not find {}", name);
 		return false;
 	}
@@ -380,12 +321,9 @@ bool SpawnMonster::addMonster(const std::string& name, const Position& pos, Dire
 	return true;
 }
 
-void SpawnMonster::removeMonster(Monster* monster)
-{
-	for (auto it = spawnedMonsterMap.begin(), end = spawnedMonsterMap.end(); it != end; ++it)
-	{
-		if (it->second == monster)
-		{
+void SpawnMonster::removeMonster(Monster* monster) {
+	for (auto it = spawnedMonsterMap.begin(), end = spawnedMonsterMap.end(); it != end; ++it) {
+		if (it->second == monster) {
 			monster->decrementReferenceCounter();
 			spawnedMonsterMap.erase(it);
 			break;
@@ -393,10 +331,8 @@ void SpawnMonster::removeMonster(Monster* monster)
 	}
 }
 
-void SpawnMonster::stopEvent()
-{
-	if (checkSpawnMonsterEvent != 0)
-	{
+void SpawnMonster::stopEvent() {
+	if (checkSpawnMonsterEvent != 0) {
 		g_scheduler.stopEvent(checkSpawnMonsterEvent);
 		checkSpawnMonsterEvent = 0;
 	}

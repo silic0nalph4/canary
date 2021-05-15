@@ -23,8 +23,7 @@
 #include "declarations.hpp"
 #include "lua/scripts/luascript.h"
 
-class Scripts
-{
+class Scripts {
 public:
 	Scripts();
 	~Scripts();
@@ -33,8 +32,7 @@ public:
 	Scripts(const Scripts&) = delete;
 	Scripts& operator=(const Scripts&) = delete;
 
-	static Scripts& getInstance()
-	{
+	static Scripts& getInstance() {
 		static Scripts instance;
 		return instance;
 	}
@@ -44,8 +42,7 @@ public:
 	bool loadScripts(const std::string& folderName, bool isLib, bool reload);
 	bool loadScriptSystems();
 
-	LuaScriptInterface& getScriptInterface()
-	{
+	LuaScriptInterface& getScriptInterface() {
 		return scriptInterface;
 	}
 

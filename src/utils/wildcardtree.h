@@ -22,11 +22,9 @@
 
 #include "declarations.hpp"
 
-class WildcardTreeNode
-{
+class WildcardTreeNode {
 public:
-	explicit WildcardTreeNode(bool initBreakpoint) : breakpoint(initBreakpoint)
-	{
+	explicit WildcardTreeNode(bool initBreakpoint) : breakpoint(initBreakpoint) {
 	}
 
 	WildcardTreeNode(WildcardTreeNode&& other) = default;

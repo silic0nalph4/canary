@@ -36,8 +36,7 @@ class WeaponWand;
 
 using Weapon_ptr = std::unique_ptr<Weapon>;
 
-class Weapons final : public BaseEvents
-{
+class Weapons final : public BaseEvents {
 public:
 	Weapons();
 	~Weapons() override;
@@ -67,24 +66,20 @@ private:
 	LuaScriptInterface scriptInterface{"Weapon Interface"};
 };
 
-class Weapon : public Event
-{
+class Weapon : public Event {
 public:
-	explicit Weapon(LuaScriptInterface* interface) : Event(interface)
-	{
+	explicit Weapon(LuaScriptInterface* interface) : Event(interface) {
 	}
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	bool loadFunction(const pugi::xml_attribute&, bool) final
-	{
+	bool loadFunction(const pugi::xml_attribute&, bool) final {
 		return true;
 	}
 
 	virtual void configureWeapon(const ItemType& it);
 
-	virtual bool interruptSwing() const
-	{
+	virtual bool interruptSwing() const {
 		return false;
 	}
 
@@ -99,152 +94,122 @@ public:
 	virtual int16_t getElementDamageValue() const = 0;
 	virtual CombatDamage getCombatDamage(CombatDamage combat, Player* player, Item* item, int32_t damageModifier) const;
 
-	uint16_t getID() const
-	{
+	uint16_t getID() const {
 		return id;
 	}
 
-	void setID(uint16_t newId)
-	{
+	void setID(uint16_t newId) {
 		id = newId;
 	}
 
-	uint32_t getReqLevel() const
-	{
+	uint32_t getReqLevel() const {
 		return level;
 	}
 
-	void setRequiredLevel(uint32_t reqlvl)
-	{
+	void setRequiredLevel(uint32_t reqlvl) {
 		level = reqlvl;
 	}
 
-	uint32_t getReqMagLv() const
-	{
+	uint32_t getReqMagLv() const {
 		return magLevel;
 	}
 
-	void setRequiredMagLevel(uint32_t reqlvl)
-	{
+	void setRequiredMagLevel(uint32_t reqlvl) {
 		magLevel = reqlvl;
 	}
 
-	bool isPremium() const
-	{
+	bool isPremium() const {
 		return premium;
 	}
 
-	void setNeedPremium(bool prem)
-	{
+	void setNeedPremium(bool prem) {
 		premium = prem;
 	}
 
-	bool isWieldedUnproperly() const
-	{
+	bool isWieldedUnproperly() const {
 		return wieldUnproperly;
 	}
 
-	void setWieldUnproperly(bool unproperly)
-	{
+	void setWieldUnproperly(bool unproperly) {
 		wieldUnproperly = unproperly;
 	}
 
-	uint32_t getMana() const
-	{
+	uint32_t getMana() const {
 		return mana;
 	}
 
-	void setMana(uint32_t m)
-	{
+	void setMana(uint32_t m) {
 		mana = m;
 	}
 
-	uint32_t getManaPercent() const
-	{
+	uint32_t getManaPercent() const {
 		return manaPercent;
 	}
 
-	void setManaPercent(uint32_t m)
-	{
+	void setManaPercent(uint32_t m) {
 		manaPercent = m;
 	}
 
-	int32_t getHealth() const
-	{
+	int32_t getHealth() const {
 		return health;
 	}
 
-	void setHealth(int32_t h)
-	{
+	void setHealth(int32_t h) {
 		health = h;
 	}
 
-	uint32_t getHealthPercent() const
-	{
+	uint32_t getHealthPercent() const {
 		return healthPercent;
 	}
 
-	void setHealthPercent(uint32_t m)
-	{
+	void setHealthPercent(uint32_t m) {
 		healthPercent = m;
 	}
 
-	uint32_t getSoul() const
-	{
+	uint32_t getSoul() const {
 		return soul;
 	}
 
-	void setSoul(uint32_t s)
-	{
+	void setSoul(uint32_t s) {
 		soul = s;
 	}
 
-	uint8_t getBreakChance() const
-	{
+	uint8_t getBreakChance() const {
 		return breakChance;
 	}
 
-	void setBreakChance(uint8_t b)
-	{
+	void setBreakChance(uint8_t b) {
 		breakChance = b;
 	}
 
-	bool isEnabled() const
-	{
+	bool isEnabled() const {
 		return enabled;
 	}
 
-	void setIsEnabled(bool e)
-	{
+	void setIsEnabled(bool e) {
 		enabled = e;
 	}
 
-	uint32_t getWieldInfo() const
-	{
+	uint32_t getWieldInfo() const {
 		return wieldInfo;
 	}
 
-	void setWieldInfo(uint32_t info)
-	{
+	void setWieldInfo(uint32_t info) {
 		wieldInfo |= info;
 	}
 
-	void addVocWeaponMap(const std::string& vocName)
-	{
+	void addVocWeaponMap(const std::string& vocName) {
 		const int32_t vocationId = g_vocations.getVocationId(vocName);
-		if (vocationId != -1)
-		{
+		if (vocationId != -1) {
 			vocWeaponMap[vocationId] = true;
 		}
 	}
 
-	const std::string& getVocationString() const
-	{
+	const std::string& getVocationString() const {
 		return vocationString;
 	}
 
-	void setVocationString(const std::string& str)
-	{
+	void setVocationString(const std::string& str) {
 		vocationString = str;
 	}
 
@@ -260,8 +225,7 @@ protected:
 	uint16_t id = 0;
 
 private:
-	virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const
-	{
+	virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const {
 		return false;
 	}
 
@@ -292,8 +256,7 @@ private:
 	friend class Combat;
 };
 
-class WeaponMelee final : public Weapon
-{
+class WeaponMelee final : public Weapon {
 public:
 	explicit WeaponMelee(LuaScriptInterface* interface);
 
@@ -314,15 +277,13 @@ private:
 	CombatType_t elementType = COMBAT_NONE;
 };
 
-class WeaponDistance final : public Weapon
-{
+class WeaponDistance final : public Weapon {
 public:
 	explicit WeaponDistance(LuaScriptInterface* interface);
 
 	void configureWeapon(const ItemType& it) override;
 
-	bool interruptSwing() const override
-	{
+	bool interruptSwing() const override {
 		return true;
 	}
 
@@ -340,11 +301,9 @@ private:
 	uint16_t elementDamage = 0;
 };
 
-class WeaponWand final : public Weapon
-{
+class WeaponWand final : public Weapon {
 public:
-	explicit WeaponWand(LuaScriptInterface* interface) : Weapon(interface)
-	{
+	explicit WeaponWand(LuaScriptInterface* interface) : Weapon(interface) {
 	}
 
 	bool configureEvent(const pugi::xml_node& node) override;
@@ -356,19 +315,16 @@ public:
 	CombatType_t getElementType() const override { return COMBAT_NONE; }
 	int16_t getElementDamageValue() const override;
 
-	void setMinChange(int32_t change)
-	{
+	void setMinChange(int32_t change) {
 		minChange = change;
 	}
 
-	void setMaxChange(int32_t change)
-	{
+	void setMaxChange(int32_t change) {
 		maxChange = change;
 	}
 
 private:
-	bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const override
-	{
+	bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const override {
 		return false;
 	}
 

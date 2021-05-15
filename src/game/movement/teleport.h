@@ -22,20 +22,16 @@
 
 #include "items/tile.h"
 
-class Teleport final : public Item, public Cylinder
-{
+class Teleport final : public Item, public Cylinder {
 public:
-	explicit Teleport(uint16_t type) : Item(type)
-	{
+	explicit Teleport(uint16_t type) : Item(type) {
 	};
 
-	Teleport* getTeleport() override
-	{
+	Teleport* getTeleport() override {
 		return this;
 	}
 
-	const Teleport* getTeleport() const override
-	{
+	const Teleport* getTeleport() const override {
 		return this;
 	}
 
@@ -43,13 +39,11 @@ public:
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
-	const Position& getDestPos() const
-	{
+	const Position& getDestPos() const {
 		return destPos;
 	}
 
-	void setDestPos(Position pos)
-	{
+	void setDestPos(Position pos) {
 		destPos = pos;
 	}
 

@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class CharmFunctions final : LuaScriptInterface
-{
+class CharmFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Charm", "", luaCharmCreate);
 		registerMetaMethod(L, "Charm", "__eq", luaUserdataCompare);
 

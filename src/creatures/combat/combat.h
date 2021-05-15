@@ -31,11 +31,9 @@ class Creature;
 class Item;
 
 //for luascript callback
-class ValueCallback final : public CallBack
-{
+class ValueCallback final : public CallBack {
 public:
-	explicit ValueCallback(formulaType_t initType): type(initType)
-	{
+	explicit ValueCallback(formulaType_t initType): type(initType) {
 	}
 
 	void getMinMaxValues(Player* player, CombatDamage& damage, bool useCharges) const;
@@ -44,8 +42,7 @@ private:
 	formulaType_t type;
 };
 
-class TileCallback final : public CallBack
-{
+class TileCallback final : public CallBack {
 public:
 	void onTileCombat(Creature* creature, Tile* tile) const;
 
@@ -53,8 +50,7 @@ protected:
 	formulaType_t type;
 };
 
-class TargetCallback final : public CallBack
-{
+class TargetCallback final : public CallBack {
 public:
 	void onTargetCombat(Creature* creature, Creature* target) const;
 
@@ -62,8 +58,7 @@ protected:
 	formulaType_t type;
 };
 
-struct CombatParams
-{
+struct CombatParams {
 	std::forward_list<std::unique_ptr<const Condition>> conditionList;
 
 	std::unique_ptr<ValueCallback> valueCallback;
@@ -88,26 +83,21 @@ struct CombatParams
 
 using CombatFunction = std::function<void(Creature*, Creature*, const CombatParams&, CombatDamage*)>;
 
-class MatrixArea
-{
+class MatrixArea {
 public:
-	MatrixArea(uint32_t initRows, uint32_t initCols): centerX(0), centerY(0), rows(initRows), cols(initCols)
-	{
+	MatrixArea(uint32_t initRows, uint32_t initCols): centerX(0), centerY(0), rows(initRows), cols(initCols) {
 		data_ = new bool*[rows];
 
-		for (uint32_t row = 0; row < rows; ++row)
-		{
+		for (uint32_t row = 0; row < rows; ++row) {
 			data_[row] = new bool[cols];
 
-			for (uint32_t col = 0; col < cols; ++col)
-			{
+			for (uint32_t col = 0; col < cols; ++col) {
 				data_[row][col] = false;
 			}
 		}
 	}
 
-	MatrixArea(const MatrixArea& rhs)
-	{
+	MatrixArea(const MatrixArea& rhs) {
 		centerX = rhs.centerX;
 		centerY = rhs.centerY;
 		rows = rhs.rows;
@@ -115,21 +105,17 @@ public:
 
 		data_ = new bool*[rows];
 
-		for (uint32_t row = 0; row < rows; ++row)
-		{
+		for (uint32_t row = 0; row < rows; ++row) {
 			data_[row] = new bool[cols];
 
-			for (uint32_t col = 0; col < cols; ++col)
-			{
+			for (uint32_t col = 0; col < cols; ++col) {
 				data_[row][col] = rhs.data_[row][col];
 			}
 		}
 	}
 
-	~MatrixArea()
-	{
-		for (uint32_t row = 0; row < rows; ++row)
-		{
+	~MatrixArea() {
+		for (uint32_t row = 0; row < rows; ++row) {
 			delete[] data_[row];
 		}
 
@@ -139,45 +125,37 @@ public:
 	// non-assignable
 	MatrixArea& operator=(const MatrixArea&) = delete;
 
-	void setValue(uint32_t row, uint32_t col, bool value) const
-	{
+	void setValue(uint32_t row, uint32_t col, bool value) const {
 		data_[row][col] = value;
 	}
 
-	bool getValue(uint32_t row, uint32_t col) const
-	{
+	bool getValue(uint32_t row, uint32_t col) const {
 		return data_[row][col];
 	}
 
-	void setCenter(uint32_t y, uint32_t x)
-	{
+	void setCenter(uint32_t y, uint32_t x) {
 		centerX = x;
 		centerY = y;
 	}
 
-	void getCenter(uint32_t& y, uint32_t& x) const
-	{
+	void getCenter(uint32_t& y, uint32_t& x) const {
 		x = centerX;
 		y = centerY;
 	}
 
-	uint32_t getRows() const
-	{
+	uint32_t getRows() const {
 		return rows;
 	}
 
-	uint32_t getCols() const
-	{
+	uint32_t getCols() const {
 		return cols;
 	}
 
-	const bool* operator[](uint32_t i) const
-	{
+	const bool* operator[](uint32_t i) const {
 		return data_[i];
 	}
 
-	bool* operator[](uint32_t i)
-	{
+	bool* operator[](uint32_t i) {
 		return data_[i];
 	}
 
@@ -190,15 +168,13 @@ private:
 	bool** data_;
 };
 
-class AreaCombat
-{
+class AreaCombat {
 public:
 	AreaCombat() = default;
 
 	AreaCombat(const AreaCombat& rhs);
 
-	~AreaCombat()
-	{
+	~AreaCombat() {
 		clear();
 	}
 
@@ -217,52 +193,41 @@ private:
 	MatrixArea* createArea(const std::list<uint32_t>& list, uint32_t rows);
 	void copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op) const;
 
-	MatrixArea* getArea(const Position& centerPos, const Position& targetPos) const
-	{
+	MatrixArea* getArea(const Position& centerPos, const Position& targetPos) const {
 		const int32_t dx = Position::getOffsetX(targetPos, centerPos);
 		const int32_t dy = Position::getOffsetY(targetPos, centerPos);
 
 		Direction dir;
-		if (dx < 0)
-		{
+		if (dx < 0) {
 			dir = DIRECTION_WEST;
 		}
-		else if (dx > 0)
-		{
+		else if (dx > 0) {
 			dir = DIRECTION_EAST;
 		}
-		else if (dy < 0)
-		{
+		else if (dy < 0) {
 			dir = DIRECTION_NORTH;
 		}
-		else
-		{
+		else {
 			dir = DIRECTION_SOUTH;
 		}
 
-		if (hasExtArea)
-		{
-			if (dx < 0 && dy < 0)
-			{
+		if (hasExtArea) {
+			if (dx < 0 && dy < 0) {
 				dir = DIRECTION_NORTHWEST;
 			}
-			else if (dx > 0 && dy < 0)
-			{
+			else if (dx > 0 && dy < 0) {
 				dir = DIRECTION_NORTHEAST;
 			}
-			else if (dx < 0 && dy > 0)
-			{
+			else if (dx < 0 && dy > 0) {
 				dir = DIRECTION_SOUTHWEST;
 			}
-			else if (dx > 0 && dy > 0)
-			{
+			else if (dx > 0 && dy > 0) {
 				dir = DIRECTION_SOUTHEAST;
 			}
 		}
 
 		const auto it = areas.find(dir);
-		if (it == areas.end())
-		{
+		if (it == areas.end()) {
 			return nullptr;
 		}
 		return it->second;
@@ -272,8 +237,7 @@ private:
 	bool hasExtArea = false;
 };
 
-class Combat
-{
+class Combat {
 public:
 	Combat() = default;
 
@@ -320,30 +284,25 @@ public:
 
 	bool setParam(CombatParam_t param, uint32_t value);
 
-	void setArea(AreaCombat* newArea)
-	{
+	void setArea(AreaCombat* newArea) {
 		this->area.reset(newArea);
 	}
 
-	bool hasArea() const
-	{
+	bool hasArea() const {
 		return area != nullptr;
 	}
 
-	void addCondition(const Condition* condition)
-	{
+	void addCondition(const Condition* condition) {
 		params.conditionList.emplace_front(condition);
 	}
 
 	void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
 
-	void postCombatEffects(Creature* caster, const Position& pos) const
-	{
+	void postCombatEffects(Creature* caster, const Position& pos) const {
 		postCombatEffects(caster, pos, params);
 	}
 
-	void setOrigin(CombatOrigin origin)
-	{
+	void setOrigin(CombatOrigin origin) {
 		params.origin = origin;
 	}
 
@@ -376,39 +335,31 @@ private:
 	std::unique_ptr<AreaCombat> area;
 };
 
-class MagicField final : public Item
-{
+class MagicField final : public Item {
 public:
-	explicit MagicField(uint16_t type) : Item(type), createTime(OTSYS_TIME())
-	{
+	explicit MagicField(uint16_t type) : Item(type), createTime(OTSYS_TIME()) {
 	}
 
-	MagicField* getMagicField() override
-	{
+	MagicField* getMagicField() override {
 		return this;
 	}
 
-	const MagicField* getMagicField() const override
-	{
+	const MagicField* getMagicField() const override {
 		return this;
 	}
 
-	bool isReplaceable() const
-	{
+	bool isReplaceable() const {
 		return items[getID()].replaceable;
 	}
 
-	CombatType_t getCombatType() const
-	{
+	CombatType_t getCombatType() const {
 		const ItemType& it = items[getID()];
 		return it.combatType;
 	}
 
-	int32_t getDamage() const
-	{
+	int32_t getDamage() const {
 		const ItemType& it = items[getID()];
-		if (it.conditionDamage)
-		{
+		if (it.conditionDamage) {
 			return it.conditionDamage->getTotalDamage();
 		}
 		return 0;

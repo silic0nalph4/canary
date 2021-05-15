@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class CreatureEventFunctions final : LuaScriptInterface
-{
+class CreatureEventFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "CreatureEvent", "", luaCreateCreatureEvent);
 		registerMethod(L, "CreatureEvent", "type", luaCreatureEventType);
 		registerMethod(L, "CreatureEvent", "register", luaCreatureEventRegister);

@@ -23,8 +23,7 @@
 class Guild;
 using GuildWarVector = std::vector<uint32_t>;
 
-class IOGuild
-{
+class IOGuild {
 public:
 	static Guild* loadGuild(uint32_t guildId);
 	static void saveGuild(Guild* guild);

@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class MountFunctions final : LuaScriptInterface
-{
+class MountFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Mount", "", luaCreateMount);
 		registerMetaMethod(L, "Mount", "__eq", luaUserdataCompare);
 

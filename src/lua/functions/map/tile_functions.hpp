@@ -24,11 +24,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class TileFunctions final : LuaScriptInterface
-{
+class TileFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "Tile", "", luaTileCreate);
 		registerMetaMethod(L, "Tile", "__eq", luaUserdataCompare);
 

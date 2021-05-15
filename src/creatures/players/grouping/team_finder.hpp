@@ -29,8 +29,7 @@
   * This class is responsible control and manage the team finder feature.
 **/
 
-class TeamFinder
-{
+class TeamFinder {
 public:
 	TeamFinder() = default;
 
@@ -52,8 +51,7 @@ public:
 		hunt_area(initHunt_area),
 		questID(initQuestID),
 		leaderGuid(initLeaderGuid),
-		membersMap(std::move(std::move(initMembersMap)))
-	{
+		membersMap(std::move(std::move(initMembersMap))) {
 	}
 
 	virtual ~TeamFinder() = default;

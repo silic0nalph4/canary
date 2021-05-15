@@ -29,8 +29,7 @@ using Event_ptr = std::unique_ptr<Event>;
  * @brief Class that describes an event
  *
  */
-class Event
-{
+class Event {
 public:
 	/**
       * @brief Explicit construtor
@@ -79,8 +78,7 @@ public:
       */
 	bool loadCallback();
 
-	virtual bool loadFunction(const pugi::xml_attribute&, bool)
-	{
+	virtual bool loadFunction(const pugi::xml_attribute&, bool) {
 		return false;
 	}
 
@@ -90,8 +88,7 @@ public:
       * @return true
       * @return false
       */
-	bool isScripted() const
-	{
+	bool isScripted() const {
 		return scripted;
 	}
 
@@ -100,8 +97,7 @@ public:
       *
       * @return int32_t
       */
-	int32_t getScriptId()
-	{
+	int32_t getScriptId() {
 		return scriptId;
 	}
 
@@ -119,8 +115,7 @@ protected:
  * @brief Class that handles the load's of the XML file
  *
  */
-class BaseEvents
-{
+class BaseEvents {
 public:
 	/**
       * @brief The constexpr specifier declares that it is possible to
@@ -152,8 +147,7 @@ public:
       * @return true
       * @return false
       */
-	bool isLoaded() const
-	{
+	bool isLoaded() const {
 		return loaded;
 	}
 
@@ -179,8 +173,7 @@ private:
  * @brief
  *
  */
-class CallBack
-{
+class CallBack {
 public:
 	CallBack() = default;
 

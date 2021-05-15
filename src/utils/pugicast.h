@@ -22,18 +22,14 @@
 
 #include <boost/lexical_cast.hpp>
 
-namespace pugi
-{
+namespace pugi {
 	template <typename T>
-	T cast(const char_t* str)
-	{
+	T cast(const char_t* str) {
 		T value;
-		try
-		{
+		try {
 			value = boost::lexical_cast<T>(str);
 		}
-		catch (boost::bad_lexical_cast&)
-		{
+		catch (boost::bad_lexical_cast&) {
 			value = T();
 		}
 		return value;

@@ -21,22 +21,19 @@
 #define SRC_MAP_MAP_DEFINITIONS_HPP_
 
 // Enums
-enum AccessList_t
-{
+enum AccessList_t {
 	GUEST_LIST = 0x100,
 	SUBOWNER_LIST = 0x101,
 };
 
-enum AccessHouseLevel_t
-{
+enum AccessHouseLevel_t {
 	HOUSE_NOT_INVITED = 0,
 	HOUSE_GUEST = 1,
 	HOUSE_SUBOWNER = 2,
 	HOUSE_OWNER = 3,
 };
 
-enum RentPeriod_t
-{
+enum RentPeriod_t {
 	RENTPERIOD_DAILY,
 	RENTPERIOD_WEEKLY,
 	RENTPERIOD_MONTHLY,

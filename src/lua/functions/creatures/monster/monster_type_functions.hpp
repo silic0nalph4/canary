@@ -22,11 +22,9 @@
 
 #include "lua/scripts/luascript.h"
 
-class MonsterTypeFunctions final : LuaScriptInterface
-{
+class MonsterTypeFunctions final : LuaScriptInterface {
 public:
-	static void init(lua_State* L)
-	{
+	static void init(lua_State* L) {
 		registerClass(L, "MonsterType", "", luaMonsterTypeCreate);
 		registerMetaMethod(L, "MonsterType", "__eq", luaUserdataCompare);
 
