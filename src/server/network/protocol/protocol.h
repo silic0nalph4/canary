@@ -68,7 +68,7 @@ public:
 		return outputBuffer;
 	}
 
-	void send(const OutputMessage_ptr& msg) const
+	void send(OutputMessage_ptr msg) const
 	{
 		if (auto conn = getConnection())
 		{

@@ -31,7 +31,7 @@ const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY{10};
 
 void OutputMessagePool::scheduleSendAll()
 {
-	const auto functor = [this] { sendAll(); };
+	const auto functor = std::bind(&OutputMessagePool::sendAll, this);
 	g_scheduler.addEvent(createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), functor));
 }
 
